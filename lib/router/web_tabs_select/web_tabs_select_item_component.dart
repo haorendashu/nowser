@@ -42,14 +42,12 @@ class _WebTabsSelectItemComponent extends State<WebTabsSelectItemComponent> {
 
     Widget logoWidget;
     if (StringUtil.isNotBlank(faviconUrl)) {
-      print(faviconUrl);
       logoWidget = Container(
         width: logoWidth,
         height: logoWidth,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(logoWidth / 2),
-          color: themeData.hintColor,
         ),
         child: ImageComponent(
           imageUrl: faviconUrl!,
@@ -101,7 +99,7 @@ class _WebTabsSelectItemComponent extends State<WebTabsSelectItemComponent> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: themeData.cardColor,
       ),
       child: Row(
         children: list,

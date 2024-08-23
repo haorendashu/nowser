@@ -10,6 +10,7 @@ import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/webview/web_home_component.dart';
+import '../../component/webview/webview_number_component.dart';
 
 class IndexWebComponent extends StatefulWidget {
   int index;
@@ -32,17 +33,7 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     var maxWidth = mediaQuery.size.width;
     var titleWidth = maxWidth / 2;
 
-    Widget numberWidget =
-        Selector<WebProvider, int>(builder: (context, length, child) {
-      return Badge(
-        label: Text("$length"),
-        backgroundColor:
-            Colors.blueAccent, // TODO here should use background color
-        child: Icon(Icons.crop_din),
-      );
-    }, selector: (context, provider) {
-      return provider.webInfos.length;
-    });
+    Widget numberWidget = WebViewNumberComponent();
 
     return Container(
       padding: EdgeInsets.only(

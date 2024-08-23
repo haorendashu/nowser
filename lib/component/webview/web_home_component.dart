@@ -3,6 +3,10 @@ import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/main.dart';
 
+import '../../const/router_path.dart';
+import '../../util/router_util.dart';
+import 'webview_number_component.dart';
+
 class WebHomeComponent extends StatefulWidget {
   WebInfo webInfo;
 
@@ -26,19 +30,56 @@ class _WebHomeComponent extends State<WebHomeComponent> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Base.BASE_PADDING),
-      child: Center(
-        child: TextField(
-          controller: textEditingController,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-          onSubmitted: (value) {
-            print("onSubmitted $value");
-            if (value.startsWith("http")) {
-              widget.webInfo.url = value;
-              widget.webInfo.title = null;
+      child: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: TextField(
+                controller: textEditingController,
+                decoration: InputDecoration(border: OutlineInputBorder()),
+                onSubmitted: (value) {
+                  print("onSubmitted $value");
+                  if (value.startsWith("http")) {
+                    widget.webInfo.url = value;
+                    widget.webInfo.title = null;
 
-              webProvider.updateWebInfo(widget.webInfo);
-            }
-          },
+                    webProvider.updateWebInfo(widget.webInfo);
+                  }
+                },
+              ),
+            ),
+          ),
+          Container(
+            height: 60,
+            child: Row(
+              children: [
+                wrapBottomBtn(
+                    Container(
+                      alignment: Alignment.center,
+                      child: WebViewNumberComponent(),
+                    ), onTap: () {
+                  RouterUtil.router(context, RouterPath.WEB_TABS);
+                }),
+                wrapBottomBtn(const Icon(Icons.space_dashboard)),
+                wrapBottomBtn(const Icon(Icons.segment)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget wrapBottomBtn(Widget btn, {Function? onTap}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          if (onTap != null) {
+            onTap();
+          }
+        },
+        child: Container(
+          child: btn,
         ),
       ),
     );
