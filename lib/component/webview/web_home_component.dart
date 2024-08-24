@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nowser/component/auth_dialog/auth_dialog.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/main.dart';
@@ -61,7 +62,9 @@ class _WebHomeComponent extends State<WebHomeComponent> {
                   RouterUtil.router(context, RouterPath.WEB_TABS);
                 }),
                 wrapBottomBtn(const Icon(Icons.space_dashboard)),
-                wrapBottomBtn(const Icon(Icons.segment)),
+                wrapBottomBtn(const Icon(Icons.segment), onTap: () {
+                  AuthDialog.show(context);
+                }),
               ],
             ),
           ),
