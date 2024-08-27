@@ -7,6 +7,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/data/db.dart';
+import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
@@ -25,13 +27,19 @@ late WebProvider webProvider;
 
 late SettingProvider settingProvider;
 
+late KeyProvider keyProvider;
+
 late Map<String, WidgetBuilder> routes;
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
+  keyProvider = KeyProvider();
+
   var dataUtilTask = DataUtil.getInstance();
-  var dataFutureResultList = await Future.wait([dataUtilTask]);
+  var keyTask = keyProvider.init();
+  var dbTask = DB.getCurrentDatabase();
+  var dataFutureResultList = await Future.wait([dataUtilTask, keyTask, dbTask]);
 
   var settingTask = SettingProvider.getInstance();
   var futureResultList = await Future.wait([settingTask]);

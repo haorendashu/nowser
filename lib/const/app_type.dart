@@ -1,0 +1,7 @@
+class AppType {
+  static const WEB = 1;
+
+  static const REMOTE = 2;
+
+  static const ANDROID_APP = 3;
+}
