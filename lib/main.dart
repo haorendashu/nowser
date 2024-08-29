@@ -11,6 +11,7 @@ import 'package:nowser/data/db.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_router.dart';
+import 'package:nowser/router/me/me_router.dart';
 import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as receiveIntent;
@@ -75,6 +76,7 @@ class _MyApp extends State<MyApp> {
     routes = {
       RouterPath.INDEX: (context) => IndexRouter(),
       RouterPath.WEB_TABS: (context) => WebTabsSelectRouter(),
+      RouterPath.ME: (context) => MeRouter(),
     };
 
     return MultiProvider(

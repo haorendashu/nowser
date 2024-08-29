@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/base.dart';
+
+import '../app/app_type_component.dart';
 
 class AuthAppInfoComponent extends StatefulWidget {
   @override
@@ -50,25 +53,7 @@ class _AuthAppInfoComponent extends State<AuthAppInfoComponent> {
         ),
         Positioned(
           right: 16,
-          child: Container(
-            decoration: BoxDecoration(
-              color: themeData.hintColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: EdgeInsets.only(
-              left: Base.BASE_PADDING_HALF,
-              right: Base.BASE_PADDING_HALF,
-              top: 4,
-              bottom: 4,
-            ),
-            child: Text(
-              "WEB",
-              style: TextStyle(
-                fontSize: themeData.textTheme.bodySmall!.fontSize,
-                color: themeData.hintColor,
-              ),
-            ),
-          ),
+          child: AppTypeComponent(AppType.WEB),
         )
       ],
     );
