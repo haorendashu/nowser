@@ -86,6 +86,9 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<WebProvider>.value(
           value: webProvider,
         ),
+        ListenableProvider<KeyProvider>.value(
+          value: keyProvider,
+        ),
       ],
       child: MaterialApp(
         builder: BotToastInit(),

@@ -20,8 +20,8 @@ class KeyProvider extends ChangeNotifier {
 
   Future<void> reload() async {
     keys.clear();
-    pubkeys.clear();
-    keysMap.clear();
+    keysMap = {};
+    pubkeys = [];
 
     final storage = FlutterSecureStorage();
     var strs = await storage.read(key: KEY_NAME);
@@ -37,6 +37,34 @@ class KeyProvider extends ChangeNotifier {
           }
         }
       }
+    }
+  }
+
+  void _regenMemKeys() {
+    keys = [...keys];
+
+    keysMap = {};
+    pubkeys = [];
+
+    for (var key in keys) {
+      var pubkey = getPublicKey(key);
+      keysMap[pubkey] = key;
+      pubkeys.add(pubkey);
+    }
+  }
+
+  void setDefault(String pubkey) {
+    var key = keysMap[pubkey];
+    if (StringUtil.isNotBlank(key)) {
+      keys.remove(key);
+
+      List<String> newKeys = [key!];
+      newKeys.addAll(keys);
+
+      keys = newKeys;
+      _saveKey();
+      _regenMemKeys();
+      notifyListeners();
     }
   }
 
@@ -57,6 +85,7 @@ class KeyProvider extends ChangeNotifier {
     pubkeys.add(pubkey);
 
     _saveKey();
+    _regenMemKeys();
     notifyListeners();
   }
 
@@ -68,6 +97,7 @@ class KeyProvider extends ChangeNotifier {
     }
 
     _saveKey();
+    _regenMemKeys();
     notifyListeners();
   }
 

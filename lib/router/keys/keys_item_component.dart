@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/main.dart';
 
-import '../../component/user_pic_component.dart';
+import '../../component/user/user_name_component.dart';
+import '../../component/user/user_pic_component.dart';
 
 class KeysItemComponent extends StatefulWidget {
   bool isDefault;
@@ -33,17 +35,20 @@ class _KeysItemComponent extends State<KeysItemComponent> {
       ),
     ));
     list.add(Expanded(
-        child: Text(
-      Nip19.encodePubKey(widget.pubkey),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+        child: UserNameComponent(
+      widget.pubkey,
+      fullNpubName: true,
     )));
-    list.add(Container(
-      margin: EdgeInsets.only(
-        left: Base.BASE_PADDING_HALF,
-        // right: Base.BASE_PADDING_HALF,
+    list.add(GestureDetector(
+      onTap: () {
+        keyProvider.removeKey(widget.pubkey);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(
+          left: Base.BASE_PADDING_HALF,
+        ),
+        child: const Icon(Icons.logout),
       ),
-      child: Icon(Icons.logout),
     ));
 
     return Container(

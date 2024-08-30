@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nowser/component/appbar_back_btn_component.dart';
-import 'package:nowser/component/text_input/text_input_dialog.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/main.dart';
+import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/router/keys/keys_item_component.dart';
+import 'package:provider/provider.dart';
+
+import '../../component/user/user_login_dialog.dart';
 
 class KeysRouter extends StatefulWidget {
   @override
@@ -11,7 +15,7 @@ class KeysRouter extends StatefulWidget {
   }
 
   static void addKey(BuildContext context) {
-    TextInputDialog.show(context, "Please input private key");
+    UserLoginDialog.show(context);
   }
 }
 
@@ -25,19 +29,23 @@ class _KeysRouter extends State<KeysRouter> {
       top: Base.BASE_PADDING,
     );
 
+    var _keyProvider = Provider.of<KeyProvider>(context);
+
     List<Widget> list = [];
-    list.add(Container(
-      margin: margin,
-      child: KeysItemComponent(
-        "29320975df855fe34a7b45ada2421e2c741c37c0136901fe477133a91eb18b07",
-        isDefault: true,
-      ),
-    ));
-    for (var i = 0; i < 5; i++) {
+    var pubkeys = _keyProvider.pubkeys;
+    var length = pubkeys.length;
+    for (var i = 0; i < length; i++) {
+      var pubkey = pubkeys[i];
       list.add(Container(
         margin: margin,
-        child: KeysItemComponent(
-          "8fb140b4e8ddef97ce4b821d247278a1a4353362623f64021484b372f948000c",
+        child: GestureDetector(
+          onTap: () {
+            keyProvider.setDefault(pubkey);
+          },
+          child: KeysItemComponent(
+            pubkey,
+            isDefault: i == 0,
+          ),
         ),
       ));
     }
