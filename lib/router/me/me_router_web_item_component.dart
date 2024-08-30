@@ -6,12 +6,12 @@ class MeRouterWebItemComponent extends StatefulWidget {
 
   String name;
 
-  // EdgeInsetsGeometry margin;
+  IconData iconData;
 
   MeRouterWebItemComponent({
     required this.num,
     required this.name,
-    // required this.margin,
+    required this.iconData,
   });
 
   @override
@@ -44,13 +44,17 @@ class _MeRouterWebItemComponent extends State<MeRouterWebItemComponent> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "${widget.num}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            Icon(widget.iconData),
             Text(
               widget.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: themeData.textTheme.bodySmall!.fontSize! - 2,
+              ),
+            ),
+            Text(
+              "${widget.num}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

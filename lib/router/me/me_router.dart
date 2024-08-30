@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nowser/component/text_input/text_input_dialog.dart';
 import 'package:nowser/component/user_pic_component.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/const/router_path.dart';
 import 'package:nowser/router/me/me_router_log_item_component.dart';
 import 'package:nowser/router/me/me_router_web_item_component.dart';
+import 'package:nowser/util/router_util.dart';
 
+import '../keys/keys_router.dart';
 import 'me_router_app_item_component.dart';
 
 class MeRouter extends StatefulWidget {
@@ -33,7 +37,12 @@ class _MeRouter extends State<MeRouter> {
     ));
     defaultUserWidgets.add(Container(
       margin: EdgeInsets.only(left: Base.BASE_PADDING),
-      child: Text("Click and Login"),
+      child: GestureDetector(
+        onTap: () {
+          KeysRouter.addKey(context);
+        },
+        child: Text("Click and Login"),
+      ),
     ));
     defaultUserWidgets.add(Expanded(child: Container()));
     defaultUserWidgets.add(Container(
@@ -69,33 +78,37 @@ class _MeRouter extends State<MeRouter> {
       ),
       margin: listWidgetMargin,
       padding: EdgeInsets.all(Base.BASE_PADDING),
-      child: Row(
-        children: memberList,
+      child: GestureDetector(
+        onTap: () {
+          RouterUtil.router(context, RouterPath.KEYS);
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          children: memberList,
+        ),
       ),
     );
 
     List<Widget> webItemList = [];
     webItemList.add(MeRouterWebItemComponent(
       num: 102,
-      name: "Bookmarks",
-      // margin: EdgeInsets.only(right: Base.BASE_PADDING),
+      name: "Bookmark",
+      iconData: Icons.bookmark,
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: 999,
-      name: "Historys",
-      // margin:
-      //     EdgeInsets.only(left: Base.BASE_PADDING, right: Base.BASE_PADDING),
+      name: "History",
+      iconData: Icons.history,
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: 30,
-      name: "Downloads",
-      // margin:
-      //     EdgeInsets.only(left: Base.BASE_PADDING, right: Base.BASE_PADDING),
+      name: "Download",
+      iconData: Icons.download,
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: 102,
-      name: "Bookmarks",
-      // margin: EdgeInsets.only(left: Base.BASE_PADDING),
+      name: "Bookmark",
+      iconData: Icons.bookmark,
     ));
     var webItemWidget = Container(
       margin: listWidgetMargin,
