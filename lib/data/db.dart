@@ -36,10 +36,13 @@ class DB {
   static Future<void> _onCreate(Database db, int version) async {
     // init db
     db.execute(
-        "create table app(id          integer not null constraint app_pk primary key autoincrement,pubkey        text    not null,app_type    integer not null,code        text    not null,name        text    not null,image       text,permissions text);");
+        "create table app(id            integer not null constraint app_pk primary key autoincrement,pubkey        text    not null,app_type      integer not null,code          text    not null,name          text,image         text,connect_type  integer not null,always_allow  text,always_reject text,created_at    integer not null,updated_at    integer not null);");
     db.execute(
         "create table auth_log(id          integer not null constraint auth_log_pk primary key autoincrement,app_id      integer not null,auth_type   integer not null,event_kind  integer,title       text,content     text,auth_result integer not null,created_at  integer not null);");
     db.execute("create index auth_log_index on auth_log (app_id);");
+    db.execute(
+        "create table zap_log(id         integer not null constraint zap_log_pk primary key autoincrement,app_id     integer not null constraint zap_log_index unique,zap_type   integer not null,num        integer not null,created_at integer not null);");
+    db.execute("create index zap_log_index on zap_log (app_id);");
   }
 
   static Future<Database> getCurrentDatabase() async {

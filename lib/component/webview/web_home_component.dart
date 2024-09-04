@@ -64,7 +64,7 @@ class _WebHomeComponent extends State<WebHomeComponent> {
                   RouterUtil.router(context, RouterPath.WEB_TABS);
                 }),
                 wrapBottomBtn(const Icon(Icons.space_dashboard), onTap: () {
-                  AuthDialog.show(context);
+                  // AuthDialog.show(context);
                   // AuthAppConnectDialog.show(context);
                 }),
                 wrapBottomBtn(const Icon(Icons.segment), onTap: () {

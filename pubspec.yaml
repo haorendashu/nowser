@@ -33,9 +33,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   cupertino_icons: ^1.0.6
-
   nostr_sdk:
     path: packages/nostr_sdk
+    
   receive_intent: ^0.2.5
   provider: ^6.1.2
   flutter_inappwebview: ^6.0.0

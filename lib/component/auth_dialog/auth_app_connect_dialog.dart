@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/auth_dialog/auth_dialog_base_componnet.dart';
 import 'package:nowser/const/connect_type.dart';
+import 'package:nowser/const/reasonable_permissions.dart';
+import 'package:nowser/data/app_db.dart';
+import 'package:nowser/main.dart';
+import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
+import '../../data/app.dart';
 
 class AuthAppConnectDialog extends StatefulWidget {
-  static void show(BuildContext context) {
-    showDialog(
+  App app;
+
+  AuthAppConnectDialog({required this.app});
+
+  static Future<App?> show(BuildContext context, App app) {
+    return showDialog(
       context: context,
       builder: (context) {
-        return AuthAppConnectDialog();
+        return AuthAppConnectDialog(
+          app: app,
+        );
       },
     );
   }
@@ -65,7 +77,12 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
       children: list,
     );
 
-    return AuthDialogBaseComponnet(title: "App Connect", child: child);
+    return AuthDialogBaseComponnet(
+      app: widget.app,
+      title: "App Connect",
+      onConfirm: onConfirm,
+      child: child,
+    );
   }
 
   void onConnectTypeChange(int? value) {
@@ -73,6 +90,24 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
       setState(() {
         connectType = value;
       });
+    }
+  }
+
+  onConfirm() async {
+    var app = widget.app;
+    app.connectType = connectType;
+    if (StringUtil.isBlank(app.pubkey) && keyProvider.pubkeys.isNotEmpty) {
+      app.pubkey = keyProvider.pubkeys.first;
+    }
+    if (connectType == ConnectType.REASONABLE) {
+      app.alwaysAllow = ReasonablePermissions.text;
+    }
+    app.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    app.updatedAt = app.createdAt;
+
+    if (await AppDB.insert(app) > 0) {
+      await appProvider.reload();
+      RouterUtil.back(context);
     }
   }
 }

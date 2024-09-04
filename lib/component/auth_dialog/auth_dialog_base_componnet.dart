@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/nip19/nip19.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/data/app.dart';
+import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/util/router_util.dart';
+import 'package:provider/provider.dart';
 
 import '../logo_component.dart';
 import 'auth_app_info_component.dart';
 
 class AuthDialogBaseComponnet extends StatefulWidget {
+  App app;
+
   String title;
 
   Widget child;
 
-  AuthDialogBaseComponnet({required this.title, required this.child});
+  Function onConfirm;
+
+  Function(String)? onPubkeyChange;
+
+  AuthDialogBaseComponnet({
+    required this.app,
+    required this.title,
+    required this.child,
+    required this.onConfirm,
+    this.onPubkeyChange,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -30,11 +47,43 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
 
     List<Widget> list = [];
 
+    var keyWidget =
+        Selector<KeyProvider, List<String>>(builder: (context, pubkeys, child) {
+      List<DropdownMenuItem<String>> items = [];
+      for (var pubkey in pubkeys) {
+        items.add(DropdownMenuItem(
+          value: pubkey,
+          child: Text(
+            Nip19.encodePubKey(pubkey),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ));
+      }
+
+      if (StringUtil.isBlank(widget.app.pubkey) && pubkeys.isNotEmpty) {
+        widget.app.pubkey = pubkeys.first;
+      }
+
+      return DropdownButton<String>(
+        items: items,
+        onChanged: (String? value) {
+          if (StringUtil.isNotBlank(value)) {
+            widget.app.pubkey = value;
+            setState(() {});
+          }
+        },
+        value: widget.app.pubkey,
+      );
+    }, selector: (context, provider) {
+      return provider.pubkeys;
+    });
+
     var topWidget = Container(
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
               top: Base.BASE_PADDING_HALF,
@@ -46,16 +95,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
             child: Container(
               margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
               alignment: Alignment.centerRight,
-              child: DropdownButton<String>(
-                items: [
-                  DropdownMenuItem(
-                    child: Text("npubxxxxxx"),
-                    value: "npubxxxxxx",
-                  )
-                ],
-                onChanged: (Object? value) {},
-                value: "npubxxxxxx",
-              ),
+              child: keyWidget,
             ),
           ),
         ],
@@ -76,7 +116,9 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
 
     list.add(Container(
       margin: baseMargin,
-      child: AuthAppInfoComponent(),
+      child: AuthAppInfoComponent(
+        app: widget.app,
+      ),
     ));
 
     list.add(Container(
@@ -112,7 +154,12 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
             margin: EdgeInsets.only(
               left: Base.BASE_PADDING_HALF,
             ),
-            child: FilledButton(onPressed: () {}, child: Text("Confirm")),
+            child: FilledButton(
+              onPressed: () {
+                widget.onConfirm();
+              },
+              child: Text("Confirm"),
+            ),
           )
         ],
       ),

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
+import 'package:nostr_sdk/signer/local_nostr_signer.dart';
+import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 
 class KeyProvider extends ChangeNotifier {
@@ -103,5 +105,14 @@ class KeyProvider extends ChangeNotifier {
 
   bool exist(String privateKey) {
     return keys.contains(privateKey);
+  }
+
+  NostrSigner? getSigner(String pubkey) {
+    var key = keysMap[pubkey];
+    if (StringUtil.isNotBlank(key)) {
+      return LocalNostrSigner(key!);
+    }
+
+    return null;
   }
 }
