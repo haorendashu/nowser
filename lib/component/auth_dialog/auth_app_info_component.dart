@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/image_component.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/data/app.dart';
@@ -57,10 +58,16 @@ class _AuthAppInfoComponent extends State<AuthAppInfoComponent> {
                   Container(
                     margin:
                         const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
-                    child: Icon(
-                      Icons.image,
-                      size: 46,
-                    ),
+                    child: StringUtil.isBlank(widget.app.image)
+                        ? const Icon(
+                            Icons.image,
+                            size: 46,
+                          )
+                        : ImageComponent(
+                            imageUrl: widget.app.image!,
+                            width: 40,
+                            height: 40,
+                          ),
                   ),
                   Column(
                     mainAxisSize: MainAxisSize.min,

@@ -21,12 +21,15 @@ class AuthDialogBaseComponnet extends StatefulWidget {
 
   Function(String)? onPubkeyChange;
 
+  bool pubkeyReadonly;
+
   AuthDialogBaseComponnet({
     required this.app,
     required this.title,
     required this.child,
     required this.onConfirm,
     this.onPubkeyChange,
+    this.pubkeyReadonly = false,
   });
 
   @override
@@ -67,12 +70,15 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
 
       return DropdownButton<String>(
         items: items,
-        onChanged: (String? value) {
-          if (StringUtil.isNotBlank(value)) {
-            widget.app.pubkey = value;
-            setState(() {});
-          }
-        },
+        isExpanded: true,
+        onChanged: widget.pubkeyReadonly
+            ? null
+            : (String? value) {
+                if (StringUtil.isNotBlank(value)) {
+                  widget.app.pubkey = value;
+                  setState(() {});
+                }
+              },
         value: widget.app.pubkey,
       );
     }, selector: (context, provider) {
@@ -93,7 +99,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+              margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
               alignment: Alignment.centerRight,
               child: keyWidget,
             ),

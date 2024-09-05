@@ -204,7 +204,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_getPublicKey",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_getPublicKey $jsMsg");
+        print("Nowser_JS_getPublicKey $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
@@ -217,6 +217,7 @@ class _WebViewComponent extends State<WebViewComponent>
             () {
           nip07Reject(resultId, "Forbid");
         }, (app, signer) {
+          print("confirm get pubkey");
           var pubkey = app.pubkey;
           var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
           controller.evaluateJavascript(source: script);
@@ -227,7 +228,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_signEvent",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_signEvent $jsMsg");
+        print("Nowser_JS_signEvent $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var content = jsonObj["msg"];
@@ -242,7 +243,7 @@ class _WebViewComponent extends State<WebViewComponent>
           var eventKind = eventObj["kind"];
           if (eventKind is int) {
             checkPermission(context, AppType.WEB, code, AuthType.SIGN_EVENT,
-                eventKind: eventKind, () {
+                eventKind: eventKind, authDetail: content, () {
               nip07Reject(resultId, "Forbid");
             }, (app, signer) async {
               var tags = eventObj["tags"];
@@ -270,7 +271,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_getRelays",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_getRelays $jsMsg");
+        print("Nowser_JS_getRelays $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
@@ -303,7 +304,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_nip04_encrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_nip04_encrypt $jsMsg");
+        print("Nowser_JS_nip04_encrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
@@ -335,7 +336,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_nip04_decrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_nip04_decrypt $jsMsg");
+        print("Nowser_JS_nip04_decrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg.message);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
@@ -370,7 +371,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_nip44_encrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_nip04_encrypt $jsMsg");
+        print("Nowser_JS_nip44_encrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
@@ -402,7 +403,7 @@ class _WebViewComponent extends State<WebViewComponent>
       handlerName: "Nowser_JS_nip44_decrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nowser_JS_nip04_decrypt $jsMsg");
+        print("Nowser_JS_nip44_decrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg.message);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];

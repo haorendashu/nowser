@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/auth_dialog/auth_dialog_base_componnet.dart';
 import 'package:nowser/const/auth_result.dart';
+import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/data/app.dart';
 import 'package:nowser/util/router_util.dart';
 
@@ -56,10 +57,35 @@ class _AuthDialog extends State<AuthDialog> {
     );
     var hintColor = themeData.hintColor;
 
+    var appName = widget.app.name;
+    if (StringUtil.isNotBlank(widget.app.code)) {
+      appName = widget.app.code;
+    }
     // handle this title and des with widget.authType
     String authTitle = "Sign Event";
-    String authDes = "Allow web.nostrmo.com to sign a authenticate event";
-    authTitle = "AuthType ${widget.authType}";
+    String authDes = "Allow $appName to ";
+    if (widget.authType == AuthType.GET_PUBLIC_KEY) {
+      authTitle = "Get Public Key";
+      authDes += "get public key";
+    } else if (widget.authType == AuthType.SIGN_EVENT) {
+      authTitle = "Sign Event";
+      authDes += "sign a ${widget.eventKind} event";
+    } else if (widget.authType == AuthType.GET_RELAYS) {
+      authTitle = "Get Relays";
+      authDes += "get relays";
+    } else if (widget.authType == AuthType.NIP04_ENCRYPT) {
+      authTitle = "Encrypt (NIP-04)";
+      authDes += "Encrypt (NIP-04)";
+    } else if (widget.authType == AuthType.NIP04_DECRYPT) {
+      authTitle = "Decrypt (NIP-04)";
+      authDes += "Decrypt (NIP-04)";
+    } else if (widget.authType == AuthType.NIP44_ENCRYPT) {
+      authTitle = "Encrypt (NIP-44)";
+      authDes += "Encrypt (NIP-44)";
+    } else if (widget.authType == AuthType.NIP44_DECRYPT) {
+      authTitle = "Decrypt (NIP-44)";
+      authDes += "Decrypt (NIP-44)";
+    }
 
     List<Widget> list = [];
     list.add(Container(
@@ -124,6 +150,7 @@ class _AuthDialog extends State<AuthDialog> {
       app: widget.app,
       title: authTitle,
       onConfirm: onConfirm,
+      pubkeyReadonly: true,
       child: child,
     );
   }

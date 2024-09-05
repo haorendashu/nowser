@@ -9,6 +9,8 @@ import '../data/app.dart';
 class AppProvider extends ChangeNotifier {
   List<App> _list = [];
 
+  List<App> get appList => _list;
+
   Map<String, Map<String, int>> appPermissions = {};
 
   Future<void> reload() async {

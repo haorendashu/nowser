@@ -4,6 +4,7 @@ import 'package:nowser/component/user/user_name_component.dart';
 import 'package:nowser/component/user/user_pic_component.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
+import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/router/me/me_router_log_item_component.dart';
 import 'package:nowser/router/me/me_router_web_item_component.dart';
@@ -25,6 +26,7 @@ class _MeRouter extends State<MeRouter> {
   Widget build(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     var themeData = Theme.of(context);
+    var _appProvider = Provider.of<AppProvider>(context);
 
     var listWidgetMargin = const EdgeInsets.only(
       top: Base.BASE_PADDING,
@@ -145,20 +147,17 @@ class _MeRouter extends State<MeRouter> {
       ),
     );
 
-    List<Widget> appList = [];
-    appList.add(Container(
-      child: MeRouterAppItemComponent(),
-    ));
-    appList.add(Divider());
-    appList.add(Container(
-      child: MeRouterAppItemComponent(),
-    ));
-    appList.add(Divider());
-    appList.add(Container(
-      child: MeRouterAppItemComponent(),
-    ));
-    appList.add(Divider());
-    appList.add(Container(
+    List<Widget> appWidgetList = [];
+    var appList = _appProvider.appList;
+    var length = appList.length;
+    for (var i = 0; i < length && i < 3; i++) {
+      var app = appList[i];
+      appWidgetList.add(Container(
+        child: MeRouterAppItemComponent(app),
+      ));
+      appWidgetList.add(Divider());
+    }
+    appWidgetList.add(Container(
       alignment: Alignment.center,
       child: Text(
         "Show more",
@@ -178,7 +177,7 @@ class _MeRouter extends State<MeRouter> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: appList,
+        children: appWidgetList,
       ),
     );
 

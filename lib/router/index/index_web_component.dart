@@ -105,8 +105,10 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                     )),
                     wrapBottomBtn(const Icon(Icons.space_dashboard),
                         left: 8, right: 8),
-                    wrapBottomBtn(const Icon(Icons.segment),
-                        left: 8, right: 13),
+                    wrapBottomBtn(const Icon(Icons.segment), left: 8, right: 13,
+                        onTap: () {
+                      RouterUtil.router(context, RouterPath.ME);
+                    }),
                   ],
                 ),
               ),
