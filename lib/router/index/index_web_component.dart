@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/component/webview/webview_component.dart';
@@ -80,29 +81,60 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                       RouterUtil.router(context, RouterPath.WEB_TABS);
                     }),
                     Expanded(
-                        child: Container(
-                      margin: const EdgeInsets.only(
-                        left: 8,
-                        right: 8,
+                      child: Hero(
+                        tag: "urlInput",
+                        child: Material(
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (webInfo.controller == null) {
+                                return;
+                              }
+
+                              var url = await webInfo.controller!.getUrl();
+                              var value = await RouterUtil.router(context,
+                                  RouterPath.WEB_URL_INPUT, url.toString());
+                              if (value != null &&
+                                  value is String &&
+                                  value.startsWith("http")) {
+                                webInfo.url = value;
+                                webInfo.title = null;
+
+                                if (webInfo.controller != null) {
+                                  webInfo.controller!.loadUrl(
+                                      urlRequest: URLRequest(
+                                    url: WebUri(value),
+                                  ));
+                                }
+                              }
+                            },
+                            behavior: HitTestBehavior.translucent,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 8,
+                                right: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(
+                                    Base.BASE_PADDING_HALF),
+                              ),
+                              padding: const EdgeInsets.only(
+                                left: Base.BASE_PADDING,
+                                right: Base.BASE_PADDING,
+                                top: Base.BASE_PADDING_HALF,
+                                bottom: Base.BASE_PADDING_HALF,
+                              ),
+                              width: titleWidth,
+                              child: Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius:
-                            BorderRadius.circular(Base.BASE_PADDING_HALF),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: Base.BASE_PADDING,
-                        right: Base.BASE_PADDING,
-                        top: Base.BASE_PADDING_HALF,
-                        bottom: Base.BASE_PADDING_HALF,
-                      ),
-                      width: titleWidth,
-                      child: Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )),
+                    ),
                     wrapBottomBtn(const Icon(Icons.space_dashboard),
                         left: 8, right: 8),
                     wrapBottomBtn(const Icon(Icons.segment), left: 8, right: 13,

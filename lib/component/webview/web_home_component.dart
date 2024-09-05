@@ -5,6 +5,7 @@ import 'package:nowser/component/auth_dialog/auth_dialog_base_componnet.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/main.dart';
+import 'package:nowser/router/web_url_input/web_url_input_router.dart';
 
 import '../../const/router_path.dart';
 import '../../util/router_util.dart';
@@ -27,7 +28,7 @@ class _WebHomeComponent extends State<WebHomeComponent> {
   @override
   void initState() {
     super.initState();
-    textEditingController.text = "https://nostr.build/login/";
+    // textEditingController.text = "https://nostr.build/login/";
     // textEditingController.text = "https://web.nostrmo.com/";
   }
 
@@ -39,18 +40,28 @@ class _WebHomeComponent extends State<WebHomeComponent> {
         children: [
           Expanded(
             child: Center(
-              child: TextField(
-                controller: textEditingController,
-                decoration: InputDecoration(border: OutlineInputBorder()),
-                onSubmitted: (value) {
-                  print("onSubmitted $value");
-                  if (value.startsWith("http")) {
-                    widget.webInfo.url = value;
-                    widget.webInfo.title = null;
+              child: Hero(
+                tag: "urlInput",
+                child: Material(
+                  child: TextField(
+                    controller: textEditingController,
+                    decoration:
+                        const InputDecoration(border: OutlineInputBorder()),
+                    readOnly: true,
+                    onTap: () async {
+                      var value = await RouterUtil.router(
+                          context, RouterPath.WEB_URL_INPUT);
+                      if (value != null &&
+                          value is String &&
+                          value.startsWith("http")) {
+                        widget.webInfo.url = value;
+                        widget.webInfo.title = null;
 
-                    webProvider.updateWebInfo(widget.webInfo);
-                  }
-                },
+                        webProvider.updateWebInfo(widget.webInfo);
+                      }
+                    },
+                  ),
+                ),
               ),
             ),
           ),
