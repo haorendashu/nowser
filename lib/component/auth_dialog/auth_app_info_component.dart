@@ -49,47 +49,46 @@ class _AuthAppInfoComponent extends State<AuthAppInfoComponent> {
       ));
     }
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          width: double.infinity,
-          height: 64,
-          child: Card(
-            child: Container(
-              padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin:
-                        const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
-                    child: StringUtil.isBlank(widget.app.image)
-                        ? const Icon(
-                            Icons.image,
-                            size: 46,
-                          )
-                        : ImageComponent(
-                            imageUrl: widget.app.image!,
-                            width: 40,
-                            height: 40,
-                          ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: rightList,
-                  )
-                ],
+    return Container(
+      width: double.infinity,
+      height: 64,
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+                child: StringUtil.isBlank(widget.app.image)
+                    ? const Icon(
+                        Icons.image,
+                        size: 46,
+                      )
+                    : ImageComponent(
+                        imageUrl: widget.app.image!,
+                        width: 40,
+                        height: 40,
+                      ),
               ),
-            ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: rightList,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  left: Base.BASE_PADDING_HALF,
+                  right: Base.BASE_PADDING_HALF,
+                ),
+                child: AppTypeComponent(widget.app.appType!),
+              ),
+            ],
           ),
         ),
-        Positioned(
-          right: 16,
-          child: AppTypeComponent(AppType.WEB),
-        )
-      ],
+      ),
     );
   }
 }
