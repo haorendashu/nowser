@@ -249,7 +249,7 @@ class _WebViewComponent extends State<WebViewComponent>
               var tags = eventObj["tags"];
               Event? event = Event(app.pubkey!, eventObj["kind"], tags ?? [],
                   eventObj["content"],
-                  publishAt: eventObj["created_at"]);
+                  createdAt: eventObj["created_at"]);
               event = await signer.signEvent(event);
               if (event == null) {
                 return;

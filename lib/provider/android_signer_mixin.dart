@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/event.dart';
+import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_result.dart';
@@ -94,6 +95,10 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                 eventKind: eventKind, authDetail: playload, () {
               // this place should do some about reject
               // saveAuthLog(app, authType, eventKind, playload, AuthResult.OK);
+              receiveIntent.ReceiveIntent.setResult(
+                receiveIntent.kActivityResultCanceled,
+                shouldFinish: true,
+              );
             }, (app, signer) async {
               print("checkPermission confrim $code");
               // confirm
@@ -103,20 +108,23 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
               if (authType == AuthType.GET_PUBLIC_KEY) {
                 // TODO should handle permissions
                 // var permissions = extra["permissions"];
-                data["signature"] = await signer.getPublicKey();
+                var pubkey = await signer.getPublicKey();
+                data["signature"] = Nip19.encodePubKey(pubkey!);
                 data["package"] = "com.github.haorendashu.nowser";
               } else if (authType == AuthType.SIGN_EVENT) {
                 var tags = eventObj["tags"];
                 Event? event = Event(app.pubkey!, eventObj["kind"], tags ?? [],
                     eventObj["content"],
-                    publishAt: eventObj["created_at"]);
+                    createdAt: eventObj["created_at"]);
+                log(jsonEncode(event.toJson()));
                 event = await signer.signEvent(event);
                 if (event == null) {
+                  log("sign event fail");
                   return;
                 }
                 data["signature"] = event.sig;
                 data["event"] = jsonEncode(event.toJson());
-                print("sig ${event.sig}");
+                log("sig ${event.sig}");
               } else if (authType == AuthType.GET_RELAYS) {
                 // TODO
               } else if (authType == AuthType.NIP04_ENCRYPT) {
