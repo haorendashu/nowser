@@ -28,8 +28,6 @@ class _WebHomeComponent extends State<WebHomeComponent> {
   @override
   void initState() {
     super.initState();
-    // textEditingController.text = "https://nostr.build/login/";
-    // textEditingController.text = "https://web.nostrmo.com/";
   }
 
   @override

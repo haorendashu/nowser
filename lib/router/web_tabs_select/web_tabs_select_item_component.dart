@@ -3,6 +3,8 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/image_component.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/main.dart';
+import 'package:nowser/util/router_util.dart';
 
 class WebTabsSelectItemComponent extends StatefulWidget {
   WebInfo webInfo;
@@ -68,6 +70,11 @@ class _WebTabsSelectItemComponent extends State<WebTabsSelectItemComponent> {
     }
 
     Widget removeIcon = GestureDetector(
+      onTap: () {
+        webProvider.closeTab(widget.webInfo);
+        RouterUtil.back(context);
+      },
+      behavior: HitTestBehavior.translucent,
       child: Icon(Icons.close),
     );
 

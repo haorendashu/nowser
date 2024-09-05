@@ -79,6 +79,23 @@ class WebProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void closeTab(WebInfo webInfo) {
+    int i = 0;
+    for (; i < webInfos.length; i++) {
+      var owi = webInfos[i];
+      if (owi.id == webInfo.id) {
+        break;
+      }
+    }
+
+    if (i < index) {
+      index--;
+    }
+
+    webInfos.removeAt(i);
+    notifyListeners();
+  }
 }
 
 class WebNumInfo {
