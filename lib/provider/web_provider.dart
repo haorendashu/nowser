@@ -94,6 +94,7 @@ class WebProvider extends ChangeNotifier {
     }
 
     webInfos.removeAt(i);
+    checkBlank();
     notifyListeners();
   }
 }
