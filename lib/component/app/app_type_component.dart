@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nowser/const/app_type.dart';
 
 import '../../const/base.dart';
 
@@ -17,6 +18,12 @@ class _AppTypeComponent extends State<AppTypeComponent> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
+    String typeName = "WEB";
+    if (widget.appType == AppType.ANDROID_APP) {
+      typeName = "Android";
+    } else if (widget.appType == AppType.REMOTE) {
+      typeName = "Remote";
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -30,7 +37,7 @@ class _AppTypeComponent extends State<AppTypeComponent> {
         bottom: 4,
       ),
       child: Text(
-        "WEB",
+        typeName,
         style: TextStyle(
           fontSize: themeData.textTheme.bodySmall!.fontSize,
           color: themeData.hintColor,

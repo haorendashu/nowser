@@ -24,25 +24,29 @@ class _MeRouterAppItemComponent extends State<MeRouterAppItemComponent> {
     var imageWidget = Container(
       margin: const EdgeInsets.only(
         left: Base.BASE_PADDING_HALF,
-        right: Base.BASE_PADDING,
+        right: Base.BASE_PADDING_HALF,
       ),
       child: StringUtil.isBlank(widget.app.image)
           ? const Icon(Icons.image)
           : ImageComponent(
               imageUrl: widget.app.image!,
-              width: 40,
-              height: 40,
+              width: 30,
+              height: 30,
             ),
     );
 
     var appName = widget.app.name;
-    if (StringUtil.isBlank(widget.app.code)) {
+    if (StringUtil.isBlank(appName)) {
       appName = widget.app.code;
     }
 
     var titleWidget = Container(
-      margin: const EdgeInsets.only(right: Base.BASE_PADDING),
-      child: Text(appName!),
+      margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+      child: Text(
+        appName!,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
 
     var typeWidget = Container(
@@ -57,9 +61,8 @@ class _MeRouterAppItemComponent extends State<MeRouterAppItemComponent> {
       child: Row(
         children: [
           imageWidget,
-          titleWidget,
+          Expanded(child: titleWidget),
           typeWidget,
-          Expanded(child: Container()),
           rightIconWidget,
         ],
       ),
