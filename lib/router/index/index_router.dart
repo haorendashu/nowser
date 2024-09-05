@@ -5,6 +5,8 @@ import 'package:nowser/router/index/index_web_component.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/webview/webview_component.dart';
+import '../../provider/android_signer_mixin.dart';
+import '../../provider/permission_check_mixin.dart';
 
 class IndexRouter extends StatefulWidget {
   @override
@@ -13,11 +15,16 @@ class IndexRouter extends StatefulWidget {
   }
 }
 
-class _IndexRouter extends State<IndexRouter> {
+class _IndexRouter extends State<IndexRouter>
+    with PermissionCheckMixin, AndroidSignerMixin {
   Map<String, WebViewComponent> webViewComponentMap = {};
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      handleInitialIntent(context);
+    });
+
     webProvider.checkBlank();
 
     var main = Selector<WebProvider, WebNumInfo>(

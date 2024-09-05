@@ -8,8 +8,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
+import 'package:nowser/provider/android_signer_mixin.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
+import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
@@ -69,6 +71,11 @@ class _MyApp extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Locale? _locale;
 
@@ -78,7 +85,6 @@ class _MyApp extends State<MyApp> {
     ThemeData? defaultDarkTheme;
     defaultTheme = lightTheme;
     defaultDarkTheme = darkTheme;
-
     routes = {
       RouterPath.INDEX: (context) => IndexRouter(),
       RouterPath.WEB_TABS: (context) => WebTabsSelectRouter(),

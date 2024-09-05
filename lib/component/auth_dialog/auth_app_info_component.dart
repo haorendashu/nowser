@@ -37,10 +37,16 @@ class _AuthAppInfoComponent extends State<AuthAppInfoComponent> {
       rightList.add(Text(
         name!,
         style: TextStyle(fontWeight: FontWeight.bold),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ));
     }
     if (StringUtil.isNotBlank(des)) {
-      rightList.add(Text(des!));
+      rightList.add(Text(
+        des!,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ));
     }
 
     return Stack(

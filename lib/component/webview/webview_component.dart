@@ -10,7 +10,7 @@ import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/main.dart';
-import 'package:nowser/util/permission_check_mixin.dart';
+import 'package:nowser/provider/permission_check_mixin.dart';
 
 import '../../const/auth_result.dart';
 import '../../data/app.dart';
@@ -248,7 +248,8 @@ class _WebViewComponent extends State<WebViewComponent>
             }, (app, signer) async {
               var tags = eventObj["tags"];
               Event? event = Event(app.pubkey!, eventObj["kind"], tags ?? [],
-                  eventObj["content"]);
+                  eventObj["content"],
+                  publishAt: eventObj["created_at"]);
               event = await signer.signEvent(event);
               if (event == null) {
                 return;
