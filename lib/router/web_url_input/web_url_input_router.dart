@@ -15,6 +15,23 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
 
   String? url;
 
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+    Future.delayed(const Duration(milliseconds: 350), () {
+      focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (url == null) {
@@ -33,7 +50,7 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
         child: TextField(
           controller: textEditingController,
           decoration: const InputDecoration(border: OutlineInputBorder()),
-          autofocus: true,
+          focusNode: focusNode,
           onSubmitted: (value) {
             RouterUtil.back(context, value);
           },
@@ -44,7 +61,28 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
     list.add(Expanded(child: Container()));
     list.add(Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),
-      child: inputWidget,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              RouterUtil.back(context);
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: EdgeInsets.only(right: Base.BASE_PADDING),
+              child: Icon(Icons.chevron_left),
+            ),
+          ),
+          Expanded(child: inputWidget),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: EdgeInsets.only(left: Base.BASE_PADDING),
+              child: Icon(Icons.qr_code_scanner),
+            ),
+          ),
+        ],
+      ),
     ));
 
     return Scaffold(
