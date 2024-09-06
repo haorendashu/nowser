@@ -8,7 +8,8 @@ class AppDB {
   static Future<List<App>> all() async {
     List<App> objs = [];
     var db = await DB.getCurrentDatabase();
-    List<Map<String, dynamic>> list = await db.rawQuery("select * from app");
+    List<Map<String, dynamic>> list =
+        await db.rawQuery("select * from app order by updated_at desc");
     for (var i = 0; i < list.length; i++) {
       var json = list[i];
       objs.add(App.fromJson(json));
