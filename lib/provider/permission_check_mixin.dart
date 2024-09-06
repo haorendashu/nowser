@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nowser/component/auth_dialog/auth_app_connect_dialog.dart';
 import 'package:nowser/component/auth_dialog/auth_dialog.dart';
+import 'package:nowser/component/user/user_login_dialog.dart';
 import 'package:nowser/const/auth_result.dart';
 import 'package:nowser/data/auth_log.dart';
 import 'package:nowser/data/auth_log_db.dart';
@@ -14,6 +15,14 @@ mixin PermissionCheckMixin {
   Future<void> checkPermission(BuildContext context, int appType, String code,
       int authType, Function(App?) reject, Function(App, NostrSigner) confirm,
       {int? eventKind, String? authDetail}) async {
+    if (keyProvider.keys.isEmpty) {
+      // should add a key first
+      await UserLoginDialog.show(context);
+      if (keyProvider.keys.isEmpty) {
+        return;
+      }
+    }
+
     var app = appProvider.getApp(appType, code);
     if (app == null) {
       // app is null, app connect
