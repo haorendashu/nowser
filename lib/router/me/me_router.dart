@@ -162,8 +162,8 @@ class _MeRouter extends CustState<MeRouter> {
 
     List<Widget> appWidgetList = [];
     var appList = _appProvider.appList;
-    var length = appList.length;
-    for (var i = 0; i < length && i < 5; i++) {
+    var appListLength = appList.length;
+    for (var i = 0; i < appListLength && i < 5; i++) {
       var app = appList[i];
       appWidgetList.add(Container(
         child: MeRouterAppItemComponent(app),
@@ -173,7 +173,7 @@ class _MeRouter extends CustState<MeRouter> {
     appWidgetList.add(Container(
       alignment: Alignment.center,
       child: Text(
-        "Show more",
+        "Show more apps",
         style: TextStyle(
           decoration: TextDecoration.underline,
         ),
@@ -206,7 +206,7 @@ class _MeRouter extends CustState<MeRouter> {
     logList.add(Container(
       alignment: Alignment.center,
       child: Text(
-        "Show more",
+        "Show more logs",
         style: TextStyle(
           decoration: TextDecoration.underline,
         ),
@@ -232,7 +232,7 @@ class _MeRouter extends CustState<MeRouter> {
         padding: EdgeInsets.only(
           left: Base.BASE_PADDING,
           right: Base.BASE_PADDING,
-          top: mediaQueryData.padding.top + Base.BASE_PADDING,
+          top: mediaQueryData.padding.top + 30,
           bottom: mediaQueryData.padding.bottom + Base.BASE_PADDING,
         ),
         child: Column(
@@ -248,7 +248,34 @@ class _MeRouter extends CustState<MeRouter> {
     );
 
     return Scaffold(
-      body: main,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: main,
+          ),
+          Positioned(
+            top: mediaQueryData.padding.top + Base.BASE_PADDING,
+            right: 20,
+            child: GestureDetector(
+              onTap: () {
+                RouterUtil.back(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    // border: Border.all(),
+                    borderRadius: BorderRadius.circular(4),
+                    color: themeData.hintColor.withOpacity(0.2)),
+                padding: EdgeInsets.all(4),
+                child: Icon(Icons.close),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
