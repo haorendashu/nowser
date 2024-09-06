@@ -214,7 +214,7 @@ class _WebViewComponent extends State<WebViewComponent>
         }
 
         checkPermission(context, AppType.WEB, code, AuthType.GET_PUBLIC_KEY,
-            () {
+            (app) {
           nip07Reject(resultId, "Forbid");
         }, (app, signer) {
           print("confirm get pubkey");
@@ -243,7 +243,7 @@ class _WebViewComponent extends State<WebViewComponent>
           var eventKind = eventObj["kind"];
           if (eventKind is int) {
             checkPermission(context, AppType.WEB, code, AuthType.SIGN_EVENT,
-                eventKind: eventKind, authDetail: content, () {
+                eventKind: eventKind, authDetail: content, (app) {
               nip07Reject(resultId, "Forbid");
             }, (app, signer) async {
               var tags = eventObj["tags"];
@@ -281,7 +281,7 @@ class _WebViewComponent extends State<WebViewComponent>
           return;
         }
 
-        checkPermission(context, AppType.WEB, code, AuthType.GET_RELAYS, () {
+        checkPermission(context, AppType.WEB, code, AuthType.GET_RELAYS, (app) {
           nip07Reject(resultId, "Forbid");
         }, (app, signer) {
           // TODO handle getRelays
@@ -319,7 +319,7 @@ class _WebViewComponent extends State<WebViewComponent>
           }
 
           checkPermission(context, AppType.WEB, code, AuthType.NIP04_ENCRYPT,
-              () {
+              (app) {
             nip07Reject(resultId, "Forbid");
           }, (app, signer) async {
             var resultStr = await signer.encrypt(pubkey, plaintext);
@@ -351,7 +351,7 @@ class _WebViewComponent extends State<WebViewComponent>
           }
 
           checkPermission(context, AppType.WEB, code, AuthType.NIP04_DECRYPT,
-              () {
+              (app) {
             nip07Reject(resultId, "Forbid");
           }, (app, signer) async {
             var app = appProvider.getApp(AppType.WEB, code);
@@ -386,7 +386,7 @@ class _WebViewComponent extends State<WebViewComponent>
           }
 
           checkPermission(context, AppType.WEB, code, AuthType.NIP44_ENCRYPT,
-              () {
+              (app) {
             nip07Reject(resultId, "Forbid");
           }, (app, signer) async {
             var resultStr = await signer.nip44Encrypt(pubkey, plaintext);
@@ -418,7 +418,7 @@ class _WebViewComponent extends State<WebViewComponent>
           }
 
           checkPermission(context, AppType.WEB, code, AuthType.NIP44_DECRYPT,
-              () {
+              (app) {
             nip07Reject(resultId, "Forbid");
           }, (app, signer) async {
             var resultStr = await signer.nip44Decrypt(pubkey, ciphertext);

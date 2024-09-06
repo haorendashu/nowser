@@ -92,9 +92,12 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
             }
 
             checkPermission(context, AppType.ANDROID_APP, code!, authType,
-                eventKind: eventKind, authDetail: playload, () {
+                eventKind: eventKind, authDetail: playload, (app) {
               // this place should do some about reject
-              // saveAuthLog(app, authType, eventKind, playload, AuthResult.OK);
+              if (app != null) {
+                saveAuthLog(
+                    app, authType, eventKind, playload, AuthResult.REJECT);
+              }
               receiveIntent.ReceiveIntent.setResult(
                 receiveIntent.kActivityResultCanceled,
                 shouldFinish: true,

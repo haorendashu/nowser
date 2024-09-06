@@ -4,6 +4,7 @@ import 'package:nowser/component/auth_dialog/auth_app_connect_dialog.dart';
 import 'package:nowser/component/auth_dialog/auth_dialog.dart';
 import 'package:nowser/const/auth_result.dart';
 import 'package:nowser/data/auth_log.dart';
+import 'package:nowser/data/auth_log_db.dart';
 import 'package:nowser/main.dart';
 
 import '../const/connect_type.dart';
@@ -11,7 +12,7 @@ import '../data/app.dart';
 
 mixin PermissionCheckMixin {
   Future<void> checkPermission(BuildContext context, int appType, String code,
-      int authType, Function reject, Function(App, NostrSigner) confirm,
+      int authType, Function(App?) reject, Function(App, NostrSigner) confirm,
       {int? eventKind, String? authDetail}) async {
     var app = appProvider.getApp(appType, code);
     if (app == null) {
@@ -24,13 +25,14 @@ mixin PermissionCheckMixin {
 
     if (app == null) {
       // not allow connect
-      reject();
+      reject(null);
       return;
     }
 
     var signer = getSigner(app.pubkey!);
     if (signer == null) {
-      reject();
+      saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
+      reject(app);
       return;
     }
 
@@ -48,7 +50,7 @@ mixin PermissionCheckMixin {
         return;
       } else if (permissionCheckResult == AuthResult.REJECT) {
         saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
-        reject();
+        reject(app);
         return;
       }
 
@@ -62,13 +64,24 @@ mixin PermissionCheckMixin {
     }
 
     saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
-    reject();
+    reject(app);
     return;
   }
 
   void saveAuthLog(App app, int authType, int? eventKind, String? authDetail,
       int authResult) {
-    // TODO
+    if (app.id != null) {
+      var authLog = AuthLog(
+        appId: app.id,
+        authType: authType,
+        eventKind: eventKind,
+        content: authDetail,
+        authResult: authResult,
+        createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      );
+
+      AuthLogDB.insert(authLog);
+    }
   }
 
   // this method should override

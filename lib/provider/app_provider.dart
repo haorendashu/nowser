@@ -11,12 +11,18 @@ class AppProvider extends ChangeNotifier {
 
   List<App> get appList => _list;
 
+  Map<int, App> _appMap = {};
+
   Map<String, Map<String, int>> appPermissions = {};
 
   Future<void> reload() async {
+    _appMap = {};
     appPermissions = {};
     var allApp = await AppDB.all();
     _list = allApp;
+    for (var app in allApp) {
+      _appMap[app.id!] = app;
+    }
     notifyListeners();
   }
 
@@ -89,6 +95,10 @@ class AppProvider extends ChangeNotifier {
         }
       }
     }
+  }
+
+  App? getAppById(int appId) {
+    return _appMap[appId];
   }
 
   App? getApp(int appType, String code) {

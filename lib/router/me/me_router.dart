@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/text_input/text_input_dialog.dart';
 import 'package:nowser/component/user/user_name_component.dart';
 import 'package:nowser/component/user/user_pic_component.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
+import 'package:nowser/data/auth_log_db.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/router/me/me_router_log_item_component.dart';
@@ -11,6 +13,7 @@ import 'package:nowser/router/me/me_router_web_item_component.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/auth_log.dart';
 import '../keys/keys_router.dart';
 import 'me_router_app_item_component.dart';
 
@@ -21,9 +24,19 @@ class MeRouter extends StatefulWidget {
   }
 }
 
-class _MeRouter extends State<MeRouter> {
+class _MeRouter extends CustState<MeRouter> {
+  List<AuthLog> authLogs = [];
+
   @override
-  Widget build(BuildContext context) {
+  Future<void> onReady(BuildContext context) async {
+    var list = await AuthLogDB.list(skip: 0, limit: 10);
+    setState(() {
+      authLogs = list;
+    });
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
@@ -150,7 +163,7 @@ class _MeRouter extends State<MeRouter> {
     List<Widget> appWidgetList = [];
     var appList = _appProvider.appList;
     var length = appList.length;
-    for (var i = 0; i < length && i < 3; i++) {
+    for (var i = 0; i < length && i < 5; i++) {
       var app = appList[i];
       appWidgetList.add(Container(
         child: MeRouterAppItemComponent(app),
@@ -184,18 +197,12 @@ class _MeRouter extends State<MeRouter> {
     // TODO add zap send list here!
 
     List<Widget> logList = [];
-    logList.add(Container(
-      child: MeRouterLogItemComponent(),
-    ));
-    logList.add(Divider());
-    logList.add(Container(
-      child: MeRouterLogItemComponent(),
-    ));
-    logList.add(Divider());
-    logList.add(Container(
-      child: MeRouterLogItemComponent(),
-    ));
-    logList.add(Divider());
+    for (var authLog in authLogs) {
+      logList.add(Container(
+        child: MeRouterLogItemComponent(authLog),
+      ));
+      logList.add(Divider());
+    }
     logList.add(Container(
       alignment: Alignment.center,
       child: Text(
