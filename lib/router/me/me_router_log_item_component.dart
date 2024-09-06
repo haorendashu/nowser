@@ -58,7 +58,7 @@ class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
             bottom: 2,
           ),
           child: Text(
-            "approve",
+            "Approve",
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -72,7 +72,7 @@ class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
             right: Base.BASE_PADDING_HALF,
           ),
           child: Text(
-            "reject",
+            "Reject",
             style: TextStyle(color: Colors.white),
           ),
         ),
