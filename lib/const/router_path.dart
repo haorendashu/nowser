@@ -4,4 +4,6 @@ class RouterPath {
   static const String WEB_URL_INPUT = "/webUrlInput";
   static const String ME = "/me";
   static const String KEYS = "/keys";
+  static const String APPS = "/apps";
+  static const String ADD_REMOTE_APP = "/addRemoteApp";
 }

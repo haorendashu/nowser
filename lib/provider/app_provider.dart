@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/connect_type.dart';
 import 'package:nowser/data/app_db.dart';
 
@@ -10,6 +11,16 @@ class AppProvider extends ChangeNotifier {
   List<App> _list = [];
 
   List<App> get appList => _list;
+
+  List<App> remoteAppList() {
+    List<App> apps = [];
+    for (var app in _list) {
+      if (app.appType == AppType.REMOTE) {
+        apps.add(app);
+      }
+    }
+    return apps;
+  }
 
   Map<int, App> _appMap = {};
 

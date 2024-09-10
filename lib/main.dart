@@ -13,6 +13,8 @@ import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
+import 'package:nowser/router/apps/add_remote_app_router.dart';
+import 'package:nowser/router/apps/apps_router.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
 import 'package:nowser/router/me/me_router.dart';
@@ -26,6 +28,7 @@ import 'const/colors.dart';
 import 'const/router_path.dart';
 import 'generated/l10n.dart';
 import 'provider/data_util.dart';
+import 'provider/remote_signing_provider.dart';
 import 'provider/setting_provider.dart';
 import 'util/colors_util.dart';
 
@@ -36,6 +39,8 @@ late SettingProvider settingProvider;
 late KeyProvider keyProvider;
 
 late AppProvider appProvider;
+
+late RemoteSigningProvider remoteSigningProvider;
 
 late Map<String, WidgetBuilder> routes;
 
@@ -55,6 +60,7 @@ Future<void> main() async {
   var futureResultList = await Future.wait([settingTask, appTask]);
   settingProvider = futureResultList[0] as SettingProvider;
   webProvider = WebProvider();
+  remoteSigningProvider = RemoteSigningProvider();
 
   runApp(MyApp());
 }
@@ -92,6 +98,8 @@ class _MyApp extends State<MyApp> {
       RouterPath.WEB_URL_INPUT: (context) => WebUrlInputRouter(),
       RouterPath.ME: (context) => MeRouter(),
       RouterPath.KEYS: (context) => KeysRouter(),
+      RouterPath.APPS: (context) => AppsRouter(),
+      RouterPath.ADD_REMOTE_APP: (context) => AddRemoteAppRouter(),
     };
 
     return MultiProvider(
@@ -104,6 +112,9 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<AppProvider>.value(
           value: appProvider,
+        ),
+        ListenableProvider<RemoteSigningProvider>.value(
+          value: remoteSigningProvider,
         ),
       ],
       child: MaterialApp(
@@ -283,114 +294,3 @@ Color _getMainColor() {
   }
   return color500;
 }
-
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//         useMaterial3: true,
-//       ),
-//       home: const MyHomePage(title: 'Flutter Demo Home Page'),
-//     );
-//   }
-// }
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-
-//   final String title;
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   void _incrementCounter() {
-//     // setState(() {
-//     //   _counter++;
-//     // });
-
-//     index++;
-//     index %= 3;
-//     setState(() {});
-//   }
-
-//   StreamSubscription? _sub;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _sub = receiveIntent.ReceiveIntent.receivedIntentStream.listen(
-//         (receiveIntent.Intent? intent) {
-//       log("receive intent!!!!!");
-//       log(intent.toString());
-//     }, onError: (err) {
-//       print("listen error ");
-//       print(err);
-//     });
-//     print("listen begin!");
-
-//     test();
-//   }
-
-//   Future<void> test() async {
-//     try {
-//       final receivedIntent =
-//           await receiveIntent.ReceiveIntent.getInitialIntent();
-//       print(receivedIntent);
-//       // Validate receivedIntent and warn the user, if it is not correct,
-//       // but keep in mind it could be `null` or "empty"(`receivedIntent.isNull`).
-//     } catch (e) {
-//       // Handle exception
-//     }
-//   }
-
-//   int index = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//         title: Text(widget.title),
-//       ),
-//       body: IndexedStack(
-//         index: index,
-//         children: [
-//           InAppWebView(
-//             initialUrlRequest: URLRequest(
-//               url: WebUri(
-//                 "https://xueqiu.com/",
-//               ),
-//             ),
-//           ),
-//           InAppWebView(
-//             initialUrlRequest: URLRequest(
-//               url: WebUri(
-//                 "https://inappwebview.dev/",
-//               ),
-//             ),
-//           ),
-//           InAppWebView(
-//             initialUrlRequest: URLRequest(
-//               url: WebUri(
-//                 "https://github.com/",
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }

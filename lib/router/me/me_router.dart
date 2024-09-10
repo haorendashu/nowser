@@ -170,12 +170,30 @@ class _MeRouter extends CustState<MeRouter> {
       ));
       appWidgetList.add(Divider());
     }
+    if (appWidgetList.isEmpty) {
+      appWidgetList.add(GestureDetector(
+        onTap: () {
+          RouterUtil.router(context, RouterPath.APPS);
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Container(
+          child: Text("no apps now"),
+        ),
+      ));
+      appWidgetList.add(Divider());
+    }
     appWidgetList.add(Container(
       alignment: Alignment.center,
-      child: Text(
-        "Show more apps",
-        style: TextStyle(
-          decoration: TextDecoration.underline,
+      child: GestureDetector(
+        onTap: () {
+          RouterUtil.router(context, RouterPath.APPS);
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Text(
+          "Show more apps",
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+          ),
         ),
       ),
     ));
@@ -200,6 +218,12 @@ class _MeRouter extends CustState<MeRouter> {
     for (var authLog in authLogs) {
       logList.add(Container(
         child: MeRouterLogItemComponent(authLog),
+      ));
+      logList.add(Divider());
+    }
+    if (logList.isEmpty) {
+      logList.add(Container(
+        child: Text("no logs now"),
       ));
       logList.add(Divider());
     }

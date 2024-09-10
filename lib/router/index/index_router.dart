@@ -24,7 +24,7 @@ class _IndexRouter extends State<IndexRouter>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       handleInitialIntent(context);
     });
-
+    remoteSigningProvider.updateContext(context);
     webProvider.checkBlank();
 
     var main = Selector<WebProvider, WebNumInfo>(
