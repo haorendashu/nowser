@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_web_component.dart';
@@ -21,9 +22,11 @@ class _IndexRouter extends State<IndexRouter>
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      handleInitialIntent(context);
-    });
+    if (PlatformUtil.isAndroid()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        handleInitialIntent(context);
+      });
+    }
     remoteSigningProvider.updateContext(context);
     webProvider.checkBlank();
 
