@@ -37,9 +37,14 @@ class DB {
     // init db
     db.execute(
         "create table app(id            integer not null constraint app_pk primary key autoincrement,pubkey        text    not null,app_type      integer not null,code          text    not null,name          text,image         text,connect_type  integer not null,always_allow  text,always_reject text,created_at    integer not null,updated_at    integer not null);");
+
     db.execute(
         "create table auth_log(id          integer not null constraint auth_log_pk primary key autoincrement,app_id      integer not null,auth_type   integer not null,event_kind  integer,title       text,content     text,auth_result integer not null,created_at  integer not null);");
     db.execute("create index auth_log_index on auth_log (app_id);");
+
+    db.execute(
+        "create table remote_signing_info(id                integer not null constraint remote_signing_info_pk primary key autoincrement,app_id            integer,local_pubkey      text,remote_signer_key text,relays            text,secret            text,created_at        integer,updated_at        integer);");
+
     db.execute(
         "create table zap_log(id         integer not null constraint zap_log_pk primary key autoincrement,app_id     integer not null constraint zap_log_index unique,zap_type   integer not null,num        integer not null,created_at integer not null);");
     db.execute("create index zap_log_index on zap_log (app_id);");

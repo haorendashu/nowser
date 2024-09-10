@@ -61,6 +61,8 @@ Future<void> main() async {
   settingProvider = futureResultList[0] as SettingProvider;
   webProvider = WebProvider();
   remoteSigningProvider = RemoteSigningProvider();
+  remoteSigningProvider.reload();
+  remoteSigningProvider.reloadPenddingRemoteApps();
 
   runApp(MyApp());
 }

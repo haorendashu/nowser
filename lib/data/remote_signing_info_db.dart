@@ -20,4 +20,23 @@ class RemoteSigningInfoDB {
 
     return null;
   }
+
+  static Future<List<RemoteSigningInfo>> penddingRemoteSigningInfo(
+      {DatabaseExecutor? db}) async {
+    List<RemoteSigningInfo> objs = [];
+
+    var since =
+        DateTime.now().millisecondsSinceEpoch ~/ 1000 - 60 * 60 * 24 * 3;
+
+    db = await DB.getDB(db);
+    List<Map<String, dynamic>> list = await db.rawQuery(
+        "select * from remote_signing_info where app_id is null and created_at > ?",
+        [since]);
+    for (var i = 0; i < list.length; i++) {
+      var json = list[i];
+      objs.add(RemoteSigningInfo.fromJson(json));
+    }
+
+    return objs;
+  }
 }

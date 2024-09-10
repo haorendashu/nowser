@@ -7,6 +7,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/data/remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
+import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
@@ -267,7 +268,7 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
     }
 
     remoteSigningInfo.remoteSignerKey = generatePrivateKey();
-    remoteSigningInfo.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 10;
+    remoteSigningInfo.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
     // TODO
@@ -304,11 +305,11 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       remoteSignerKey: remoteSignerKey,
       relays: relays.join(","),
       secret: secretController.text,
-      createdAt: DateTime.now().millisecondsSinceEpoch ~/ 10,
+      createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
     );
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
-    RemoteSigningInfoDB.insert(remoteSigningInfo);
+    remoteSigningProvider.addRemoteSigningInfo(remoteSigningInfo);
     RouterUtil.back(context);
   }
 

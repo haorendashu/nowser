@@ -29,7 +29,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     context = _context;
   }
 
-  // k - v ==> localPubkey - Relay
+  // localPubkey - Relay
   Map<String, List<Relay>> relayMap = {};
 
   // localPubkey - RemoteSigningInfo
@@ -245,6 +245,22 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         }
       }
     }
+  }
+
+  List<RemoteSigningInfo> _penddingRemoteApps = [];
+
+  List<RemoteSigningInfo> get penddingRemoteApps => _penddingRemoteApps;
+
+  void addRemoteSigningInfo(RemoteSigningInfo remoteSigningInfo) {
+    RemoteSigningInfoDB.insert(remoteSigningInfo);
+    reloadPenddingRemoteApps();
+    notifyListeners();
+  }
+
+  Future<void> reloadPenddingRemoteApps() async {
+    var list = await RemoteSigningInfoDB.penddingRemoteSigningInfo();
+    _penddingRemoteApps = list;
+    notifyListeners();
   }
 
   /**
