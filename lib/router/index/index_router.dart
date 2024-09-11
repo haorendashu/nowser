@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
+import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_web_component.dart';
@@ -16,12 +17,18 @@ class IndexRouter extends StatefulWidget {
   }
 }
 
-class _IndexRouter extends State<IndexRouter>
+class _IndexRouter extends CustState<IndexRouter>
     with PermissionCheckMixin, AndroidSignerMixin {
   Map<String, WebViewComponent> webViewComponentMap = {};
 
   @override
-  Widget build(BuildContext context) {
+  Future<void> onReady(BuildContext context) async {
+    await remoteSigningProvider.reload();
+    await remoteSigningProvider.reloadPenddingRemoteApps();
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
     if (PlatformUtil.isAndroid()) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         handleInitialIntent(context);

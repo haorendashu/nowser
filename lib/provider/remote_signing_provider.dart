@@ -14,10 +14,12 @@ import 'package:nostr_sdk/relay/relay_status.dart';
 import 'package:nostr_sdk/signer/local_nostr_signer.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/data/app.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 
+import '../component/auth_dialog/auth_app_connect_dialog.dart';
 import '../data/remote_signing_info.dart';
 import '../data/remote_signing_info_db.dart';
 import '../main.dart';
@@ -29,75 +31,157 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     context = _context;
   }
 
-  // localPubkey - Relay
+  // remoteSignerPubkey - Relay
   Map<String, List<Relay>> relayMap = {};
 
-  // localPubkey - RemoteSigningInfo
+  // remoteSignerPubkey - RemoteSigningInfo
   Map<String, RemoteSigningInfo> remoteSigningInfoMap = {};
 
-  // localPubkey - App
+  // remoteSignerPubkey - App
   Map<String, App> appMap = {};
 
   Future<void> reload() async {
     relayMap = {};
     remoteSigningInfoMap = {};
     appMap = {};
+
+    load();
   }
 
   Future<void> load() async {
     var remoteAppList = appProvider.remoteAppList();
     for (var remoteApp in remoteAppList) {
-      await add(remoteApp);
+      await addRemoteApp(remoteApp);
     }
   }
 
-  Future<void> add(App remoteApp) async {
+  Future<void> addRemoteApp(App remoteApp) async {
     var remoteSigningInfo = await RemoteSigningInfoDB.getByAppId(remoteApp.id!);
     if (remoteSigningInfo != null &&
         StringUtil.isNotBlank(remoteSigningInfo.remoteSignerKey) &&
+        StringUtil.isNotBlank(remoteSigningInfo.remotePubkey) &&
         StringUtil.isNotBlank(remoteSigningInfo.localPubkey) &&
         StringUtil.isNotBlank(remoteSigningInfo.relays)) {
-      var localPubkey = remoteSigningInfo.localPubkey!;
-      var pubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
-      var relayAddrs = remoteSigningInfo.relays!.split(",");
+      var relays = connectToRelay(remoteSigningInfo);
 
-      List<Relay> relays = [];
-      for (var relayAddr in relayAddrs) {
-        // use pubkey relace with
-        var relay = RelayIsolate(relayAddr, RelayStatus(localPubkey));
-
-        var filter = Filter(p: [pubkey]);
-        relay.pendingAuthedMessages
-            .add(["REQ", StringUtil.rndNameStr(10), filter.toJson()]);
-        relay.onMessage = _onEvent;
-
-        relay.connect();
-        relays.add(relay);
-      }
-
-      relayMap[localPubkey] = relays;
-      remoteSigningInfoMap[localPubkey] = remoteSigningInfo;
+      var remoteSignerPubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
+      remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
+      appMap[remoteSignerPubkey] = remoteApp;
+      relayMap[remoteSignerPubkey] = relays;
     }
+  }
+
+  List<Relay> connectToRelay(RemoteSigningInfo remoteSigningInfo) {
+    var remoteSignerPubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
+    var relayAddrs = remoteSigningInfo.relays!.split(",");
+
+    List<Relay> relays = [];
+    for (var relayAddr in relayAddrs) {
+      // use pubkey relace with
+      var relay = RelayIsolate(relayAddr, RelayStatus(remoteSignerPubkey));
+
+      var filter = Filter(
+          p: [remoteSigningInfo.remotePubkey!],
+          since: DateTime.now().millisecondsSinceEpoch ~/ 1000);
+      relay.pendingAuthedMessages
+          .add(["REQ", StringUtil.rndNameStr(10), filter.toJson()]);
+      relay.pendingMessages
+          .add(["REQ", StringUtil.rndNameStr(10), filter.toJson()]);
+      relay.onMessage = _onEvent;
+
+      relay.connect();
+      relays.add(relay);
+
+      print("connected to relay ${relay.url}");
+    }
+
+    return relays;
   }
 
   Future<void> onRequest(
     Relay relay,
     NostrRemoteRequest request,
     RemoteSigningInfo remoteSigningInfo,
-    App app,
+    String localPubkey,
+    App? app,
   ) async {
-    String localPubkey = remoteSigningInfo.localPubkey!;
-    NostrSigner signer = LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
-    var remoteSignerPubkey = await signer.getPublicKey();
-    var appType = app.appType!;
-    var code = app.code!;
+    NostrSigner signerSigner =
+        LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
+    var remoteSignerPubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
+    var appType = AppType.REMOTE;
+    var code = remoteSignerPubkey;
 
     NostrRemoteResponse? response;
     if (request.method == "ping") {
       response = NostrRemoteResponse(request.id, "pong");
 
-      sendResponse(relay, response, signer, localPubkey, remoteSignerPubkey!);
+      sendResponse(
+          relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+    } else if (request.method == "connect") {
+      if (app != null) {
+        response = NostrRemoteResponse(request.id, "ack");
+      } else {
+        if (request.params.length <= 1) {
+          response = NostrRemoteResponse(request.id, "", error: "params error");
+        } else {
+          if (request.params[0] == remoteSigningInfo.remotePubkey &&
+              request.params[1] == remoteSigningInfo.secret) {
+            // check pass, init app
+            var newApp = await getApp(appType, code);
+            await AuthAppConnectDialog.show(context!, newApp);
+            // reload from provider
+            app = appProvider.getApp(appType, code);
+            if (app == null) {
+              response =
+                  NostrRemoteResponse(request.id, "", error: "connect fail");
+            } else {
+              remoteSigningInfo.appId = app.id;
+              remoteSigningInfo.localPubkey = localPubkey;
+              remoteSigningInfo.updatedAt =
+                  DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+              RemoteSigningInfoDB.update(remoteSigningInfo);
+              remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
+              appMap[remoteSignerPubkey] = app;
+
+              _penddingRemoteApps.removeWhere((rsi) {
+                if (rsi.id == remoteSigningInfo.id) {
+                  return true;
+                }
+                return false;
+              });
+
+              response = NostrRemoteResponse(request.id, "ack");
+            }
+          } else {
+            response = NostrRemoteResponse(request.id, "",
+                error: "connect check fail");
+          }
+        }
+      }
+
+      if (response != null) {
+        sendResponse(
+            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+      }
     } else {
+      if (remoteSigningInfo.localPubkey != localPubkey) {
+        // Remote signing should connect first.
+        response = NostrRemoteResponse(request.id, "",
+            error: "Local pubkey not allow.");
+        sendResponse(
+            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+        return;
+      }
+      if (app == null) {
+        // Remote signing should connect first.
+        response = NostrRemoteResponse(request.id, "",
+            error: "Remote signing should connect first.");
+        sendResponse(
+            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+        return;
+      }
+
       int? eventKind;
       String? authDetail;
       int authType = AuthType.GET_PUBLIC_KEY;
@@ -130,7 +214,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       checkPermission(context!, appType, code, authType,
           eventKind: eventKind, authDetail: authDetail, (app) {
         response = NostrRemoteResponse(request.id, "", error: "forbid");
-        sendResponse(relay, response, signer, localPubkey, remoteSignerPubkey!);
+        sendResponse(
+            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
       }, (app, signer) async {
         if (request.method == "sign_event") {
           var tags = eventObj["tags"];
@@ -165,7 +250,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           response = NostrRemoteResponse(request.id, text!);
         }
 
-        sendResponse(relay, response, signer, localPubkey, remoteSignerPubkey!);
+        sendResponse(
+            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
       });
     }
   }
@@ -174,27 +260,45 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       NostrSigner signer, String localPubkey, String remoteSignerPubkey) async {
     if (response != null) {
       var result = await response.encrypt(signer, localPubkey);
-      var event = Event(
-          remoteSignerPubkey!,
+      Event? event = Event(
+          remoteSignerPubkey,
           EventKind.NOSTR_REMOTE_SIGNING,
           [
             ["p", localPubkey]
           ],
           result!);
+      event = await signer.signEvent(event);
 
-      relay.send(["event", event.toJson()]);
+      var signerPubkey = await signer.getPublicKey();
+      print("signerPubkey $signerPubkey");
+
+      print("response:");
+      if (event != null) {
+        print(event.toJson());
+        print(event.isValid);
+        print(event.isSigned);
+        relay.send(["EVENT", event.toJson()]);
+      } else {
+        print("null");
+      }
     }
   }
 
   Future<void> _onEvent(Relay relay, List<dynamic> json) async {
-    var localPubkey = relay.relayStatus.addr;
-    var remoteSigningInfo = remoteSigningInfoMap[localPubkey];
+    print("request");
+    print(json);
+
+    var remoteSignerPubkey = relay.relayStatus.addr;
+    var remoteSigningInfo = remoteSigningInfoMap[remoteSignerPubkey];
     if (remoteSigningInfo == null) {
       print("remoteSigningInfo is null");
       return;
     }
-    var remotePubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
     var nostrSigner = LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
+    var signer = keyProvider.getSigner(remoteSigningInfo.remotePubkey!);
+    if (signer == null) {
+      return;
+    }
 
     final messageType = json[0];
     if (messageType == 'EVENT') {
@@ -208,8 +312,11 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
         if (event.kind == EventKind.NOSTR_REMOTE_SIGNING) {
           var request = await NostrRemoteRequest.decrypt(
-              event.content, nostrSigner, localPubkey);
-          if (request != null) {}
+              event.content, signer, event.pubkey);
+          if (request != null) {
+            onRequest(relay, request, remoteSigningInfo, event.pubkey,
+                appMap[remoteSignerPubkey]);
+          }
         }
       } catch (err) {
         log(err.toString());
@@ -228,7 +335,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         ["relay", relay.url],
         ["challenge", challenge]
       ];
-      Event? event = Event(remotePubkey, EventKind.AUTHENTICATION, tags, "");
+      Event? event =
+          Event(remoteSignerPubkey, EventKind.AUTHENTICATION, tags, "");
       event = await nostrSigner.signEvent(event);
       if (event != null) {
         relay.send(["AUTH", event.toJson()], forceSend: true);
@@ -251,7 +359,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
   List<RemoteSigningInfo> get penddingRemoteApps => _penddingRemoteApps;
 
-  void addRemoteSigningInfo(RemoteSigningInfo remoteSigningInfo) {
+  void saveRemoteSigningInfo(RemoteSigningInfo remoteSigningInfo) {
     RemoteSigningInfoDB.insert(remoteSigningInfo);
     reloadPenddingRemoteApps();
     notifyListeners();
@@ -261,72 +369,22 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     var list = await RemoteSigningInfoDB.penddingRemoteSigningInfo();
     _penddingRemoteApps = list;
     notifyListeners();
+
+    connectPenddingRemoteApp();
   }
 
-  /**
-   * The below code is design for relay n - remoteSignerKey n
-   */
+  void connectPenddingRemoteApp() {
+    for (var remoteSigningInfo in _penddingRemoteApps) {
+      if (StringUtil.isNotBlank(remoteSigningInfo.remoteSignerKey) &&
+          StringUtil.isNotBlank(remoteSigningInfo.remotePubkey) &&
+          StringUtil.isNotBlank(remoteSigningInfo.relays)) {
+        var relays = connectToRelay(remoteSigningInfo);
 
-  // Map<String, RelayStatus> relayStatusMap = {};
-
-  // // relayAddr - Relay
-  // Map<String, Relay> relayMap = {};
-
-  // // remoteSignerPubkey - RemoteSigningInfo
-  // Map<String, RemoteSigningInfo> remoteSigningInfoMap = {};
-
-  // Map<String, List<String>> relayToRemoteSignerPubkeys = {};
-
-  // Map<String, List<String>> remoteSignerPubkeyToRelays = {};
-
-  // /// relay - remoteSignerKey > n - n
-  // /// ==>
-  // /// relay - remoteSignerKey > 1 - n
-  // /// remoteSigner - relay > 1 - n
-  // Future<void> load() async {
-  //   var remoteAppList = appProvider.remoteAppList();
-  //   for (var remoteApp in remoteAppList) {
-  //     var remoteSigningInfo =
-  //         await RemoteSigningInfoDB.getByAppId(remoteApp.id!);
-  //     if (remoteSigningInfo != null &&
-  //         StringUtil.isNotBlank(remoteSigningInfo.remoteSignerKey) &&
-  //         StringUtil.isNotBlank(remoteSigningInfo.localPubkey) &&
-  //         StringUtil.isNotBlank(remoteSigningInfo.relays)) {
-  //       var pubkey = getPublicKey(remoteSigningInfo.secret!);
-  //       var relays = remoteSigningInfo.relays!.split(",");
-
-  //       remoteSignerPubkeyToRelays[pubkey] = relays;
-  //       remoteSigningInfoMap[pubkey] = remoteSigningInfo;
-
-  //       for (var relay in relays) {
-  //         relay = RelayAddrUtil.handle(relay);
-
-  //         var pubkeys = relayToRemoteSignerPubkeys[relay];
-  //         if (pubkeys == null) {
-  //           pubkeys = [];
-  //           relayToRemoteSignerPubkeys[relay] = pubkeys;
-  //         }
-
-  //         if (!pubkeys.contains(pubkey)) {
-  //           pubkeys.add(pubkey);
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   // data handle complete, begin to init relays
-  //   for (var entry in relayToRemoteSignerPubkeys.entries) {
-  //     var relayAddr = entry.key;
-  //     var pubkeys = entry.value;
-
-  //     var relayStatus = RelayStatus(relayAddr);
-  //     relayStatusMap[relayAddr] = relayStatus;
-
-  //     var relay = RelayIsolate(relayAddr, relayStatus);
-  //     relayMap[relayAddr] = relay;
-
-  //     // var filter = Filter(
-  //     //     p: pubkeys, since: DateTime.now().millisecondsSinceEpoch ~/ 1000);
-  //   }
-  // }
+        var remoteSignerPubkey =
+            getPublicKey(remoteSigningInfo.remoteSignerKey!);
+        remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
+        relayMap[remoteSignerPubkey] = relays;
+      }
+    }
+  }
 }

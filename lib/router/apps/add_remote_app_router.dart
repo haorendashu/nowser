@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
@@ -5,6 +6,7 @@ import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/nip46/nostr_remote_signer_info.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/qrscanner.dart';
+import 'package:nowser/component/simple_qrcode_dialog.dart';
 import 'package:nowser/data/remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
 import 'package:nowser/main.dart';
@@ -13,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../component/appbar_back_btn_component.dart';
 import '../../const/base.dart';
+import '../../generated/l10n.dart';
 import '../../provider/key_provider.dart';
 
 class AddRemoteAppRouter extends StatefulWidget {
@@ -28,6 +31,8 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
   TextEditingController bunkerConn = TextEditingController();
 
   bool editBunker = false;
+
+  String? pubkey;
 
   @override
   void initState() {
@@ -46,6 +51,41 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
     var themeData = Theme.of(context);
     var textColor = themeData.textTheme.bodyMedium!.color;
     var mainColor = themeData.primaryColor;
+
+    var keyWidget =
+        Selector<KeyProvider, List<String>>(builder: (context, pubkeys, child) {
+      List<DropdownMenuItem<String>> items = [];
+      for (var pubkey in pubkeys) {
+        items.add(DropdownMenuItem(
+          value: pubkey,
+          child: Text(
+            Nip19.encodePubKey(pubkey),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ));
+      }
+
+      if (StringUtil.isBlank(pubkey) && pubkeys.isNotEmpty) {
+        pubkey = pubkeys.first;
+        refreshBunkerUrl();
+      }
+
+      return DropdownButton<String>(
+        items: items,
+        isExpanded: true,
+        onChanged: (String? value) {
+          if (StringUtil.isNotBlank(value)) {
+            pubkey = value;
+            refreshBunkerUrl();
+            setState(() {});
+          }
+        },
+        value: pubkey,
+      );
+    }, selector: (context, provider) {
+      return provider.pubkeys;
+    });
 
     if (StringUtil.isBlank(bunkerConn.text)) {
       refreshBunkerUrl();
@@ -121,6 +161,9 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            child: keyWidget,
+          ),
           Container(
             height: 60,
             child: TabBar(
@@ -205,9 +248,9 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
                             IconButton(
                                 onPressed: refreshBunkerUrl,
                                 icon: Icon(Icons.refresh)),
-                            // IconButton(
-                            //     onPressed: showBunkerUrlQRCode,
-                            //     icon: Icon(Icons.qr_code)),
+                            IconButton(
+                                onPressed: showBunkerUrlQRCode,
+                                icon: Icon(Icons.qr_code)),
                             IconButton(
                                 onPressed: copyBunkerUrl,
                                 icon: Icon(Icons.copy)),
@@ -288,20 +331,27 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
     reloadBunker();
   }
 
-  // void showBunkerUrlQRCode() {}
+  void showBunkerUrlQRCode() {
+    reloadBunker();
+    SimpleQrcodeDialog.show(context, bunkerConn.text);
+  }
 
   void copyBunkerUrl() {
     Clipboard.setData(ClipboardData(text: bunkerConn.text)).then((_) {
-      // TODO
-      // BotToast.showText(text: S.of(context).Copy_success);
+      BotToast.showText(text: "Copy success");
     });
   }
 
   void confirmBunkerUrl() {
+    if (StringUtil.isBlank(pubkey)) {
+      return;
+    }
+
     var remoteSignerKey = remoteSignerKeyController.text;
     var relays = [relayAddrController.text];
 
     var remoteSigningInfo = RemoteSigningInfo(
+      remotePubkey: pubkey,
       remoteSignerKey: remoteSignerKey,
       relays: relays.join(","),
       secret: secretController.text,
@@ -309,16 +359,17 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
     );
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
-    remoteSigningProvider.addRemoteSigningInfo(remoteSigningInfo);
+    remoteSigningProvider.saveRemoteSigningInfo(remoteSigningInfo);
     RouterUtil.back(context);
   }
 
   void reloadBunker() {
-    var remoteSignerKey = remoteSignerKeyController.text;
-    var remoteSignerPubkey = getPublicKey(remoteSignerKey);
+    if (StringUtil.isBlank(pubkey)) {
+      return;
+    }
 
     var nostrRemoteSignerInfo = NostrRemoteSignerInfo(
-      remoteUserPubkey: remoteSignerPubkey,
+      remoteUserPubkey: pubkey!,
       relays: [relayAddrController.text],
       optionalSecret: secretController.text,
     );

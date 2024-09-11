@@ -39,4 +39,10 @@ class RemoteSigningInfoDB {
 
     return objs;
   }
+
+  static Future<int> update(RemoteSigningInfo o, {DatabaseExecutor? db}) async {
+    db = await DB.getDB(db);
+    return await db.update("remote_signing_info", o.toJson(),
+        where: "id = ?", whereArgs: [o.id]);
+  }
 }

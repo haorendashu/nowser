@@ -74,7 +74,9 @@ class _AppsRouter extends CustState<AppsRouter> {
       var length = penddingList.length;
       for (var i = 0; i < length; i++) {
         var remoteSigningInfo = penddingList[i];
-        var pubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
+        if (StringUtil.isBlank(remoteSigningInfo.remotePubkey)) {
+          continue;
+        }
 
         String connectUrlType = "bunker";
         if (StringUtil.isNotBlank(remoteSigningInfo.localPubkey)) {
@@ -84,10 +86,10 @@ class _AppsRouter extends CustState<AppsRouter> {
         widgets.add(Container(
           child: Row(
             children: [
-              Text(Nip19.encodeSimplePubKey(pubkey)),
+              Text(Nip19.encodeSimplePubKey(remoteSigningInfo.remotePubkey!)),
               Expanded(
                   child: Container(
-                margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+                margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
                 child: Text(
                   DateFormatUtil.format(
                     remoteSigningInfo.createdAt!,
