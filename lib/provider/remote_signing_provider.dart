@@ -91,8 +91,6 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
       relay.connect();
       relays.add(relay);
-
-      print("connected to relay ${relay.url}");
     }
 
     return relays;
@@ -270,23 +268,17 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       event = await signer.signEvent(event);
 
       var signerPubkey = await signer.getPublicKey();
-      print("signerPubkey $signerPubkey");
-
-      print("response:");
+      // print("response:");
       if (event != null) {
-        print(event.toJson());
-        print(event.isValid);
-        print(event.isSigned);
+        // print(event.toJson());
         relay.send(["EVENT", event.toJson()]);
-      } else {
-        print("null");
       }
     }
   }
 
   Future<void> _onEvent(Relay relay, List<dynamic> json) async {
-    print("request");
-    print(json);
+    // print("request");
+    // print(json);
 
     var remoteSignerPubkey = relay.relayStatus.addr;
     var remoteSigningInfo = remoteSigningInfoMap[remoteSignerPubkey];

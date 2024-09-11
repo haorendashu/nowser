@@ -65,14 +65,18 @@ class AppProvider extends ChangeNotifier {
           permissionsMap = _getPermissionMap(app);
           appPermissions[appCode] = permissionsMap;
         }
+        print(permissionsMap);
 
         var key = "$authType";
         if (eventKind != null) {
           key = "$key-$eventKind";
         }
+        print(key);
 
         var value = permissionsMap[key];
+        print("value $value");
         if (value != null) {
+          print("ok");
           return value;
         }
       }
@@ -83,8 +87,8 @@ class AppProvider extends ChangeNotifier {
 
   Map<String, int> _getPermissionMap(App app) {
     Map<String, int> m = {};
-    _putPermissionMapValue(m, app.alwaysAllow, 1);
-    _putPermissionMapValue(m, app.alwaysReject, -1);
+    _putPermissionMapValue(m, app.alwaysAllow, AuthResult.OK);
+    _putPermissionMapValue(m, app.alwaysReject, AuthResult.REJECT);
     return m;
   }
 
