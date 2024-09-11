@@ -6,6 +6,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nostr_sdk/utils/date_format_util.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/tag_component.dart';
+import 'package:nowser/component/user/user_login_dialog.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
@@ -158,6 +159,10 @@ class _AppsRouter extends CustState<AppsRouter> {
         actions: [
           GestureDetector(
             onTap: () {
+              if (keyProvider.pubkeys.isEmpty) {
+                UserLoginDialog.show(context);
+                return;
+              }
               RouterUtil.router(context, RouterPath.ADD_REMOTE_APP);
             },
             child: Container(
