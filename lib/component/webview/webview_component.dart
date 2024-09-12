@@ -9,6 +9,8 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
+import 'package:nowser/data/browser_history.dart';
+import 'package:nowser/data/browser_history_db.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 
@@ -22,10 +24,13 @@ class WebViewComponent extends StatefulWidget {
 
   Function(WebInfo, InAppWebViewController, String?) onTitleChanged;
 
+  Function(WebInfo, InAppWebViewController) onLoadStop;
+
   WebViewComponent(
     this.webInfo,
     this.onWebViewCreated,
     this.onTitleChanged,
+    this.onLoadStop,
   );
 
   @override
@@ -169,6 +174,7 @@ class _WebViewComponent extends State<WebViewComponent>
             onLoadStop: (controller, url) async {
               pullToRefreshController?.endRefreshing();
               addInitScript(controller);
+              widget.onLoadStop(widget.webInfo, controller);
             },
             onReceivedError: (controller, request, error) {
               pullToRefreshController?.endRefreshing();

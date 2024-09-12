@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nowser/const/base.dart';
 
 class MeRouterWebItemComponent extends StatefulWidget {
-  int num;
+  int? num;
 
   String name;
 
   IconData iconData;
 
   MeRouterWebItemComponent({
-    required this.num,
+    this.num,
     required this.name,
     required this.iconData,
   });
@@ -54,7 +54,7 @@ class _MeRouterWebItemComponent extends State<MeRouterWebItemComponent> {
               ),
             ),
             Text(
-              "${widget.num}",
+              "${widget.num ?? 0}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

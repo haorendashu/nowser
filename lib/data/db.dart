@@ -48,6 +48,11 @@ class DB {
     db.execute(
         "create table zap_log(id         integer not null constraint zap_log_pk primary key autoincrement,app_id     integer not null constraint zap_log_index unique,zap_type   integer not null,num        integer not null,created_at integer not null);");
     db.execute("create index zap_log_index on zap_log (app_id);");
+
+    db.execute(
+        "create table bookmark(id             integer not null constraint bookmark_pk primary key autoincrement,title          text,url            text    not null,favicon        text,weight         integer,added_to_index integer,created_at     integer);");
+    db.execute(
+        "create table browser_history(id         integer not null constraint browser_history_pk primary key autoincrement,title      text,url        text    not null,favicon    text,created_at integer);");
   }
 
   static Future<Database> getCurrentDatabase() async {

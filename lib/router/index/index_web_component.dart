@@ -55,8 +55,12 @@ class _IndexWebComponent extends State<IndexWebComponent> {
             webInfo.controller = controller;
             webProvider.updateWebInfo(webInfo);
           }, (webInfo, controller, title) {
+            webInfo.controller = controller;
             webInfo.title = title;
             webProvider.updateWebInfo(webInfo);
+          }, (webInfo, controller) {
+            webInfo.controller = controller;
+            webProvider.onLoadStop(webInfo);
           });
 
           String title = "";

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/data/bookmark_db.dart';
 
 import '../component/webview/web_info.dart';
+import '../data/bookmark.dart';
+import '../data/browser_history.dart';
+import '../data/browser_history_db.dart';
 
 class WebProvider extends ChangeNotifier {
   int index = 0;
@@ -96,6 +100,53 @@ class WebProvider extends ChangeNotifier {
     webInfos.removeAt(i);
     checkBlank();
     notifyListeners();
+  }
+
+  Future<void> onLoadStop(WebInfo webInfo) async {
+    if (webInfo.controller == null) {
+      return;
+    }
+
+    try {
+      var url = await webInfo.controller!.getUrl();
+      if (url == null) {
+        return;
+      }
+
+      var title = await webInfo.controller!.getTitle();
+      var favicons = await webInfo.controller!.getFavicons();
+      String? favicon;
+      if (favicons.isNotEmpty) {
+        favicon = favicons.first.url.toString();
+      }
+      var browserHistory = BrowserHistory(
+        title: title,
+        favicon: favicon,
+        url: url.toString(),
+        createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      );
+
+      BrowserHistoryDB.insert(browserHistory);
+
+      webInfo.browserHistory = browserHistory;
+      updateWebInfo(webInfo);
+    } catch (e) {}
+  }
+
+  void addBookmark(WebInfo webInfo) {
+    if (webInfo.browserHistory == null) {
+      return;
+    }
+
+    var bookmark = Bookmark();
+    bookmark.title = webInfo.title;
+    bookmark.url = webInfo.browserHistory!.url;
+    bookmark.favicon = webInfo.browserHistory!.favicon;
+    bookmark.weight = 0;
+    bookmark.addedToIndex = -1;
+    bookmark.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+    BookmarkDB.insert(bookmark);
   }
 }
 

@@ -6,6 +6,8 @@ import 'package:nowser/component/user/user_pic_component.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/auth_log_db.dart';
+import 'package:nowser/data/bookmark_db.dart';
+import 'package:nowser/data/browser_history_db.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/router/me/me_router_log_item_component.dart';
@@ -33,6 +35,20 @@ class _MeRouter extends CustState<MeRouter> {
     setState(() {
       authLogs = list;
     });
+
+    updateNumber();
+  }
+
+  int? bookmarkNum = 0;
+
+  int? historyNum = 0;
+
+  int? downloadNum = 0;
+
+  Future<void> updateNumber() async {
+    bookmarkNum = await BookmarkDB.total();
+    historyNum = await BrowserHistoryDB.total();
+    setState(() {});
   }
 
   @override
@@ -133,25 +149,25 @@ class _MeRouter extends CustState<MeRouter> {
 
     List<Widget> webItemList = [];
     webItemList.add(MeRouterWebItemComponent(
-      num: 102,
+      num: bookmarkNum,
       name: "Bookmark",
       iconData: Icons.bookmark,
     ));
     webItemList.add(MeRouterWebItemComponent(
-      num: 999,
+      num: historyNum,
       name: "History",
       iconData: Icons.history,
     ));
     webItemList.add(MeRouterWebItemComponent(
-      num: 30,
+      num: downloadNum,
       name: "Download",
       iconData: Icons.download,
     ));
-    webItemList.add(MeRouterWebItemComponent(
-      num: 102,
-      name: "Bookmark",
-      iconData: Icons.bookmark,
-    ));
+    // webItemList.add(MeRouterWebItemComponent(
+    //   num: 102,
+    //   name: "Bookmark",
+    //   iconData: Icons.bookmark,
+    // ));
     var webItemWidget = Container(
       margin: listWidgetMargin,
       child: Row(
