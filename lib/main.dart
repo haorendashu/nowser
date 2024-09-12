@@ -13,6 +13,7 @@ import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
+import 'package:nowser/router/app_detail/app_detail_router.dart';
 import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
 import 'package:nowser/router/index/index_router.dart';
@@ -100,6 +101,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.KEYS: (context) => KeysRouter(),
       RouterPath.APPS: (context) => AppsRouter(),
       RouterPath.ADD_REMOTE_APP: (context) => AddRemoteAppRouter(),
+      RouterPath.APP_DETAIL: (context) => AppDetailRouter(),
     };
 
     return MultiProvider(

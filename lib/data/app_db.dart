@@ -32,7 +32,7 @@ class AppDB {
 
   static Future update(App o, {DatabaseExecutor? db}) async {
     db = await DB.getDB(db);
-    await db.update("app", o.toJson(), where: "id = ?", whereArgs: [o.pubkey]);
+    await db.update("app", o.toJson(), where: "id = ?", whereArgs: [o.id]);
   }
 
   static Future<void> delete(int id, {DatabaseExecutor? db}) async {

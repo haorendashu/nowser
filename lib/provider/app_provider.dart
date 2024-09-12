@@ -39,6 +39,13 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> update(App app) async {
+    app.updatedAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    AppDB.update(app);
+    reload();
+    notifyListeners();
+  }
+
   Future<void> add(App app) async {
     if (await AppDB.insert(app) > 0) {
       _list.add(app);

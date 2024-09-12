@@ -3,7 +3,9 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/app/app_type_component.dart';
 import 'package:nowser/component/image_component.dart';
 import 'package:nowser/const/app_type.dart';
+import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/app.dart';
+import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
 
@@ -57,14 +59,20 @@ class _MeRouterAppItemComponent extends State<MeRouterAppItemComponent> {
       child: Icon(Icons.chevron_right),
     );
 
-    return Container(
-      child: Row(
-        children: [
-          imageWidget,
-          Expanded(child: titleWidget),
-          typeWidget,
-          rightIconWidget,
-        ],
+    return GestureDetector(
+      onTap: () {
+        RouterUtil.router(context, RouterPath.APP_DETAIL, widget.app);
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        child: Row(
+          children: [
+            imageWidget,
+            Expanded(child: titleWidget),
+            typeWidget,
+            rightIconWidget,
+          ],
+        ),
       ),
     );
   }
