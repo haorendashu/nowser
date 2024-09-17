@@ -17,7 +17,9 @@ import 'web_control_component.dart';
 class IndexWebComponent extends StatefulWidget {
   int index;
 
-  IndexWebComponent(this.index);
+  Function showControl;
+
+  IndexWebComponent(this.index, this.showControl);
 
   @override
   State<StatefulWidget> createState() {
@@ -130,8 +132,9 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                         ),
                       ),
                     ),
-                    wrapBottomBtn(const Icon(Icons.space_dashboard),
-                        onTap: showControl, left: 8, right: 8),
+                    wrapBottomBtn(const Icon(Icons.space_dashboard), onTap: () {
+                      widget.showControl();
+                    }, left: 8, right: 8),
                     wrapBottomBtn(const Icon(Icons.segment), left: 8, right: 13,
                         onTap: () {
                       RouterUtil.router(context, RouterPath.ME);
@@ -164,16 +167,6 @@ class _IndexWebComponent extends State<IndexWebComponent> {
         ),
         child: btn,
       ),
-    );
-  }
-
-  showControl() {
-    showBottomSheet(
-      context: context,
-      showDragHandle: true,
-      builder: (context) {
-        return WebControlComponent();
-      },
     );
   }
 }

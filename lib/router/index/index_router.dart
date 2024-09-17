@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../component/webview/webview_component.dart';
 import '../../provider/android_signer_mixin.dart';
 import '../../provider/permission_check_mixin.dart';
+import 'web_control_component.dart';
 
 class IndexRouter extends StatefulWidget {
   @override
@@ -19,6 +20,8 @@ class IndexRouter extends StatefulWidget {
 
 class _IndexRouter extends CustState<IndexRouter>
     with PermissionCheckMixin, AndroidSignerMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Map<String, WebViewComponent> webViewComponentMap = {};
 
   @override
@@ -41,7 +44,7 @@ class _IndexRouter extends CustState<IndexRouter>
         builder: (context, webNumInfo, child) {
       List<Widget> list = [];
       for (var i = 0; i < webNumInfo.length; i++) {
-        list.add(IndexWebComponent(i));
+        list.add(IndexWebComponent(i, showControl));
       }
       return IndexedStack(
         index: webNumInfo.index,
@@ -54,14 +57,44 @@ class _IndexRouter extends CustState<IndexRouter>
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
+        var closeBottomSheet = closeControl();
+        if (closeBottomSheet) {
+          return;
+        }
+
         var webInfo = webProvider.currentWebInfo();
         if (webInfo != null) {
           webProvider.goBack(webInfo);
         }
       },
       child: Scaffold(
+        key: _scaffoldKey,
         body: main,
       ),
     );
+  }
+
+  PersistentBottomSheetController? bottomSheetController;
+
+  showControl() {
+    bottomSheetController = _scaffoldKey.currentState!.showBottomSheet(
+      (context) {
+        return WebControlComponent();
+      },
+      enableDrag: true,
+      showDragHandle: true,
+    );
+  }
+
+  bool closeControl() {
+    bool closeAble = false;
+    try {
+      if (bottomSheetController != null) {
+        bottomSheetController!.close();
+        closeAble = true;
+      }
+    } catch (e) {}
+    bottomSheetController = null;
+    return closeAble;
   }
 }

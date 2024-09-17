@@ -54,6 +54,7 @@ class WebProvider extends ChangeNotifier {
   void goHome(WebInfo webInfo) {
     webInfo.url = "";
     webInfo.title = null;
+    webInfo.controller = null;
     updateWebInfo(webInfo);
   }
 
