@@ -8,6 +8,7 @@ import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/auth_log_db.dart';
 import 'package:nowser/data/bookmark_db.dart';
 import 'package:nowser/data/browser_history_db.dart';
+import 'package:nowser/main.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/router/me/me_router_log_item_component.dart';
@@ -157,6 +158,13 @@ class _MeRouter extends CustState<MeRouter> {
       num: historyNum,
       name: "History",
       iconData: Icons.history,
+      onTap: () async {
+        var url = await RouterUtil.router(context, RouterPath.HISTORY);
+        print("url $url");
+        if (webProvider.currentGoTo(url)) {
+          RouterUtil.back(context);
+        }
+      },
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: downloadNum,

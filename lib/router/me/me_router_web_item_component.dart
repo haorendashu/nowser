@@ -8,10 +8,13 @@ class MeRouterWebItemComponent extends StatefulWidget {
 
   IconData iconData;
 
+  Function? onTap;
+
   MeRouterWebItemComponent({
     this.num,
     required this.name,
     required this.iconData,
+    this.onTap,
   });
 
   @override
@@ -26,39 +29,46 @@ class _MeRouterWebItemComponent extends State<MeRouterWebItemComponent> {
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
 
-    return Container(
-      alignment: Alignment.center,
-      // margin: widget.margin,
+    return GestureDetector(
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap!();
+        }
+      },
       child: Container(
-        width: 80,
-        padding: const EdgeInsets.only(
-          left: Base.BASE_PADDING,
-          right: Base.BASE_PADDING,
-          top: Base.BASE_PADDING,
-          bottom: Base.BASE_PADDING,
-        ),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(Base.BASE_PADDING),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(widget.iconData),
-            Text(
-              widget.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: themeData.textTheme.bodySmall!.fontSize! - 2,
+        alignment: Alignment.center,
+        // margin: widget.margin,
+        child: Container(
+          width: 80,
+          padding: const EdgeInsets.only(
+            left: Base.BASE_PADDING,
+            right: Base.BASE_PADDING,
+            top: Base.BASE_PADDING,
+            bottom: Base.BASE_PADDING,
+          ),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(Base.BASE_PADDING),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(widget.iconData),
+              Text(
+                widget.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: themeData.textTheme.bodySmall!.fontSize! - 2,
+                ),
               ),
-            ),
-            Text(
-              "${widget.num ?? 0}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+              Text(
+                "${widget.num ?? 0}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );

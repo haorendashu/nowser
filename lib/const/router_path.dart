@@ -7,4 +7,5 @@ class RouterPath {
   static const String APPS = "/apps";
   static const String ADD_REMOTE_APP = "/addRemoteApp";
   static const String APP_DETAIL = "/appDetail";
+  static const String HISTORY = "/history";
 }

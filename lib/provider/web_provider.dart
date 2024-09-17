@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/bookmark_db.dart';
+import 'package:nowser/util/router_util.dart';
 
 import '../component/webview/web_info.dart';
 import '../data/bookmark.dart';
@@ -147,6 +149,55 @@ class WebProvider extends ChangeNotifier {
     bookmark.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
     BookmarkDB.insert(bookmark);
+  }
+
+  void back(BuildContext context) {
+    var webInfo = currentWebInfo();
+    if (webInfo != null && webInfo.controller != null) {
+      webInfo.controller!.goBack();
+    }
+  }
+
+  void forward(BuildContext context) {
+    var webInfo = currentWebInfo();
+    if (webInfo != null && webInfo.controller != null) {
+      webInfo.controller!.goForward();
+    }
+  }
+
+  void refresh(BuildContext context) {
+    var webInfo = currentWebInfo();
+    if (webInfo != null && webInfo.controller != null) {
+      webInfo.controller!.reload();
+    }
+  }
+
+  bool currentGoTo(String? url) {
+    var webInfo = currentWebInfo();
+
+    if (webInfo != null) {
+      return goTo(webInfo, url);
+    }
+
+    return false;
+  }
+
+  bool goTo(WebInfo webInfo, String? url) {
+    if (url != null && url.startsWith("http")) {
+      webInfo.url = url;
+      webInfo.title = null;
+      if (webInfo.controller != null) {
+        webInfo.controller!.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
+        return true;
+      } else {
+        webInfo.clone();
+        updateWebInfo(webInfo);
+        notifyListeners();
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

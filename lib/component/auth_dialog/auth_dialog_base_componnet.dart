@@ -7,8 +7,8 @@ import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
+import '../app/simple_app_info_component.dart';
 import '../logo_component.dart';
-import 'auth_app_info_component.dart';
 
 class AuthDialogBaseComponnet extends StatefulWidget {
   App app;
@@ -122,7 +122,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
 
     list.add(Container(
       margin: baseMargin,
-      child: AuthAppInfoComponent(
+      child: SimpleAppInfoComponent(
         app: widget.app,
       ),
     ));

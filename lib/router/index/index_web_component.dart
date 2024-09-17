@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../component/webview/web_home_component.dart';
 import '../../component/webview/webview_number_component.dart';
+import 'web_control_component.dart';
 
 class IndexWebComponent extends StatefulWidget {
   int index;
@@ -97,18 +98,8 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                               var url = await webInfo.controller!.getUrl();
                               var value = await RouterUtil.router(context,
                                   RouterPath.WEB_URL_INPUT, url.toString());
-                              if (value != null &&
-                                  value is String &&
-                                  value.startsWith("http")) {
-                                webInfo.url = value;
-                                webInfo.title = null;
-
-                                if (webInfo.controller != null) {
-                                  webInfo.controller!.loadUrl(
-                                      urlRequest: URLRequest(
-                                    url: WebUri(value),
-                                  ));
-                                }
+                              if (value != null && value is String) {
+                                webProvider.goTo(webInfo, value);
                               }
                             },
                             behavior: HitTestBehavior.translucent,
@@ -140,7 +131,7 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                       ),
                     ),
                     wrapBottomBtn(const Icon(Icons.space_dashboard),
-                        left: 8, right: 8),
+                        onTap: showControl, left: 8, right: 8),
                     wrapBottomBtn(const Icon(Icons.segment), left: 8, right: 13,
                         onTap: () {
                       RouterUtil.router(context, RouterPath.ME);
@@ -173,6 +164,16 @@ class _IndexWebComponent extends State<IndexWebComponent> {
         ),
         child: btn,
       ),
+    );
+  }
+
+  showControl() {
+    showBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        return WebControlComponent();
+      },
     );
   }
 }

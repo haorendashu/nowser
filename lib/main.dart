@@ -16,6 +16,7 @@ import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/app_detail/app_detail_router.dart';
 import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
+import 'package:nowser/router/history/history_router.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
 import 'package:nowser/router/me/me_router.dart';
@@ -102,6 +103,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.APPS: (context) => AppsRouter(),
       RouterPath.ADD_REMOTE_APP: (context) => AddRemoteAppRouter(),
       RouterPath.APP_DETAIL: (context) => AppDetailRouter(),
+      RouterPath.HISTORY: (context) => HistoryRouter(),
     };
 
     return MultiProvider(
@@ -211,6 +213,7 @@ ThemeData getLightTheme() {
       labelColor: Colors.white,
       unselectedLabelColor: Colors.grey[200],
     ),
+    bottomSheetTheme: BottomSheetThemeData(modalBarrierColor: Colors.red),
   );
 }
 

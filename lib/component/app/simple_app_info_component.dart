@@ -5,20 +5,20 @@ import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/data/app.dart';
 
-import '../app/app_type_component.dart';
+import 'app_type_component.dart';
 
-class AuthAppInfoComponent extends StatefulWidget {
+class SimpleAppInfoComponent extends StatefulWidget {
   App app;
 
-  AuthAppInfoComponent({required this.app});
+  SimpleAppInfoComponent({required this.app});
 
   @override
   State<StatefulWidget> createState() {
-    return _AuthAppInfoComponent();
+    return _SimpleAppInfoComponent();
   }
 }
 
-class _AuthAppInfoComponent extends State<AuthAppInfoComponent> {
+class _SimpleAppInfoComponent extends State<SimpleAppInfoComponent> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);

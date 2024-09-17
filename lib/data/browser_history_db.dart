@@ -14,4 +14,17 @@ class BrowserHistoryDB {
     var sql = "select count(1) from browser_history";
     return Sqflite.firstIntValue(await db.rawQuery(sql));
   }
+
+  static Future<List<BrowserHistory>> all({DatabaseExecutor? db}) async {
+    List<BrowserHistory> objs = [];
+    List<Object?>? arguments = [];
+    db = await DB.getDB(db);
+    var sql = "select * from browser_history order by created_at desc";
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, arguments);
+    for (var i = 0; i < list.length; i++) {
+      var json = list[i];
+      objs.add(BrowserHistory.fromJson(json));
+    }
+    return objs;
+  }
 }
