@@ -298,7 +298,7 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
   Future<void> scanNostrConnectQRCode() async {
     var value = await QRScanner.show(context);
     if (StringUtil.isNotBlank(value)) {
-      nostrconnectConn.text = value;
+      nostrconnectConn.text = value!;
     }
   }
 

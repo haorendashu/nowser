@@ -11,7 +11,7 @@ class QRScanner extends StatefulWidget {
     return _QRScanner();
   }
 
-  static Future<String> show(BuildContext context) async {
+  static Future<String?> show(BuildContext context) async {
     return await RouterUtil.push(context, MaterialPageRoute(builder: (context) {
       return QRScanner();
     }));

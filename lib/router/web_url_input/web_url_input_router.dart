@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
@@ -77,8 +79,16 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
           GestureDetector(
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: EdgeInsets.only(left: Base.BASE_PADDING),
-              child: Icon(Icons.qr_code_scanner),
+              padding: const EdgeInsets.only(left: Base.BASE_PADDING),
+              child: GestureDetector(
+                onTap: () async {
+                  var url = await QRScanner.show(context);
+                  if (StringUtil.isNotBlank(url) && url!.startsWith("http")) {
+                    RouterUtil.back(context, url);
+                  }
+                },
+                child: Icon(Icons.qr_code_scanner),
+              ),
             ),
           ),
         ],
