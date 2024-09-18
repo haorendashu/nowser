@@ -4,6 +4,7 @@ import 'package:nowser/component/auth_dialog/auth_dialog_base_componnet.dart';
 import 'package:nowser/const/auth_result.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/data/app.dart';
+import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
@@ -47,6 +48,8 @@ class AuthDialog extends StatefulWidget {
 
 class _AuthDialog extends State<AuthDialog> {
   bool showDetail = false;
+
+  bool always = false;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +116,7 @@ class _AuthDialog extends State<AuthDialog> {
       );
       if (showDetail) {
         detailList.add(Container(
-          height: 210,
+          height: 142,
           width: double.infinity,
           padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
           decoration: BoxDecoration(
@@ -132,12 +135,36 @@ class _AuthDialog extends State<AuthDialog> {
     }
 
     list.add(Container(
-      height: 250,
+      height: 180,
       width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: detailList,
+      ),
+    ));
+
+    list.add(Container(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            always = !always;
+          });
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          children: [
+            Checkbox(
+              value: always,
+              onChanged: (v) {
+                setState(() {
+                  always = v!;
+                });
+              },
+            ),
+            Text("Always"),
+          ],
+        ),
       ),
     ));
 
@@ -149,14 +176,30 @@ class _AuthDialog extends State<AuthDialog> {
     return AuthDialogBaseComponnet(
       app: widget.app,
       title: authTitle,
+      onReject: onReject,
       onConfirm: onConfirm,
       pubkeyReadonly: true,
       child: child,
     );
   }
 
+  onReject() {
+    if (always) {
+      // always do reject this
+      appProvider.alwaysReject(widget.app.appType!, widget.app.code!,
+          widget.authType, widget.eventKind);
+    }
+
+    RouterUtil.back(context);
+  }
+
   onConfirm() {
-    print("auth dialog confirm!");
+    if (always) {
+      // always do confirm this
+      appProvider.alwaysAllow(widget.app.appType!, widget.app.code!,
+          widget.authType, widget.eventKind);
+    }
+
     RouterUtil.back(context, AuthResult.OK);
   }
 }

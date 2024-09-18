@@ -17,6 +17,8 @@ class AuthDialogBaseComponnet extends StatefulWidget {
 
   Widget child;
 
+  Function? onReject;
+
   Function onConfirm;
 
   Function(String)? onPubkeyChange;
@@ -27,6 +29,7 @@ class AuthDialogBaseComponnet extends StatefulWidget {
     required this.app,
     required this.title,
     required this.child,
+    this.onReject,
     required this.onConfirm,
     this.onPubkeyChange,
     this.pubkeyReadonly = false,
@@ -149,7 +152,11 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
           // ),
           FilledButton(
             onPressed: () {
-              RouterUtil.back(context);
+              if (widget.onReject != null) {
+                widget.onReject!();
+              } else {
+                RouterUtil.back(context);
+              }
             },
             child: Text("Cancel"),
             style: ButtonStyle(

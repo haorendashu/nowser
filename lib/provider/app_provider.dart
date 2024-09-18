@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/const/app_type.dart';
+import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/const/connect_type.dart';
 import 'package:nowser/data/app_db.dart';
 
@@ -129,5 +130,72 @@ class AppProvider extends ChangeNotifier {
     }
 
     return null;
+  }
+
+  void alwaysAllow(int appType, String code, int authType, int? eventKind) {
+    _addAlways(appType, code, authType, eventKind, AuthResult.OK);
+  }
+
+  void alwaysReject(int appType, String code, int authType, int? eventKind) {
+    _addAlways(appType, code, authType, eventKind, AuthResult.REJECT);
+  }
+
+  void _addAlways(
+      int appType, String code, int authType, int? eventKind, int authResult) {
+    var app = getApp(appType, code);
+    if (app != null) {
+      var permissionMap = _getPermissionMap(app);
+      var key = "$authType";
+      if (eventKind != null) {
+        key = "$key-$eventKind";
+      }
+      permissionMap[key] = authResult;
+
+      List<String> allowAuthTypeStrs = [];
+      List<String> rejectAuthTypeStrs = [];
+
+      List<String> allowEventKindStrs = [];
+      List<String> rejectEventKindStrs = [];
+      var entries = permissionMap.entries;
+      for (var entry in entries) {
+        var key = entry.key;
+        var value = entry.value;
+
+        if (key.contains("-")) {
+          var strs = key.split("-");
+
+          var eventKindStr = strs[1];
+          if (value > 0) {
+            allowEventKindStrs.add(eventKindStr);
+          } else {
+            rejectEventKindStrs.add(eventKindStr);
+          }
+        } else {
+          var authTypeStr = key;
+          if (value > 0) {
+            allowAuthTypeStrs.add(authTypeStr);
+          } else {
+            rejectAuthTypeStrs.add(authTypeStr);
+          }
+        }
+      }
+
+      if (allowEventKindStrs.isNotEmpty) {
+        allowAuthTypeStrs
+            .add("${AuthType.SIGN_EVENT}-${allowEventKindStrs.join(",")}");
+      }
+      if (rejectEventKindStrs.isNotEmpty) {
+        rejectAuthTypeStrs
+            .add("${AuthType.SIGN_EVENT}-${rejectEventKindStrs.join(",")}");
+      }
+
+      app.alwaysAllow = allowAuthTypeStrs.join(";");
+      app.alwaysReject = rejectAuthTypeStrs.join(";");
+
+      var appCode = getAppCode(appType, code);
+      appPermissions.remove(appCode);
+
+      update(app);
+    }
   }
 }
