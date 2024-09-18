@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/text_input/text_input_dialog.dart';
@@ -94,7 +95,12 @@ class _MeRouter extends CustState<MeRouter> {
     defaultUserWidgets.add(Expanded(child: Container()));
     defaultUserWidgets.add(Container(
       margin: const EdgeInsets.only(right: Base.BASE_PADDING),
-      child: const Icon(Icons.settings),
+      child: GestureDetector(
+        onTap: () {
+          BotToast.showText(text: "Coming...");
+        },
+        child: const Icon(Icons.settings),
+      ),
     ));
     var defaultUserWidget = Container(
       margin: const EdgeInsets.only(
