@@ -7,6 +7,10 @@ import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 class WebControlComponent extends StatefulWidget {
+  Function closeControl;
+
+  WebControlComponent(this.closeControl);
+
   @override
   State<StatefulWidget> createState() {
     return _WebControlComponent();
@@ -109,7 +113,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                       var webInfo = webProvider.currentWebInfo();
                       if (webInfo != null) {
                         webProvider.addBookmark(webInfo);
-                        RouterUtil.back(context);
+                        widget.closeControl();
                       }
                     },
                   ),

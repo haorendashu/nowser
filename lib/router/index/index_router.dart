@@ -80,7 +80,7 @@ class _IndexRouter extends CustState<IndexRouter>
   showControl() {
     bottomSheetController = _scaffoldKey.currentState!.showBottomSheet(
       (context) {
-        return WebControlComponent();
+        return WebControlComponent(closeControl);
       },
       enableDrag: true,
       showDragHandle: true,
@@ -94,13 +94,10 @@ class _IndexRouter extends CustState<IndexRouter>
     bool closeAble = false;
     try {
       if (bottomSheetController != null) {
-        // bottomSheetController!.close();
         closeAble = true;
-        RouterUtil.back(context);
+        bottomSheetController!.close();
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
     bottomSheetController = null;
     return closeAble;
   }
