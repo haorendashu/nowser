@@ -153,6 +153,12 @@ class _MeRouter extends CustState<MeRouter> {
       num: bookmarkNum,
       name: "Bookmark",
       iconData: Icons.bookmark,
+      onTap: () async {
+        var url = await RouterUtil.router(context, RouterPath.BOOKMARK);
+        if (webProvider.currentGoTo(url)) {
+          RouterUtil.back(context);
+        }
+      },
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: historyNum,
@@ -160,7 +166,6 @@ class _MeRouter extends CustState<MeRouter> {
       iconData: Icons.history,
       onTap: () async {
         var url = await RouterUtil.router(context, RouterPath.HISTORY);
-        print("url $url");
         if (webProvider.currentGoTo(url)) {
           RouterUtil.back(context);
         }

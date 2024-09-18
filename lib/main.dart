@@ -16,6 +16,7 @@ import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/app_detail/app_detail_router.dart';
 import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
+import 'package:nowser/router/bookmark/bookmark_router.dart';
 import 'package:nowser/router/history/history_router.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
@@ -104,6 +105,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.ADD_REMOTE_APP: (context) => AddRemoteAppRouter(),
       RouterPath.APP_DETAIL: (context) => AppDetailRouter(),
       RouterPath.HISTORY: (context) => HistoryRouter(),
+      RouterPath.BOOKMARK: (context) => BookmarkRouter(),
     };
 
     return MultiProvider(

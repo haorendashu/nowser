@@ -4,6 +4,7 @@ import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_web_component.dart';
+import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/webview/webview_component.dart';
@@ -84,16 +85,22 @@ class _IndexRouter extends CustState<IndexRouter>
       enableDrag: true,
       showDragHandle: true,
     );
+    bottomSheetController!.closed.then((v) {
+      bottomSheetController = null;
+    });
   }
 
   bool closeControl() {
     bool closeAble = false;
     try {
       if (bottomSheetController != null) {
-        bottomSheetController!.close();
+        // bottomSheetController!.close();
         closeAble = true;
+        RouterUtil.back(context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     bottomSheetController = null;
     return closeAble;
   }

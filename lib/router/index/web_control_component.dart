@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nowser/const/base.dart';
+import 'package:nowser/const/router_path.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/web_control_btn_component.dart';
+import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 class WebControlComponent extends StatefulWidget {
@@ -87,6 +89,13 @@ class _WebControlComponent extends State<WebControlComponent> {
                       Icons.bookmark_border,
                       size: 30,
                     ),
+                    onTap: () async {
+                      var url =
+                          await RouterUtil.router(context, RouterPath.BOOKMARK);
+                      if (webProvider.currentGoTo(url)) {
+                        RouterUtil.back(context);
+                      }
+                    },
                   ),
                 ),
                 Expanded(
@@ -96,6 +105,13 @@ class _WebControlComponent extends State<WebControlComponent> {
                       Icons.bookmark_add_outlined,
                       size: 30,
                     ),
+                    onTap: () {
+                      var webInfo = webProvider.currentWebInfo();
+                      if (webInfo != null) {
+                        webProvider.addBookmark(webInfo);
+                        RouterUtil.back(context);
+                      }
+                    },
                   ),
                 ),
                 Expanded(
@@ -105,6 +121,13 @@ class _WebControlComponent extends State<WebControlComponent> {
                       Icons.history,
                       size: 30,
                     ),
+                    onTap: () async {
+                      var url =
+                          await RouterUtil.router(context, RouterPath.HISTORY);
+                      if (webProvider.currentGoTo(url)) {
+                        RouterUtil.back(context);
+                      }
+                    },
                   ),
                 ),
                 Expanded(

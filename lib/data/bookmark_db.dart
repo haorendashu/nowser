@@ -14,4 +14,17 @@ class BookmarkDB {
     var sql = "select count(1) from bookmark";
     return Sqflite.firstIntValue(await db.rawQuery(sql));
   }
+
+  static Future<List<Bookmark>> all({DatabaseExecutor? db}) async {
+    List<Bookmark> objs = [];
+    List<Object?>? arguments = [];
+    db = await DB.getDB(db);
+    var sql = "select * from bookmark order by created_at desc";
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, arguments);
+    for (var i = 0; i < list.length; i++) {
+      var json = list[i];
+      objs.add(Bookmark.fromJson(json));
+    }
+    return objs;
+  }
 }
