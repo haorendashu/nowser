@@ -80,8 +80,8 @@ flutter:
   assets:
     - assets/imgs/
     - assets/imgs/logo/logo512.png
-    - assets/imgs/logo/logo_android.png
-    - assets/imgs/logo/logo_ios.jpg
+    # - assets/imgs/logo/logo_android.png
+    # - assets/imgs/logo/logo_ios.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
