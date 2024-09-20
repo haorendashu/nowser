@@ -181,6 +181,9 @@ class _MeRouter extends CustState<MeRouter> {
       num: downloadNum,
       name: "Download",
       iconData: Icons.download,
+      onTap: () {
+        BotToast.showText(text: "Coming...");
+      },
     ));
     // webItemList.add(MeRouterWebItemComponent(
     //   num: 102,

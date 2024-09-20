@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
@@ -67,6 +68,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                     ),
                     onTap: () {
                       webProvider.refresh(context);
+                      widget.closeControl();
                     },
                   ),
                 ),
@@ -77,6 +79,9 @@ class _WebControlComponent extends State<WebControlComponent> {
                       Icons.disabled_visible_outlined,
                       size: 30,
                     ),
+                    onTap: () {
+                      BotToast.showText(text: "Coming...");
+                    },
                   ),
                 ),
               ],
@@ -97,7 +102,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                       var url =
                           await RouterUtil.router(context, RouterPath.BOOKMARK);
                       if (webProvider.currentGoTo(url)) {
-                        RouterUtil.back(context);
+                        widget.closeControl();
                       }
                     },
                   ),
@@ -129,7 +134,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                       var url =
                           await RouterUtil.router(context, RouterPath.HISTORY);
                       if (webProvider.currentGoTo(url)) {
-                        RouterUtil.back(context);
+                        widget.closeControl();
                       }
                     },
                   ),
@@ -141,6 +146,9 @@ class _WebControlComponent extends State<WebControlComponent> {
                       Icons.download,
                       size: 30,
                     ),
+                    onTap: () {
+                      BotToast.showText(text: "Coming...");
+                    },
                   ),
                 ),
               ],

@@ -171,9 +171,14 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
               unselectedLabelColor: textColor,
               indicatorColor: mainColor,
               tabs: [
-                Text(
-                  "Connect by\nnostrconnect:// url",
-                  textAlign: TextAlign.center,
+                GestureDetector(
+                  child: Text(
+                    "Connect by\nnostrconnect:// url",
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () {
+                    BotToast.showText(text: "Coming...");
+                  },
                 ),
                 Text(
                   "Connect by\nbunker:// url",
@@ -218,7 +223,9 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
                         margin: EdgeInsets.only(top: Base.BASE_PADDING),
                         width: double.infinity,
                         child: FilledButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            BotToast.showText(text: "Coming...");
+                          },
                           child: Text("Confirm"),
                         ),
                       ),
