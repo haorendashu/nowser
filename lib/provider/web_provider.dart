@@ -4,10 +4,12 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/bookmark_db.dart';
 import 'package:nowser/util/router_util.dart';
 
+import '../component/webview/web_home_component.dart';
 import '../component/webview/web_info.dart';
 import '../data/bookmark.dart';
 import '../data/browser_history.dart';
 import '../data/browser_history_db.dart';
+import '../router/index/index_web_component.dart';
 
 class WebProvider extends ChangeNotifier {
   int index = 0;
@@ -28,6 +30,8 @@ class WebProvider extends ChangeNotifier {
   void checkBlank() {
     if (webInfos.isEmpty) {
       webInfos.add(WebInfo(_rndId(), ""));
+      // webInfos.add(WebInfo(_rndId(), "https://www.oschina.net/"));
+      // webInfos.add(WebInfo(_rndId(), "https://github.com/"));
     }
   }
 
@@ -39,7 +43,7 @@ class WebProvider extends ChangeNotifier {
     for (var i = 0; i < webInfos.length; i++) {
       var owi = webInfos[i];
       if (owi.id == webInfo.id) {
-        webInfos[i] = webInfo.clone();
+        webInfos[i] = webInfo;
         break;
       }
     }
@@ -55,6 +59,7 @@ class WebProvider extends ChangeNotifier {
     webInfo.url = "";
     webInfo.title = null;
     webInfo.controller = null;
+    webInfo.browserHistory = null;
     updateWebInfo(webInfo);
   }
 
@@ -100,6 +105,7 @@ class WebProvider extends ChangeNotifier {
       index--;
     }
 
+    indexWebviews.remove(webInfo.id);
     webInfos.removeAt(i);
     checkBlank();
     notifyListeners();
@@ -128,10 +134,14 @@ class WebProvider extends ChangeNotifier {
         url: url.toString(),
         createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       );
-
-      BrowserHistoryDB.insert(browserHistory);
+      if (webInfo.browserHistory != null &&
+          webInfo.browserHistory!.url == url.toString()) {
+        return;
+      }
 
       webInfo.browserHistory = browserHistory;
+      BrowserHistoryDB.insert(browserHistory);
+
       updateWebInfo(webInfo);
     } catch (e) {}
   }
@@ -191,7 +201,6 @@ class WebProvider extends ChangeNotifier {
         webInfo.controller!.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
         return true;
       } else {
-        webInfo.clone();
         updateWebInfo(webInfo);
         notifyListeners();
         return true;
@@ -199,6 +208,27 @@ class WebProvider extends ChangeNotifier {
     }
 
     return false;
+  }
+
+  Map<String, IndexWebComponent> indexWebviews = {};
+
+  List<Widget> getIndexWebviews(BuildContext context, Function showControl) {
+    List<Widget> list = [];
+    for (var webInfo in webInfos) {
+      if (StringUtil.isBlank(webInfo.url)) {
+        list.add(WebHomeComponent(webInfo));
+      } else {
+        var indexWebComp = indexWebviews[webInfo.id];
+        if (indexWebComp == null) {
+          indexWebComp =
+              IndexWebComponent(webInfo, showControl, key: GlobalKey());
+          indexWebviews[webInfo.id] = indexWebComp;
+        }
+
+        list.add(indexWebComp);
+      }
+    }
+    return list;
   }
 }
 

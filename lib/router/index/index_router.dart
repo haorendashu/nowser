@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/cust_state.dart';
+import 'package:nowser/component/image_component.dart';
+import 'package:nowser/component/webview/web_home_component.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/index_web_component.dart';
@@ -23,7 +28,10 @@ class _IndexRouter extends CustState<IndexRouter>
     with PermissionCheckMixin, AndroidSignerMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  Map<String, WebViewComponent> webViewComponentMap = {};
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Future<void> onReady(BuildContext context) async {
@@ -41,19 +49,12 @@ class _IndexRouter extends CustState<IndexRouter>
     remoteSigningProvider.updateContext(context);
     webProvider.checkBlank();
 
-    var main = Selector<WebProvider, WebNumInfo>(
-        builder: (context, webNumInfo, child) {
-      List<Widget> list = [];
-      for (var i = 0; i < webNumInfo.length; i++) {
-        list.add(IndexWebComponent(i, showControl));
-      }
-      return IndexedStack(
-        index: webNumInfo.index,
-        children: list,
-      );
-    }, selector: (context, provider) {
-      return provider.getWebNumInfo();
-    });
+    var _webProvider = Provider.of<WebProvider>(context);
+
+    var main = IndexedStack(
+      index: _webProvider.index,
+      children: _webProvider.getIndexWebviews(context, showControl),
+    );
 
     return PopScope(
       canPop: false,
