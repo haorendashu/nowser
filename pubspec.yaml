@@ -1,5 +1,5 @@
 name: nowser
-description: "A new Flutter project."
+description: "A nostr signing project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -50,6 +50,7 @@ dependencies:
   qr_code_scanner: ^1.0.1
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
@@ -76,6 +77,11 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/imgs/
+    - assets/imgs/logo/logo512.png
+    - assets/imgs/logo/logo_android.png
+    - assets/imgs/logo/logo_ios.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
@@ -101,3 +107,15 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_intl:
   enabled: true
+
+flutter_launcher_icons:
+  image_path_ios: 'assets/imgs/logo/logo_ios.jpg'
+  image_path_android: 'assets/imgs/logo/logo_android.png'
+  android: true
+  ios: true
+  windows:
+    generate: true
+    image_path: "assets/imgs/logo/logo_android.png"
+  macos:
+    generate: true
+    image_path: "assets/imgs/logo/logo_ios.jpg"
