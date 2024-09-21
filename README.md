@@ -1,16 +1,23 @@
-# nowser
+<div align="center">
 
-A new Flutter project.
+<img src="./assets/imgs/logo/logo_android.png" alt="Nostrmo Logo" title="Nostrmo logo" width="80"/>
 
-## Getting Started
+# Nowser
 
-This project is a starting point for a Flutter application.
+A nostr signing app for IOS and Android.
 
-A few resources to get you started if this is your first Flutter project:
+</div>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Platforms
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| Platforms | NIP-07 | NIP-46 | NIP-55 |
+| :----: | :----: | :----: | :----: |
+| Android | √ | √ | √ |
+| IOS | √ | √ | |
+
+## Downloads
+
+Android: [Downlaod From Release](https://github.com/haorendashu/nowser/releases)
+
+IOS: Download from TestFlight (Coming soon...)
+
