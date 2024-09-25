@@ -17,7 +17,7 @@ A nostr signing app for IOS and Android.
 
 ## Downloads
 
-Android: [Downlaod From Release](https://github.com/haorendashu/nowser/releases)
+Android: Downlaod From [Release](https://github.com/haorendashu/nowser/releases) https://github.com/haorendashu/nowser/releases
 
-IOS: Download from TestFlight (Coming soon...)
+IOS: Download from [TestFlight](https://testflight.apple.com/join/b4zVVxaM) https://testflight.apple.com/join/b4zVVxaM
 
