@@ -48,6 +48,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   pretty_qr_code: ^3.3.0
   qr_code_scanner: ^1.0.1
+  flutter_slidable: ^3.1.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

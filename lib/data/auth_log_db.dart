@@ -32,4 +32,9 @@ class AuthLogDB {
     db = await DB.getDB(db);
     return await db.insert("auth_log", o.toJson());
   }
+
+  static Future<void> deleteByAppId(int appId, {DatabaseExecutor? db}) async {
+    db = await DB.getDB(db);
+    db.execute("delete from auth_log where app_id = ?", [appId]);
+  }
 }

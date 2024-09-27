@@ -4,6 +4,7 @@ import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/const/connect_type.dart';
 import 'package:nowser/data/app_db.dart';
+import 'package:nowser/data/auth_log_db.dart';
 
 import '../const/auth_result.dart';
 import '../data/app.dart';
@@ -116,6 +117,19 @@ class AppProvider extends ChangeNotifier {
         }
       }
     }
+  }
+
+  Future<void> deleteApp(App app) async {
+    await AppDB.delete(app.id!);
+    reload();
+
+    try {
+      await AuthLogDB.deleteByAppId(app.id!);
+    } catch (e) {
+      print(e.toString());
+    }
+
+    notifyListeners();
   }
 
   App? getAppById(int appId) {

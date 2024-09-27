@@ -1,5 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
@@ -43,14 +45,62 @@ class _AppsRouter extends CustState<AppsRouter> {
       for (var i = 0; i < length; i++) {
         var app = appList[i];
         widgets.add(Container(
-          child: MeRouterAppItemComponent(app),
+          child: Slidable(
+            child: MeRouterAppItemComponent(app),
+            endActionPane: ActionPane(
+              motion: ScrollMotion(),
+              extentRatio: 0.25,
+              children: [
+                // GestureDetector(
+                //   onTap: () {},
+                //   child: Container(
+                //     color: Colors.red,
+                //     alignment: Alignment.center,
+                //     padding: EdgeInsets.only(
+                //       left: Base.BASE_PADDING,
+                //       right: Base.BASE_PADDING,
+                //       top: 3,
+                //       bottom: 3,
+                //     ),
+                //     child: Row(
+                //       // mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         Icon(
+                //           Icons.delete_forever,
+                //           color: Colors.white,
+                //         ),
+                //         Text(
+                //           "Delete",
+                //           style: TextStyle(color: Colors.white),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                SlidableAction(
+                  onPressed: (context) {
+                    var cancelFunc = BotToast.showLoading();
+                    try {
+                      appProvider.deleteApp(app);
+                    } catch (e) {
+                    } finally {
+                      cancelFunc.call();
+                    }
+                  },
+                  backgroundColor: Color(0xFFFE4A49),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                ),
+              ],
+            ),
+          ),
         ));
         if (i + 1 < length) {
           widgets.add(Divider());
         }
       }
       if (widgets.isNotEmpty) {
-        var listWidget = Container(
+        Widget listWidget = Container(
           padding: EdgeInsets.all(Base.BASE_PADDING),
           decoration: BoxDecoration(
             color: themeData.cardColor,
