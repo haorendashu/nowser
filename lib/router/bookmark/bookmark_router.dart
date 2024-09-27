@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nowser/component/cust_state.dart';
+import 'package:nowser/component/deletable_list_mixin.dart';
 import 'package:nowser/component/url_list_item_componnet.dart';
-import 'package:nowser/data/browser_history_db.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../component/appbar_back_btn_component.dart';
-import '../../const/base.dart';
 import '../../data/bookmark.dart';
 import '../../data/bookmark_db.dart';
 
@@ -16,7 +15,8 @@ class BookmarkRouter extends StatefulWidget {
   }
 }
 
-class _BookmarkRouter extends CustState<BookmarkRouter> {
+class _BookmarkRouter extends CustState<BookmarkRouter>
+    with DeletableListMixin {
   List<Bookmark> bookmarks = [];
 
   @override
@@ -24,6 +24,8 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
     bookmarks = await BookmarkDB.all();
     setState(() {});
   }
+
+  List<int> selectedIds = [];
 
   @override
   Widget doBuild(BuildContext context) {
@@ -39,15 +41,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
             fontSize: themeData.textTheme.bodyLarge!.fontSize,
           ),
         ),
-        actions: [
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: Container(
-          //     padding: const EdgeInsets.all(Base.BASE_PADDING),
-          //     child: Icon(Icons.delete_sweep_outlined),
-          //   ),
-          // ),
-        ],
+        actions: genAppBarActions(context),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
@@ -57,23 +51,39 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
 
           var bookmark = bookmarks[index];
 
-          var main = Container(
-            child: GestureDetector(
-              onTap: () {
-                RouterUtil.back(context, bookmark.url);
-              },
-              child: UrlListItemComponnet(
-                image: bookmark.favicon,
-                title: bookmark.title ?? "",
-                url: bookmark.url ?? "",
-              ),
-            ),
+          Widget main = UrlListItemComponnet(
+            selectable: deleting,
+            selected: selectedIds.contains(bookmark.id),
+            image: bookmark.favicon,
+            title: bookmark.title ?? "",
+            url: bookmark.url ?? "",
           );
+
+          main = wrapListItem(main, onTap: () {
+            RouterUtil.back(context, bookmark.url);
+          }, onSelect: () {
+            if (!selectedIds.contains(bookmark.id)) {
+              setState(() {
+                selectedIds.add(bookmark.id!);
+              });
+            }
+          });
 
           return main;
         },
         itemCount: bookmarks.length,
       ),
     );
+  }
+
+  @override
+  Future<void> doDelete() async {
+    if (selectedIds.isNotEmpty) {
+      await BookmarkDB.deleteByIds(selectedIds);
+      bookmarks.removeWhere((o) {
+        return selectedIds.contains(o.id);
+      });
+      selectedIds.clear();
+    }
   }
 }

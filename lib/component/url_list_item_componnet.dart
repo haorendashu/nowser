@@ -3,6 +3,10 @@ import 'package:nowser/component/image_component.dart';
 import 'package:nowser/const/base.dart';
 
 class UrlListItemComponnet extends StatefulWidget {
+  bool selected;
+
+  bool selectable;
+
   String? image;
 
   String title;
@@ -12,6 +16,8 @@ class UrlListItemComponnet extends StatefulWidget {
   int? dateTime;
 
   UrlListItemComponnet({
+    this.selected = false,
+    this.selectable = false,
     this.image,
     required this.title,
     required this.url,
@@ -30,6 +36,16 @@ class _UrlListItemComponnet extends State<UrlListItemComponnet> {
     var themeData = Theme.of(context);
     var smallFontSize = themeData.textTheme.bodySmall!.fontSize;
 
+    List<Widget> list = [];
+    if (widget.selectable) {
+      list.add(Container(
+        child: Checkbox(
+          value: widget.selected,
+          onChanged: (bool? value) {},
+        ),
+      ));
+    }
+
     Widget iconWidget = Icon(
       Icons.image,
       weight: 60,
@@ -43,6 +59,13 @@ class _UrlListItemComponnet extends State<UrlListItemComponnet> {
       );
     }
 
+    list.add(Container(
+      width: 60,
+      height: 60,
+      alignment: Alignment.center,
+      child: iconWidget,
+    ));
+
     String host = widget.url;
     try {
       var uri = Uri.parse(widget.url);
@@ -55,68 +78,62 @@ class _UrlListItemComponnet extends State<UrlListItemComponnet> {
       time = "${dt.hour}:${dt.minute}";
     }
 
+    list.add(Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+                width: 1, color: themeData.hintColor.withOpacity(0.5)),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: Base.BASE_PADDING_HALF,
+                  bottom: Base.BASE_PADDING_HALF,
+                ),
+                padding: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      host,
+                      style: TextStyle(
+                        fontSize: smallFontSize,
+                        color: themeData.hintColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                time,
+                style: TextStyle(
+                  color: themeData.hintColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
+
     return Container(
       padding: EdgeInsets.only(
         left: Base.BASE_PADDING,
         right: Base.BASE_PADDING,
       ),
       child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            child: iconWidget,
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                      width: 1, color: themeData.hintColor.withOpacity(0.5)),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        top: Base.BASE_PADDING_HALF,
-                        bottom: Base.BASE_PADDING_HALF,
-                      ),
-                      padding: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            host,
-                            style: TextStyle(
-                              fontSize: smallFontSize,
-                              color: themeData.hintColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      time,
-                      style: TextStyle(
-                        color: themeData.hintColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        children: list,
       ),
     );
   }

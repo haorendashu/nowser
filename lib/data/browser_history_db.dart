@@ -27,4 +27,16 @@ class BrowserHistoryDB {
     }
     return objs;
   }
+
+  static Future<void> deleteByIds(List<int> ids, {DatabaseExecutor? db}) async {
+    var sql = "delete from browser_history where id in(";
+    for (var id in ids) {
+      sql += "?,";
+    }
+    sql = sql.substring(0, sql.length - 1);
+    sql += ")";
+
+    db = await DB.getDB(db);
+    await db.execute(sql, ids);
+  }
 }

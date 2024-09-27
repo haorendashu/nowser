@@ -1,5 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nowser/component/cust_state.dart';
+import 'package:nowser/component/deletable_list_mixin.dart';
 import 'package:nowser/component/url_list_item_componnet.dart';
 import 'package:nowser/data/browser_history_db.dart';
 import 'package:nowser/util/router_util.dart';
@@ -15,7 +17,7 @@ class HistoryRouter extends StatefulWidget {
   }
 }
 
-class _HistoryRouter extends CustState<HistoryRouter> {
+class _HistoryRouter extends CustState<HistoryRouter> with DeletableListMixin {
   List<BrowserHistory> historys = [];
 
   @override
@@ -23,6 +25,8 @@ class _HistoryRouter extends CustState<HistoryRouter> {
     historys = await BrowserHistoryDB.all();
     setState(() {});
   }
+
+  List<int> selectedIds = [];
 
   @override
   Widget doBuild(BuildContext context) {
@@ -38,15 +42,7 @@ class _HistoryRouter extends CustState<HistoryRouter> {
             fontSize: themeData.textTheme.bodyLarge!.fontSize,
           ),
         ),
-        actions: [
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: Container(
-          //     padding: const EdgeInsets.all(Base.BASE_PADDING),
-          //     child: Icon(Icons.delete_sweep_outlined),
-          //   ),
-          // ),
-        ],
+        actions: genAppBarActions(context),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
@@ -73,19 +69,24 @@ class _HistoryRouter extends CustState<HistoryRouter> {
             }
           }
 
-          var main = Container(
-            child: GestureDetector(
-              onTap: () {
-                RouterUtil.back(context, history.url);
-              },
-              child: UrlListItemComponnet(
-                image: history.favicon,
-                title: history.title ?? "",
-                url: history.url ?? "",
-                dateTime: history.createdAt,
-              ),
-            ),
+          Widget main = UrlListItemComponnet(
+            selectable: deleting,
+            selected: selectedIds.contains(history.id),
+            image: history.favicon,
+            title: history.title ?? "",
+            url: history.url ?? "",
+            dateTime: history.createdAt,
           );
+
+          main = wrapListItem(main, onTap: () {
+            RouterUtil.back(context, history.url);
+          }, onSelect: () {
+            if (!selectedIds.contains(history.id)) {
+              setState(() {
+                selectedIds.add(history.id!);
+              });
+            }
+          });
 
           if (dateWidget != null) {
             return Column(
@@ -99,5 +100,16 @@ class _HistoryRouter extends CustState<HistoryRouter> {
         itemCount: historys.length,
       ),
     );
+  }
+
+  @override
+  Future<void> doDelete() async {
+    if (selectedIds.isNotEmpty) {
+      await BrowserHistoryDB.deleteByIds(selectedIds);
+      historys.removeWhere((o) {
+        return selectedIds.contains(o.id);
+      });
+      selectedIds.clear();
+    }
   }
 }
