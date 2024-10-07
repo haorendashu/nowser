@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
 import 'package:nowser/provider/android_signer_mixin.dart';
@@ -16,6 +17,7 @@ import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/app_detail/app_detail_router.dart';
 import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
+import 'package:nowser/router/auth_log/auth_logs_router.dart';
 import 'package:nowser/router/bookmark/bookmark_router.dart';
 import 'package:nowser/router/history/history_router.dart';
 import 'package:nowser/router/index/index_router.dart';
@@ -25,6 +27,8 @@ import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
 import 'package:nowser/router/web_url_input/web_url_input_router.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as receiveIntent;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'const/base.dart';
 import 'const/colors.dart';
@@ -49,6 +53,30 @@ late Map<String, WidgetBuilder> routes;
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  if (!PlatformUtil.isWeb() && PlatformUtil.isPC()) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = WindowOptions(
+      size: Size(1280, 800),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+      title: Base.APP_NAME,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
+
+  if (PlatformUtil.isWindowsOrLinux()) {
+    // Initialize FFI
+    sqfliteFfiInit();
+    // Change the default factory
+    databaseFactory = databaseFactoryFfi;
+  }
 
   keyProvider = KeyProvider();
   appProvider = AppProvider();
@@ -106,6 +134,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.APP_DETAIL: (context) => AppDetailRouter(),
       RouterPath.HISTORY: (context) => HistoryRouter(),
       RouterPath.BOOKMARK: (context) => BookmarkRouter(),
+      RouterPath.AUTH_LOGS: (context) => AuthLogsRouter(),
     };
 
     return MultiProvider(

@@ -9,4 +9,5 @@ class RouterPath {
   static const String APP_DETAIL = "/appDetail";
   static const String HISTORY = "/history";
   static const String BOOKMARK = "/bookmark";
+  static const String AUTH_LOGS = "/authLogs";
 }
