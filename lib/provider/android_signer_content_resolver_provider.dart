@@ -168,6 +168,10 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       }
     }
 
+    if (data != null) {
+      saveAuthLog(app!, authType, eventKind, authDetail, AuthResult.OK);
+    }
+
     return data;
   }
 
