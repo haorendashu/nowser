@@ -78,7 +78,11 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     }
 
     int appType = AppType.ANDROID_APP;
-    String code = "com.github.haorendashu.nostrmo";
+    var code = await getCallingPackage();
+    if (StringUtil.isBlank(code)) {
+      print("get calling package fail!");
+      return null;
+    }
 
     int? eventKind;
     dynamic eventObj;
@@ -104,7 +108,7 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       complete.complete();
     }
 
-    checkPermission(null, appType, code, authType, rejectFunc, confirmFunc,
+    checkPermission(null, appType, code!, authType, rejectFunc, confirmFunc,
         eventKind: eventKind, authDetail: authDetail);
 
     await complete.future;
