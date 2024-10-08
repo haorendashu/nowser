@@ -34,6 +34,7 @@ import 'const/base.dart';
 import 'const/colors.dart';
 import 'const/router_path.dart';
 import 'generated/l10n.dart';
+import 'provider/android_signer_content_resolver_provider.dart';
 import 'provider/data_util.dart';
 import 'provider/remote_signing_provider.dart';
 import 'provider/setting_provider.dart';
@@ -78,6 +79,12 @@ Future<void> main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
+  await doInit();
+
+  runApp(MyApp());
+}
+
+Future<void> doInit() async {
   keyProvider = KeyProvider();
   appProvider = AppProvider();
 
@@ -92,8 +99,6 @@ Future<void> main() async {
   settingProvider = futureResultList[0] as SettingProvider;
   webProvider = WebProvider();
   remoteSigningProvider = RemoteSigningProvider();
-
-  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -329,4 +334,12 @@ Color _getMainColor() {
     color500 = Color(settingProvider.themeColor!);
   }
   return color500;
+}
+
+@pragma('vm:entry-point')
+Future<void> nowserSignerProviderEntrypoint() async {
+  // if we call content resolver this should init first, to receive request.
+  // so, doInit() method move to query method.
+  AndroidSignerContentResolverProvider(
+      'com.github.haorendashu.nowser.SIGN_EVENT;com.github.haorendashu.nowser.NIP04_ENCRYPT;com.github.haorendashu.nowser.NIP04_DECRYPT;com.github.haorendashu.nowser.NIP44_ENCRYPT;com.github.haorendashu.nowser.NIP44_DECRYPT;com.github.haorendashu.nowser.GET_PUBLIC_KEY');
 }

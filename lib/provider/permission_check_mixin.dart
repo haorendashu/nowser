@@ -12,12 +12,14 @@ import '../const/connect_type.dart';
 import '../data/app.dart';
 
 mixin PermissionCheckMixin {
-  Future<void> checkPermission(BuildContext context, int appType, String code,
+  Future<void> checkPermission(BuildContext? context, int appType, String code,
       int authType, Function(App?) reject, Function(App, NostrSigner) confirm,
       {int? eventKind, String? authDetail}) async {
     if (keyProvider.keys.isEmpty) {
       // should add a key first
-      await UserLoginDialog.show(context);
+      if (context != null) {
+        await UserLoginDialog.show(context);
+      }
       if (keyProvider.keys.isEmpty) {
         return;
       }
@@ -27,7 +29,9 @@ mixin PermissionCheckMixin {
     if (app == null) {
       // app is null, app connect
       var newApp = await getApp(appType, code);
-      await AuthAppConnectDialog.show(context, newApp);
+      if (context != null) {
+        await AuthAppConnectDialog.show(context, newApp);
+      }
       // reload from provider
       app = appProvider.getApp(appType, code);
     }
@@ -63,12 +67,14 @@ mixin PermissionCheckMixin {
         return;
       }
 
-      var authResult = await AuthDialog.show(context, app, authType,
-          eventKind: eventKind, authDetail: authDetail);
-      if (authResult == AuthResult.OK) {
-        saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
-        confirm(app, signer);
-        return;
+      if (context != null) {
+        var authResult = await AuthDialog.show(context, app, authType,
+            eventKind: eventKind, authDetail: authDetail);
+        if (authResult == AuthResult.OK) {
+          saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
+          confirm(app, signer);
+          return;
+        }
       }
     }
 
