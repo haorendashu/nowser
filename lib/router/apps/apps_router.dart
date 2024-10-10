@@ -83,6 +83,8 @@ class _AppsRouter extends CustState<AppsRouter> {
                     try {
                       appProvider.deleteApp(app);
                     } catch (e) {
+                      print("delete app error");
+                      print(e);
                     } finally {
                       cancelFunc.call();
                     }

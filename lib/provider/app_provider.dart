@@ -121,7 +121,6 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> deleteApp(App app) async {
     await AppDB.delete(app.id!);
-    reload();
 
     try {
       await AuthLogDB.deleteByAppId(app.id!);
@@ -129,7 +128,7 @@ class AppProvider extends ChangeNotifier {
       print(e.toString());
     }
 
-    notifyListeners();
+    reload();
   }
 
   App? getAppById(int appId) {

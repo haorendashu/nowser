@@ -37,6 +37,6 @@ class AppDB {
 
   static Future<void> delete(int id, {DatabaseExecutor? db}) async {
     db = await DB.getDB(db);
-    db.execute("delete from app where id = ?");
+    db.execute("delete from app where id = ?", [id]);
   }
 }
