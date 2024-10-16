@@ -7,6 +7,7 @@ import 'package:nostr_sdk/event.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nostr_sdk/zap/private_zap.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 
@@ -75,6 +76,8 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       authType = AuthType.NIP44_ENCRYPT;
     } else if (authTypeStr == "NIP44_DECRYPT") {
       authType = AuthType.NIP44_DECRYPT;
+    } else if (authTypeStr == "DECRYPT_ZAP_EVENT") {
+      authType = AuthType.DECRYPT_ZAP_EVENT;
     }
 
     int appType = AppType.ANDROID_APP;
@@ -86,9 +89,10 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
 
     int? eventKind;
     dynamic eventObj;
-    if (authType == AuthType.SIGN_EVENT) {
+    if (authType == AuthType.SIGN_EVENT ||
+        authType == AuthType.DECRYPT_ZAP_EVENT) {
       eventObj = jsonDecode(authDetail);
-      if (eventObj != null) {
+      if (eventObj != null && authType == AuthType.SIGN_EVENT) {
         eventKind = eventObj["kind"];
       }
     }
@@ -98,7 +102,9 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     var complete = Completer();
 
     rejectFunc(_app) {
-      saveAuthLog(_app, authType, eventKind, authDetail, AuthResult.REJECT);
+      if (_app != null) {
+        saveAuthLog(_app, authType, eventKind, authDetail, AuthResult.REJECT);
+      }
       complete.complete();
     }
 
@@ -165,6 +171,14 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       }
     } else if (authType == AuthType.NIP44_DECRYPT) {
       var result = await signer!.nip44Decrypt(pubkey, authDetail);
+      if (StringUtil.isNotBlank(result)) {
+        data = MatrixCursorData(
+            columnNames: ["signature"], notificationUris: [uri]);
+        data.addRow([result]);
+      }
+    } else if (authType == AuthType.DECRYPT_ZAP_EVENT) {
+      var event = Event.fromJson(eventObj);
+      var result = await PrivateZap.decryptZapEvent(signer!, event);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
             columnNames: ["signature"], notificationUris: [uri]);

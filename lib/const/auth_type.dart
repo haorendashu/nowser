@@ -15,6 +15,8 @@ class AuthType {
 
   static const NIP44_DECRYPT = 7;
 
+  static const DECRYPT_ZAP_EVENT = 8;
+
   static String getAuthName(BuildContext context, int authType) {
     if (authType == GET_PUBLIC_KEY) {
       return "Get Public Key";
@@ -30,6 +32,8 @@ class AuthType {
       return "Encrypt (NIP-44)";
     } else if (authType == NIP44_DECRYPT) {
       return "Decrypt (NIP-44)";
+    } else if (authType == DECRYPT_ZAP_EVENT) {
+      return "Decrypt zap event";
     }
 
     return "Unknow";

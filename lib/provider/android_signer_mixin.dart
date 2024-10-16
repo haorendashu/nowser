@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/event.dart';
+import 'package:nostr_sdk/nip04/nip04.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nostr_sdk/zap/private_zap.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_result.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:receive_intent/receive_intent.dart' as receiveIntent;
+import 'package:hex/hex.dart';
 
 mixin AndroidSignerMixin on PermissionCheckMixin {
   // StreamSubscription? _sub;
@@ -77,15 +80,18 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
               authType = AuthType.NIP44_ENCRYPT;
             } else if (authTypeStr == "nip44_decrypt") {
               authType = AuthType.NIP44_DECRYPT;
+            } else if (authTypeStr == "decrypt_zap_event") {
+              authType = AuthType.DECRYPT_ZAP_EVENT;
             }
 
             var playload = intent.data!.replaceFirst(PREFIX, "");
             int? eventKind;
             dynamic eventObj;
-            if (authType == AuthType.SIGN_EVENT) {
+            if (authType == AuthType.SIGN_EVENT ||
+                authType == AuthType.DECRYPT_ZAP_EVENT) {
               print(playload);
               eventObj = jsonDecode(playload);
-              if (eventObj != null) {
+              if (eventObj != null && authType == AuthType.SIGN_EVENT) {
                 eventKind = eventObj["kind"];
                 print("eventKind $eventKind");
               }
@@ -107,12 +113,12 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
               // confirm
               Map<String, Object?> data = {};
               data["id"] = callId;
+              var signerPubkey = await signer.getPublicKey();
 
               if (authType == AuthType.GET_PUBLIC_KEY) {
                 // TODO should handle permissions
                 // var permissions = extra["permissions"];
-                var pubkey = await signer.getPublicKey();
-                data["signature"] = Nip19.encodePubKey(pubkey!);
+                data["signature"] = Nip19.encodePubKey(signerPubkey!);
                 data["package"] = "com.github.haorendashu.nowser";
               } else if (authType == AuthType.SIGN_EVENT) {
                 var tags = eventObj["tags"];
@@ -150,6 +156,10 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                 if (StringUtil.isNotBlank(result)) {
                   data["signature"] = result;
                 }
+              } else if (authType == AuthType.DECRYPT_ZAP_EVENT) {
+                var event = Event.fromJson(eventObj);
+                var source = await PrivateZap.decryptZapEvent(signer, event);
+                data["signature"] = source;
               }
 
               saveAuthLog(app, authType, eventKind, playload, AuthResult.OK);

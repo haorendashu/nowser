@@ -50,16 +50,28 @@ mixin PermissionCheckMixin {
     }
 
     if (app.connectType == ConnectType.FULLY_TRUST) {
-      saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
-      confirm(app, signer);
+      try {
+        confirm(app, signer);
+        saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
+      } catch (e) {
+        print("confirm error $e");
+        reject(app);
+        saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
+      }
       return;
     } else if (app.connectType == ConnectType.REASONABLE) {
       var permissionCheckResult = appProvider
           .checkPermission(appType, code, authType, eventKind: eventKind);
       print("permissionCheckResult $permissionCheckResult");
       if (permissionCheckResult == AuthResult.OK) {
-        saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
-        confirm(app, signer);
+        try {
+          confirm(app, signer);
+          saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
+        } catch (e) {
+          print("confirm error $e");
+          reject(app);
+          saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
+        }
         return;
       } else if (permissionCheckResult == AuthResult.REJECT) {
         saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
@@ -71,8 +83,15 @@ mixin PermissionCheckMixin {
         var authResult = await AuthDialog.show(context, app, authType,
             eventKind: eventKind, authDetail: authDetail);
         if (authResult == AuthResult.OK) {
-          saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
-          confirm(app, signer);
+          try {
+            confirm(app, signer);
+            saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
+          } catch (e) {
+            print("confirm error $e");
+            reject(app);
+            saveAuthLog(
+                app, authType, eventKind, authDetail, AuthResult.REJECT);
+          }
           return;
         }
       }

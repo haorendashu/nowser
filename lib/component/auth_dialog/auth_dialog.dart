@@ -88,6 +88,9 @@ class _AuthDialog extends State<AuthDialog> {
     } else if (widget.authType == AuthType.NIP44_DECRYPT) {
       authTitle = "Decrypt (NIP-44)";
       authDes += "Decrypt (NIP-44)";
+    } else if (widget.authType == AuthType.DECRYPT_ZAP_EVENT) {
+      authTitle = "Decrypt zap event";
+      authDes += "Decrypt zap event";
     }
 
     List<Widget> list = [];

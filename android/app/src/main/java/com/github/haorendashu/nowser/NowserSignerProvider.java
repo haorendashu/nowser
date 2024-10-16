@@ -8,7 +8,7 @@ public class NowserSignerProvider extends AndroidContentProvider {
     @NotNull
     @Override
     public String getAuthority() {
-        return "com.github.haorendashu.nowser.SIGN_EVENT;com.github.haorendashu.nowser.NIP04_ENCRYPT;com.github.haorendashu.nowser.NIP04_DECRYPT;com.github.haorendashu.nowser.NIP44_ENCRYPT;com.github.haorendashu.nowser.NIP44_DECRYPT;com.github.haorendashu.nowser.GET_PUBLIC_KEY";
+        return "com.github.haorendashu.nowser.SIGN_EVENT;com.github.haorendashu.nowser.NIP04_ENCRYPT;com.github.haorendashu.nowser.NIP04_DECRYPT;com.github.haorendashu.nowser.NIP44_ENCRYPT;com.github.haorendashu.nowser.NIP44_DECRYPT;com.github.haorendashu.nowser.GET_PUBLIC_KEY;com.github.haorendashu.nowser.DECRYPT_ZAP_EVENT";
     }
 
     @NotNull
