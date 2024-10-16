@@ -119,6 +119,7 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                 // TODO should handle permissions
                 // var permissions = extra["permissions"];
                 data["signature"] = Nip19.encodePubKey(signerPubkey!);
+                data["result"] = Nip19.encodePubKey(signerPubkey!);
                 data["package"] = "com.github.haorendashu.nowser";
               } else if (authType == AuthType.SIGN_EVENT) {
                 var tags = eventObj["tags"];
@@ -132,6 +133,7 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                   return;
                 }
                 data["signature"] = event.sig;
+                data["result"] = event.sig;
                 data["event"] = jsonEncode(event.toJson());
                 log("sig ${event.sig}");
               } else if (authType == AuthType.GET_RELAYS) {
@@ -140,26 +142,31 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                 var result = await signer.encrypt(pubkey, playload);
                 if (StringUtil.isNotBlank(result)) {
                   data["signature"] = result;
+                  data["result"] = result;
                 }
               } else if (authType == AuthType.NIP04_DECRYPT) {
                 var result = await signer.decrypt(pubkey, playload);
                 if (StringUtil.isNotBlank(result)) {
                   data["signature"] = result;
+                  data["result"] = result;
                 }
               } else if (authType == AuthType.NIP44_ENCRYPT) {
                 var result = await signer.nip44Encrypt(pubkey, playload);
                 if (StringUtil.isNotBlank(result)) {
                   data["signature"] = result;
+                  data["result"] = result;
                 }
               } else if (authType == AuthType.NIP44_DECRYPT) {
                 var result = await signer.nip44Decrypt(pubkey, playload);
                 if (StringUtil.isNotBlank(result)) {
                   data["signature"] = result;
+                  data["result"] = result;
                 }
               } else if (authType == AuthType.DECRYPT_ZAP_EVENT) {
                 var event = Event.fromJson(eventObj);
                 var source = await PrivateZap.decryptZapEvent(signer, event);
                 data["signature"] = source;
+                data["result"] = source;
               }
 
               saveAuthLog(app, authType, eventKind, playload, AuthResult.OK);

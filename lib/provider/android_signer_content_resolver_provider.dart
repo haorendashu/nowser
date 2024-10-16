@@ -128,9 +128,9 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       // TODO should handle permissions
       // var permissions = extra["permissions"];
       var pubkey = await signer!.getPublicKey();
-      data =
-          MatrixCursorData(columnNames: ["signature"], notificationUris: [uri]);
-      data.addRow([Nip19.encodePubKey(pubkey!)]);
+      data = MatrixCursorData(
+          columnNames: ["signature", "result"], notificationUris: [uri]);
+      data.addRow([Nip19.encodePubKey(pubkey!), Nip19.encodePubKey(pubkey)]);
     } else if (authType == AuthType.SIGN_EVENT) {
       var tags = eventObj["tags"];
       Event? event = Event(
@@ -144,45 +144,46 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       }
       log("sig ${event.sig}");
       data = MatrixCursorData(
-          columnNames: ["signature", "event"], notificationUris: [uri]);
-      data.addRow([event.sig, jsonEncode(event.toJson())]);
+          columnNames: ["signature", "result", "event"],
+          notificationUris: [uri]);
+      data.addRow([event.sig, event.sig, jsonEncode(event.toJson())]);
     } else if (authType == AuthType.GET_RELAYS) {
       // TODO
     } else if (authType == AuthType.NIP04_ENCRYPT) {
       var result = await signer!.encrypt(pubkey, authDetail);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
-            columnNames: ["signature"], notificationUris: [uri]);
-        data.addRow([result]);
+            columnNames: ["signature", "result"], notificationUris: [uri]);
+        data.addRow([result, result]);
       }
     } else if (authType == AuthType.NIP04_DECRYPT) {
       var result = await signer!.decrypt(pubkey, authDetail);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
-            columnNames: ["signature"], notificationUris: [uri]);
-        data.addRow([result]);
+            columnNames: ["signature", "result"], notificationUris: [uri]);
+        data.addRow([result, result]);
       }
     } else if (authType == AuthType.NIP44_ENCRYPT) {
       var result = await signer!.nip44Encrypt(pubkey, authDetail);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
-            columnNames: ["signature"], notificationUris: [uri]);
-        data.addRow([result]);
+            columnNames: ["signature", "result"], notificationUris: [uri]);
+        data.addRow([result, result]);
       }
     } else if (authType == AuthType.NIP44_DECRYPT) {
       var result = await signer!.nip44Decrypt(pubkey, authDetail);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
-            columnNames: ["signature"], notificationUris: [uri]);
-        data.addRow([result]);
+            columnNames: ["signature", "result"], notificationUris: [uri]);
+        data.addRow([result, result]);
       }
     } else if (authType == AuthType.DECRYPT_ZAP_EVENT) {
       var event = Event.fromJson(eventObj);
       var result = await PrivateZap.decryptZapEvent(signer!, event);
       if (StringUtil.isNotBlank(result)) {
         data = MatrixCursorData(
-            columnNames: ["signature"], notificationUris: [uri]);
-        data.addRow([result]);
+            columnNames: ["signature", "result"], notificationUris: [uri]);
+        data.addRow([result, result]);
       }
     }
 
