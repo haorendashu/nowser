@@ -62,7 +62,7 @@ mixin PermissionCheckMixin {
     } else if (app.connectType == ConnectType.REASONABLE) {
       var permissionCheckResult = appProvider
           .checkPermission(appType, code, authType, eventKind: eventKind);
-      print("permissionCheckResult $permissionCheckResult");
+      // print("permissionCheckResult $permissionCheckResult");
       if (permissionCheckResult == AuthResult.OK) {
         try {
           confirm(app, signer);

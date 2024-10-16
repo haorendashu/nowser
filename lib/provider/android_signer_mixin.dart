@@ -40,12 +40,12 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
   Future<void> handleInitialIntent(BuildContext context) async {
     final intent = await receiveIntent.ReceiveIntent.getInitialIntent();
     if (intent != null) {
-      log(intent.toString());
-      log("from ${intent.fromPackageName}");
-      log("action ${intent.action}");
-      log("data ${intent.data}");
-      log("categories ${intent.categories}");
-      log("extra ${intent.extra}");
+      // log(intent.toString());
+      // log("from ${intent.fromPackageName}");
+      // log("action ${intent.action}");
+      // log("data ${intent.data}");
+      // log("categories ${intent.categories}");
+      // log("extra ${intent.extra}");
 
       if (StringUtil.isNotBlank(intent.data) &&
           intent.data!.startsWith(PREFIX)) {
@@ -89,11 +89,11 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
             dynamic eventObj;
             if (authType == AuthType.SIGN_EVENT ||
                 authType == AuthType.DECRYPT_ZAP_EVENT) {
-              print(playload);
+              // print(playload);
               eventObj = jsonDecode(playload);
               if (eventObj != null && authType == AuthType.SIGN_EVENT) {
                 eventKind = eventObj["kind"];
-                print("eventKind $eventKind");
+                // print("eventKind $eventKind");
               }
             }
 
@@ -109,7 +109,7 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
                 shouldFinish: true,
               );
             }, (app, signer) async {
-              print("checkPermission confrim $code");
+              // print("checkPermission confrim $code");
               // confirm
               Map<String, Object?> data = {};
               data["id"] = callId;
@@ -171,8 +171,8 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
 
               saveAuthLog(app, authType, eventKind, playload, AuthResult.OK);
 
-              print("setResult ok");
-              print(data);
+              // print("setResult ok");
+              // print(data);
 
               receiveIntent.ReceiveIntent.setResult(
                 receiveIntent.kActivityResultOk,
