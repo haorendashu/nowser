@@ -191,6 +191,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
             ),
           ));
           list.add(Container(
+            margin: baseMargin,
             width: double.infinity,
             child: Wrap(
               spacing: Base.BASE_PADDING,
