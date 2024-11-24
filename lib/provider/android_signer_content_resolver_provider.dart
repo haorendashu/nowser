@@ -97,6 +97,15 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       }
     }
 
+    MatrixCursorData? data;
+    if (authType == AuthType.DECRYPT_ZAP_EVENT) {
+      // direct reject decrypt_zap_event query!
+      data =
+          MatrixCursorData(columnNames: ["rejected"], notificationUris: [uri]);
+      data.addRow(["Could not decrypt the message"]);
+      return data;
+    }
+
     App? app;
     NostrSigner? signer;
     var complete = Completer();
@@ -121,8 +130,6 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     if (signer == null || app == null) {
       return null;
     }
-
-    MatrixCursorData? data;
 
     if (authType == AuthType.GET_PUBLIC_KEY) {
       // TODO should handle permissions
@@ -178,13 +185,13 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
         data.addRow([result, result]);
       }
     } else if (authType == AuthType.DECRYPT_ZAP_EVENT) {
-      var event = Event.fromJson(eventObj);
-      var result = await PrivateZap.decryptZapEvent(signer!, event);
-      if (StringUtil.isNotBlank(result)) {
-        data = MatrixCursorData(
-            columnNames: ["signature", "result"], notificationUris: [uri]);
-        data.addRow([result, result]);
-      }
+      // var event = Event.fromJson(eventObj);
+      // var result = await PrivateZap.decryptZapEvent(signer!, event);
+      // if (StringUtil.isNotBlank(result)) {
+      //   data = MatrixCursorData(
+      //       columnNames: ["signature", "result"], notificationUris: [uri]);
+      //   data.addRow([result, result]);
+      // }
     }
 
     if (data != null) {
