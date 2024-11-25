@@ -97,6 +97,8 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       }
     }
 
+    // print("appType $appType code $code authtype $authType");
+
     MatrixCursorData? data;
     if (authType == AuthType.DECRYPT_ZAP_EVENT) {
       // direct reject decrypt_zap_event query!

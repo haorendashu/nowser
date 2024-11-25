@@ -56,14 +56,14 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
         var extra = intent.extra;
 
         if (intent.extra != null) {
-          var callId = extra!["id"];
+          var callId = extra![
+              "id"]; // sometime client don't send this id, don't need to check blank, just pass it return.
           var authTypeStr = extra["type"];
           var currentUser = extra["current_user"];
           var pubkey = extra["pubKey"];
           pubkey ??= extra["pubkey"];
 
-          if (StringUtil.isNotBlank(callId) &&
-              StringUtil.isNotBlank(authTypeStr) &&
+          if (StringUtil.isNotBlank(authTypeStr) &&
               StringUtil.isNotBlank(code)) {
             var authType = AuthType.GET_PUBLIC_KEY;
             if (authTypeStr == "get_public_key") {
