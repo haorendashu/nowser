@@ -309,6 +309,8 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
     }
   }
 
+  String remoteSignerKey = generatePrivateKey();
+
   void confirmNostrConnect() {
     var remoteSigningInfo =
         RemoteSigningInfo.parseNostrConnectUrl(nostrconnectConn.text);
@@ -317,21 +319,19 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       return;
     }
 
-    remoteSigningInfo.remoteSignerKey = generatePrivateKey();
+    remoteSigningInfo.remoteSignerKey = remoteSignerKey;
     remoteSigningInfo.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
     // TODO
   }
 
-  TextEditingController remoteSignerKeyController = TextEditingController();
-
   TextEditingController relayAddrController = TextEditingController();
 
   TextEditingController secretController = TextEditingController();
 
   void refreshBunkerUrl() {
-    remoteSignerKeyController.text = generatePrivateKey();
+    remoteSignerKey = generatePrivateKey();
     secretController.text = StringUtil.rndNameStr(20);
     relayAddrController.text = "wss://relay.nsec.app";
 
@@ -354,7 +354,6 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       return;
     }
 
-    var remoteSignerKey = remoteSignerKeyController.text;
     var relays = [relayAddrController.text];
 
     var remoteSigningInfo = RemoteSigningInfo(
@@ -371,12 +370,8 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
   }
 
   void reloadBunker() {
-    if (StringUtil.isBlank(pubkey)) {
-      return;
-    }
-
     var nostrRemoteSignerInfo = NostrRemoteSignerInfo(
-      remoteUserPubkey: pubkey!,
+      remoteSignerPubkey: getPublicKey(remoteSignerKey),
       relays: [relayAddrController.text],
       optionalSecret: secretController.text,
     );

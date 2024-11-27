@@ -81,7 +81,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       var relay = RelayIsolate(relayAddr, RelayStatus(remoteSignerPubkey));
 
       var filter = Filter(
-          p: [remoteSigningInfo.remotePubkey!],
+          p: [remoteSignerPubkey],
           since: DateTime.now().millisecondsSinceEpoch ~/ 1000);
       relay.pendingAuthedMessages
           .add(["REQ", StringUtil.rndNameStr(10), filter.toJson()]);
@@ -97,7 +97,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
   }
 
   Future<void> onRequest(
-    Relay relay,
+    List<Relay> relays,
     NostrRemoteRequest request,
     RemoteSigningInfo remoteSigningInfo,
     String localPubkey,
@@ -114,7 +114,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       response = NostrRemoteResponse(request.id, "pong");
 
       sendResponse(
-          relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+          relays, response, signerSigner, localPubkey, remoteSignerPubkey);
     } else if (request.method == "connect") {
       if (app != null) {
         response = NostrRemoteResponse(request.id, "ack");
@@ -160,7 +160,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
       if (response != null) {
         sendResponse(
-            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+            relays, response, signerSigner, localPubkey, remoteSignerPubkey);
       }
     } else {
       if (remoteSigningInfo.localPubkey != localPubkey) {
@@ -168,7 +168,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         response = NostrRemoteResponse(request.id, "",
             error: "Local pubkey not allow.");
         sendResponse(
-            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+            relays, response, signerSigner, localPubkey, remoteSignerPubkey);
         return;
       }
       if (app == null) {
@@ -176,7 +176,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         response = NostrRemoteResponse(request.id, "",
             error: "Remote signing should connect first.");
         sendResponse(
-            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+            relays, response, signerSigner, localPubkey, remoteSignerPubkey);
         return;
       }
 
@@ -213,7 +213,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           eventKind: eventKind, authDetail: authDetail, (app) {
         response = NostrRemoteResponse(request.id, "", error: "forbid");
         sendResponse(
-            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+            relays, response, signerSigner, localPubkey, remoteSignerPubkey);
       }, (app, signer) async {
         if (request.method == "sign_event") {
           var tags = eventObj["tags"];
@@ -249,12 +249,12 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         }
 
         sendResponse(
-            relay, response, signerSigner, localPubkey, remoteSignerPubkey);
+            relays, response, signerSigner, localPubkey, remoteSignerPubkey);
       });
     }
   }
 
-  Future<void> sendResponse(Relay relay, NostrRemoteResponse? response,
+  Future<void> sendResponse(List<Relay> relays, NostrRemoteResponse? response,
       NostrSigner signer, String localPubkey, String remoteSignerPubkey) async {
     if (response != null) {
       var result = await response.encrypt(signer, localPubkey);
@@ -271,10 +271,14 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       // print("response:");
       if (event != null) {
         // print(event.toJson());
-        relay.send(["EVENT", event.toJson()]);
+        for (var relay in relays) {
+          relay.send(["EVENT", event.toJson()]);
+        }
       }
     }
   }
+
+  Map<String, int> handledIds = {};
 
   Future<void> _onEvent(Relay relay, List<dynamic> json) async {
     // print("request");
@@ -303,11 +307,19 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         event.sources.add(relay.url);
 
         if (event.kind == EventKind.NOSTR_REMOTE_SIGNING) {
-          var request = await NostrRemoteRequest.decrypt(
-              event.content, signer, event.pubkey);
-          if (request != null) {
-            onRequest(relay, request, remoteSigningInfo, event.pubkey,
-                appMap[remoteSignerPubkey]);
+          if (handledIds[event.id] == null) {
+            var request = await NostrRemoteRequest.decrypt(
+                event.content, signer, event.pubkey);
+            var relays = relayMap[remoteSignerPubkey];
+            if (relays == null || relays.isEmpty) {
+              relays = [relay];
+            }
+            if (request != null) {
+              onRequest(relays, request, remoteSigningInfo, event.pubkey,
+                  appMap[remoteSignerPubkey]);
+            }
+
+            handledIds[event.id] = 1;
           }
         }
       } catch (err) {
