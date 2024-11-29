@@ -5,11 +5,14 @@ import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/nip46/nostr_remote_signer_info.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/component/simple_qrcode_dialog.dart';
 import 'package:nowser/data/remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
 import 'package:nowser/main.dart';
+import 'package:nowser/provider/build_in_relay_provider.dart';
+import 'package:nowser/util/ip_util.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
@@ -25,14 +28,18 @@ class AddRemoteAppRouter extends StatefulWidget {
   }
 }
 
-class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
+class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
   TextEditingController nostrconnectConn = TextEditingController();
 
   TextEditingController bunkerConn = TextEditingController();
 
   bool editBunker = false;
 
+  bool localRelay = false;
+
   String? pubkey;
+
+  String? localIp;
 
   @override
   void initState() {
@@ -47,7 +54,12 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Future<void> onReady(BuildContext context) async {
+    localIp = await IpUtil.getIp();
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
     var textColor = themeData.textTheme.bodyMedium!.color;
     var mainColor = themeData.primaryColor;
@@ -136,9 +148,27 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    right: Base.BASE_PADDING_HALF,
+                  ),
+                  child: Text("Local Relay:"),
+                ),
+                Checkbox(
+                  value: localRelay,
+                  onChanged: onLocalRelayChange,
+                ),
+                Expanded(child: Container()),
+              ],
+            ),
+          ),
+          Container(
             child: TextField(
               decoration: InputDecoration(
                 labelText: "Relay",
+                enabled: !localRelay,
               ),
               controller: relayAddrController,
             ),
@@ -328,12 +358,17 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
 
   TextEditingController relayAddrController = TextEditingController();
 
+  static const String DEFAULT_RELAY = "wss://relay.nsec.app";
+
   TextEditingController secretController = TextEditingController();
 
   void refreshBunkerUrl() {
     remoteSignerKey = generatePrivateKey();
     secretController.text = StringUtil.rndNameStr(20);
-    relayAddrController.text = "wss://relay.nsec.app";
+    if (StringUtil.isBlank(localIp) ||
+        !relayAddrController.text.contains(localIp!)) {
+      relayAddrController.text = DEFAULT_RELAY;
+    }
 
     reloadBunker();
   }
@@ -354,7 +389,12 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       return;
     }
 
-    var relays = [relayAddrController.text];
+    List<String> relays = [];
+    if (localRelay) {
+      relays.add("ws://127.0.0.1:${BuildInRelayProvider.port}");
+    } else {
+      relays.add(relayAddrController.text);
+    }
 
     var remoteSigningInfo = RemoteSigningInfo(
       remotePubkey: pubkey,
@@ -376,5 +416,20 @@ class _AddRemoteAppRouter extends State<AddRemoteAppRouter> {
       optionalSecret: secretController.text,
     );
     bunkerConn.text = nostrRemoteSignerInfo.toString();
+  }
+
+  void onLocalRelayChange(bool? v) {
+    if (v == true) {
+      relayAddrController.text = "ws://${localIp}:${BuildInRelayProvider.port}";
+    } else if (v == false) {
+      relayAddrController.text = DEFAULT_RELAY;
+    }
+
+    if (v != null) {
+      setState(() {
+        localRelay = v;
+      });
+      reloadBunker();
+    }
   }
 }

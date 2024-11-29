@@ -1,3 +1,6 @@
 [submodule "packages/nostr_sdk"]
 	path = packages/nostr_sdk
 	url = git@github.com:haorendashu/nostr_sdk.git
+[submodule "packages/relay_sdk"]
+	path = packages/relay_sdk
+	url = git@github.com:haorendashu/relay_sdk.git

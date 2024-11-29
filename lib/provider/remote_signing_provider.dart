@@ -18,11 +18,13 @@ import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/data/app.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
+import 'package:relay_sdk/network/memory/mem_relay_client.dart';
 
 import '../component/auth_dialog/auth_app_connect_dialog.dart';
 import '../data/remote_signing_info.dart';
 import '../data/remote_signing_info_db.dart';
 import '../main.dart';
+import 'build_in_relay_provider.dart';
 
 class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
   BuildContext? context;
@@ -77,8 +79,18 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
     List<Relay> relays = [];
     for (var relayAddr in relayAddrs) {
-      // use pubkey relace with
-      var relay = RelayIsolate(relayAddr, RelayStatus(remoteSignerPubkey));
+      bool isLocalRelay = false;
+      Relay? relay;
+      var relayStatus = RelayStatus(remoteSignerPubkey);
+      if (relayAddr == "ws://localhost:${BuildInRelayProvider.port}" ||
+          relayAddr == "ws://127.0.0.1:${BuildInRelayProvider.port}") {
+        // use pubkey relace with
+        relay = MemRelayClient(relayAddr, relayStatus);
+        isLocalRelay = true;
+      } else {
+        // use pubkey relace with
+        relay = RelayIsolate(relayAddr, relayStatus);
+      }
 
       var filter = Filter(
           p: [remoteSignerPubkey],
@@ -89,7 +101,11 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           .add(["REQ", StringUtil.rndNameStr(10), filter.toJson()]);
       relay.onMessage = _onEvent;
 
-      relay.connect();
+      if (isLocalRelay) {
+        buildInRelayProvider.addMemClient(relay as MemRelayClient);
+      } else {
+        relay.connect();
+      }
       relays.add(relay);
     }
 
@@ -122,7 +138,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         if (request.params.length <= 1) {
           response = NostrRemoteResponse(request.id, "", error: "params error");
         } else {
-          if (request.params[0] == remoteSigningInfo.remotePubkey &&
+          if (request.params[0] == remoteSignerPubkey &&
               request.params[1] == remoteSigningInfo.secret) {
             // check pass, init app
             var newApp = await getApp(appType, code);
@@ -182,6 +198,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
       int? eventKind;
       String? authDetail;
+      String? thirdPartyPubkey;
       int authType = AuthType.GET_PUBLIC_KEY;
       dynamic eventObj;
 
@@ -197,15 +214,19 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         authType = AuthType.GET_PUBLIC_KEY;
       } else if (request.method == "nip04_encrypt") {
         authType = AuthType.NIP04_ENCRYPT;
+        thirdPartyPubkey = request.params[0];
         authDetail = request.params[1];
       } else if (request.method == "nip04_decrypt") {
         authType = AuthType.NIP04_DECRYPT;
+        thirdPartyPubkey = request.params[0];
         authDetail = request.params[1];
       } else if (request.method == "nip44_encrypt") {
         authType = AuthType.NIP44_ENCRYPT;
+        thirdPartyPubkey = request.params[0];
         authDetail = request.params[1];
       } else if (request.method == "nip44_decrypt") {
         authType = AuthType.NIP44_DECRYPT;
+        thirdPartyPubkey = request.params[0];
         authDetail = request.params[1];
       }
 
@@ -235,16 +256,16 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           var pubkey = await signer.getPublicKey();
           response = NostrRemoteResponse(request.id, pubkey!);
         } else if (request.method == "nip04_encrypt") {
-          var text = await signer.encrypt(localPubkey, authDetail);
+          var text = await signer.encrypt(thirdPartyPubkey, authDetail);
           response = NostrRemoteResponse(request.id, text!);
         } else if (request.method == "nip04_decrypt") {
-          var text = await signer.decrypt(localPubkey, authDetail);
+          var text = await signer.decrypt(thirdPartyPubkey, authDetail);
           response = NostrRemoteResponse(request.id, text!);
         } else if (request.method == "nip44_encrypt") {
-          var text = await signer.nip44Encrypt(localPubkey, authDetail);
+          var text = await signer.nip44Encrypt(thirdPartyPubkey, authDetail);
           response = NostrRemoteResponse(request.id, text!);
         } else if (request.method == "nip44_decrypt") {
-          var text = await signer.nip44Decrypt(localPubkey, authDetail);
+          var text = await signer.nip44Decrypt(thirdPartyPubkey, authDetail);
           response = NostrRemoteResponse(request.id, text!);
         }
 
@@ -257,6 +278,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
   Future<void> sendResponse(List<Relay> relays, NostrRemoteResponse? response,
       NostrSigner signer, String localPubkey, String remoteSignerPubkey) async {
     if (response != null) {
+      // print("response:");
+      // print(response.toString());
       var result = await response.encrypt(signer, localPubkey);
       Event? event = Event(
           remoteSignerPubkey,
@@ -267,10 +290,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           result!);
       event = await signer.signEvent(event);
 
-      var signerPubkey = await signer.getPublicKey();
-      // print("response:");
       if (event != null) {
-        // print(event.toJson());
         for (var relay in relays) {
           relay.send(["EVENT", event.toJson()]);
         }
@@ -290,7 +310,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       print("remoteSigningInfo is null");
       return;
     }
-    var nostrSigner = LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
+    var remoteSigner = LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
     var signer = keyProvider.getSigner(remoteSigningInfo.remotePubkey!);
     if (signer == null) {
       return;
@@ -309,7 +329,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
         if (event.kind == EventKind.NOSTR_REMOTE_SIGNING) {
           if (handledIds[event.id] == null) {
             var request = await NostrRemoteRequest.decrypt(
-                event.content, signer, event.pubkey);
+                event.content, remoteSigner, event.pubkey);
             var relays = relayMap[remoteSignerPubkey];
             if (relays == null || relays.isEmpty) {
               relays = [relay];
@@ -341,7 +361,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       ];
       Event? event =
           Event(remoteSignerPubkey, EventKind.AUTHENTICATION, tags, "");
-      event = await nostrSigner.signEvent(event);
+      event = await remoteSigner.signEvent(event);
       if (event != null) {
         relay.send(["AUTH", event.toJson()], forceSend: true);
 

@@ -35,6 +35,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   nostr_sdk:
     path: packages/nostr_sdk
+  relay_sdk:
+    path: packages/relay_sdk
     
   receive_intent: ^0.2.5
   provider: ^6.1.2

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
 import 'package:nowser/provider/android_signer_mixin.dart';
 import 'package:nowser/provider/app_provider.dart';
+import 'package:nowser/provider/build_in_relay_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
@@ -52,8 +54,13 @@ late RemoteSigningProvider remoteSigningProvider;
 
 late Map<String, WidgetBuilder> routes;
 
+late RootIsolateToken rootIsolateToken;
+
+late BuildInRelayProvider buildInRelayProvider;
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  rootIsolateToken = RootIsolateToken.instance!;
 
   if (!PlatformUtil.isWeb() && PlatformUtil.isPC()) {
     await windowManager.ensureInitialized();
@@ -87,6 +94,7 @@ Future<void> main() async {
 Future<void> doInit() async {
   keyProvider = KeyProvider();
   appProvider = AppProvider();
+  buildInRelayProvider = BuildInRelayProvider();
 
   var dataUtilTask = DataUtil.getInstance();
   var keyTask = keyProvider.init();
@@ -155,6 +163,9 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<RemoteSigningProvider>.value(
           value: remoteSigningProvider,
+        ),
+        ListenableProvider<BuildInRelayProvider>.value(
+          value: buildInRelayProvider,
         ),
       ],
       child: MaterialApp(

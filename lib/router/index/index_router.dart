@@ -37,6 +37,9 @@ class _IndexRouter extends CustState<IndexRouter>
   Future<void> onReady(BuildContext context) async {
     await remoteSigningProvider.reload();
     await remoteSigningProvider.reloadPenddingRemoteApps();
+
+    // start build-in
+    buildInRelayProvider.start();
   }
 
   @override
