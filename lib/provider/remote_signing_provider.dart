@@ -402,10 +402,13 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       if (StringUtil.isNotBlank(remoteSigningInfo.remoteSignerKey) &&
           StringUtil.isNotBlank(remoteSigningInfo.remotePubkey) &&
           StringUtil.isNotBlank(remoteSigningInfo.relays)) {
-        var relays = connectToRelay(remoteSigningInfo);
-
         var remoteSignerPubkey =
             getPublicKey(remoteSigningInfo.remoteSignerKey!);
+        if (remoteSigningInfoMap[remoteSignerPubkey] != null) {
+          continue;
+        }
+
+        var relays = connectToRelay(remoteSigningInfo);
         remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
         relayMap[remoteSignerPubkey] = relays;
       }

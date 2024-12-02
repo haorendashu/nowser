@@ -14,6 +14,7 @@ import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/app_provider.dart';
+import 'package:nowser/provider/remote_signing_provider.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,8 @@ class _AppsRouter extends CustState<AppsRouter> {
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
     var appList = _appProvider.appList;
+
+    var _remoteSigningProvider = Provider.of<RemoteSigningProvider>(context);
 
     List<Widget> mainList = [];
 
@@ -121,7 +124,7 @@ class _AppsRouter extends CustState<AppsRouter> {
     }
 
     List<RemoteSigningInfo> penddingList =
-        remoteSigningProvider.penddingRemoteApps;
+        _remoteSigningProvider.penddingRemoteApps;
     if (penddingList.isNotEmpty) {
       List<Widget> widgets = [];
       var length = penddingList.length;
