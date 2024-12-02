@@ -5,7 +5,7 @@ class IpUtil {
     var ips = await NetworkInterface.list();
     for (var interface in ips) {
       print('== Interface: ${interface.name} ==');
-      if (interface.name == "WLAN") {
+      if ((interface.name.toLowerCase()).contains("wlan")) {
         for (var addr in interface.addresses) {
           print(
               '${addr.address} ${addr.host} ${addr.isLoopback} ${addr.rawAddress} ${addr.type.name}');
