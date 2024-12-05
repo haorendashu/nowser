@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/bookmark_edit_dialog.dart';
 import 'package:nowser/data/bookmark_db.dart';
 import 'package:nowser/util/router_util.dart';
 
@@ -74,10 +75,40 @@ class WebProvider extends ChangeNotifier {
     }
   }
 
-  void addTab() {
-    webInfos.add(WebInfo(_rndId(), ""));
+  void addTab({String url = ""}) {
+    webInfos.add(WebInfo(_rndId(), url));
     index = webInfos.length - 1;
     notifyListeners();
+  }
+
+  void checkAndOpenUrl(String url) {
+    if (!url.startsWith("http")) {
+      return;
+    }
+
+    int targetIndex = -1;
+    for (var i = 0; i < webInfos.length; i++) {
+      var webInfo = webInfos[i];
+      if (webInfo.url.contains(url)) {
+        targetIndex = i;
+        break;
+      }
+    }
+
+    if (targetIndex > -1) {
+      if (index != targetIndex) {
+        index = targetIndex;
+        notifyListeners();
+      }
+    } else {
+      var _currentWebInfo = currentWebInfo();
+      if (_currentWebInfo != null && _currentWebInfo.url == "") {
+        _currentWebInfo.url = url;
+        notifyListeners();
+      } else {
+        addTab(url: url);
+      }
+    }
   }
 
   void changeIndex(WebInfo webInfo) {
@@ -146,7 +177,7 @@ class WebProvider extends ChangeNotifier {
     } catch (e) {}
   }
 
-  void addBookmark(WebInfo webInfo) {
+  void addBookmark(BuildContext context, WebInfo webInfo) {
     if (webInfo.browserHistory == null) {
       return;
     }
@@ -159,7 +190,8 @@ class WebProvider extends ChangeNotifier {
     bookmark.addedToIndex = -1;
     bookmark.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-    BookmarkDB.insert(bookmark);
+    // BookmarkDB.insert(bookmark);
+    BookmarkEditDialog.show(context, bookmark);
   }
 
   void back(BuildContext context) {

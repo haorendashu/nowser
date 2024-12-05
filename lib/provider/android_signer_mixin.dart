@@ -38,15 +38,26 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
   static const String PREFIX = "nostrsigner:";
 
   Future<void> handleInitialIntent(BuildContext context) async {
-    final intent = await receiveIntent.ReceiveIntent.getInitialIntent();
-    if (intent != null) {
-      // log(intent.toString());
-      // log("from ${intent.fromPackageName}");
-      // log("action ${intent.action}");
-      // log("data ${intent.data}");
-      // log("categories ${intent.categories}");
-      // log("extra ${intent.extra}");
+    var intent = await getInitialIntent();
+    await dohandleInitialIntent(context, intent);
+  }
 
+  Future<receiveIntent.Intent?> getInitialIntent() async {
+    var intent = await receiveIntent.ReceiveIntent.getInitialIntent();
+    if (intent != null) {
+      log(intent.toString());
+      log("from ${intent.fromPackageName}");
+      log("action ${intent.action}");
+      log("data ${intent.data}");
+      log("categories ${intent.categories}");
+      log("extra ${intent.extra}");
+    }
+    return intent;
+  }
+
+  Future<void> dohandleInitialIntent(
+      BuildContext context, receiveIntent.Intent? intent) async {
+    if (intent != null) {
       if (StringUtil.isNotBlank(intent.data) &&
           intent.data!.startsWith(PREFIX)) {
         // This is an android signer intent

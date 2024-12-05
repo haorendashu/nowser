@@ -28,6 +28,7 @@ import 'package:nowser/router/me/me_router.dart';
 import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
 import 'package:nowser/router/web_url_input/web_url_input_router.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:receive_intent/receive_intent.dart' as receiveIntent;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:window_manager/window_manager.dart';
@@ -41,6 +42,7 @@ import 'provider/data_util.dart';
 import 'provider/remote_signing_provider.dart';
 import 'provider/setting_provider.dart';
 import 'util/colors_util.dart';
+import 'util/media_data_cache.dart';
 
 late WebProvider webProvider;
 
@@ -57,6 +59,10 @@ late Map<String, WidgetBuilder> routes;
 late RootIsolateToken rootIsolateToken;
 
 late BuildInRelayProvider buildInRelayProvider;
+
+const QuickActions quickActions = QuickActions();
+
+late MediaDataCache mediaDataCache;
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

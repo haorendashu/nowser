@@ -52,6 +52,9 @@ dependencies:
   qr_code_scanner: ^1.0.1
   flutter_slidable: ^3.1.1
   window_manager: ^0.4.2
+  quick_actions: ^1.0.8
+  flutter_pinned_shortcut_plus: ^0.0.2
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

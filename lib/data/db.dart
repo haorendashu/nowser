@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 
 class DB {
-  static const _VERSION = 1;
+  static const _VERSION = 2;
 
   static const _dbName = "nowser.db";
 
@@ -21,14 +21,14 @@ class DB {
     }
 
     try {
-      _database =
-          await openDatabase(path, version: _VERSION, onCreate: _onCreate);
+      _database = await openDatabase(path,
+          version: _VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
     } catch (e) {
       if (Platform.isLinux) {
         // maybe it need install sqlite first, but this command need run by root.
         await run('sudo apt-get -y install libsqlite3-0 libsqlite3-dev');
-        _database =
-            await openDatabase(path, version: _VERSION, onCreate: _onCreate);
+        _database = await openDatabase(path,
+            version: _VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
       }
     }
   }
@@ -50,9 +50,17 @@ class DB {
     db.execute("create index zap_log_index on zap_log (app_id);");
 
     db.execute(
-        "create table bookmark(id             integer not null constraint bookmark_pk primary key autoincrement,title          text,url            text    not null,favicon        text,weight         integer,added_to_index integer,created_at     integer);");
+        "create table bookmark(id             integer not null constraint bookmark_pk primary key autoincrement,title          text,url            text    not null,favicon        text,weight         integer,added_to_index integer, added_to_qa integer,created_at     integer);");
     db.execute(
         "create table browser_history(id         integer not null constraint browser_history_pk primary key autoincrement,title      text,url        text    not null,favicon    text,created_at integer);");
+  }
+
+  static Future<void> _onUpgrade(
+      Database db, int oldVersion, int newVersion) async {
+    if (oldVersion == 1 && newVersion == 2) {
+      db.execute(
+          "alter table bookmark add added_to_qa integer after added_to_index");
+    }
   }
 
   static Future<Database> getCurrentDatabase() async {

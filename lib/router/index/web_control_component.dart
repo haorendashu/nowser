@@ -117,7 +117,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                     onTap: () {
                       var webInfo = webProvider.currentWebInfo();
                       if (webInfo != null) {
-                        webProvider.addBookmark(webInfo);
+                        webProvider.addBookmark(context, webInfo);
                         widget.closeControl();
                       }
                     },

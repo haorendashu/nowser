@@ -40,15 +40,53 @@ class _IndexRouter extends CustState<IndexRouter>
 
     // start build-in
     buildInRelayProvider.start();
+
+    if (PlatformUtil.isAndroid()) {
+      var intent = await getInitialIntent();
+      if (intent != null) {
+        if (intent.categories != null &&
+            intent.categories!.contains("android.intent.category.LAUNCHER") &&
+            intent.extra != null &&
+            intent.extra!["flutter_pinned_shortcuts"] != null) {
+          var url = intent.extra!["flutter_pinned_shortcuts"];
+          print("find url! $url");
+          webProvider.checkAndOpenUrl(url);
+        } else {
+          dohandleInitialIntent(context, intent);
+        }
+      }
+    }
+
+    quickActions.initialize((shortcutType) {
+      print("find quickAction $shortcutType");
+      webProvider.checkAndOpenUrl(shortcutType);
+    });
   }
 
   @override
   Widget doBuild(BuildContext context) {
-    if (PlatformUtil.isAndroid()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        handleInitialIntent(context);
-      });
-    }
+    // if (PlatformUtil.isAndroid()) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //     var intent = await getInitialIntent();
+    //     if (intent != null) {
+    //       if (intent.categories != null &&
+    //           intent.categories!.contains("android.intent.category.LAUNCHER") &&
+    //           intent.extra != null &&
+    //           intent.extra!["flutter_pinned_shortcuts"] != null) {
+    //         var url = intent.extra!["flutter_pinned_shortcuts"];
+    //         print("find url! $url");
+    //         webProvider.checkAndOpenUrl(url);
+    //       } else {
+    //         dohandleInitialIntent(context, intent);
+    //       }
+    //     }
+
+    //     quickActions.initialize((shortcutType) {
+    //       print("find quickAction $shortcutType");
+    //       webProvider.checkAndOpenUrl(shortcutType);
+    //     });
+    //   });
+    // }
     remoteSigningProvider.updateContext(context);
     webProvider.checkBlank();
 

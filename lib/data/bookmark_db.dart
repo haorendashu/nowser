@@ -28,6 +28,20 @@ class BookmarkDB {
     return objs;
   }
 
+  static Future<List<Bookmark>> allQas({DatabaseExecutor? db}) async {
+    List<Bookmark> objs = [];
+    List<Object?>? arguments = [];
+    db = await DB.getDB(db);
+    var sql =
+        "select * from bookmark where added_to_qa = 1 order by created_at desc";
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, arguments);
+    for (var i = 0; i < list.length; i++) {
+      var json = list[i];
+      objs.add(Bookmark.fromJson(json));
+    }
+    return objs;
+  }
+
   static Future<void> deleteByIds(List<int> ids, {DatabaseExecutor? db}) async {
     var sql = "delete from bookmark where id in(";
     for (var id in ids) {
@@ -38,5 +52,10 @@ class BookmarkDB {
 
     db = await DB.getDB(db);
     await db.execute(sql, ids);
+  }
+
+  static Future update(Bookmark o, {DatabaseExecutor? db}) async {
+    db = await DB.getDB(db);
+    await db.update("bookmark", o.toJson(), where: "id = ?", whereArgs: [o.id]);
   }
 }
