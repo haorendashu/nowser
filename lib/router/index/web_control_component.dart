@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
+import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/index/web_control_btn_component.dart';
 import 'package:nowser/util/router_util.dart';
@@ -117,7 +118,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                     onTap: () {
                       var webInfo = webProvider.currentWebInfo();
                       if (webInfo != null) {
-                        webProvider.addBookmark(context, webInfo);
+                        bookmarkProvider.addBookmark(context, webInfo);
                         widget.closeControl();
                       }
                     },

@@ -1,6 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/const/base_consts.dart';
 import 'package:nowser/data/bookmark.dart';
 import 'package:nowser/data/bookmark_db.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -49,6 +51,13 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
     }
     if (StringUtil.isNotBlank(widget.bookmark.url)) {
       urlTextController.text = widget.bookmark.url!;
+    }
+
+    if (widget.bookmark.addedToIndex == OpenStatus.OPEN) {
+      addedToIndex = true;
+    }
+    if (widget.bookmark.addedToQa == OpenStatus.OPEN) {
+      addedToQa = true;
     }
   }
 
@@ -173,6 +182,12 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       addedToIndex: addedToIndex ? 1 : -1,
       addedToQa: addedToQa ? 1 : -1,
     );
+
+    if (StringUtil.isBlank(bookmark.title) ||
+        StringUtil.isBlank(bookmark.url)) {
+      BotToast.showText(text: "Input can't be null");
+      return;
+    }
 
     if (bookmark.id == null) {
       await BookmarkDB.insert(bookmark);

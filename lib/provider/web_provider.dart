@@ -76,6 +76,15 @@ class WebProvider extends ChangeNotifier {
   }
 
   void addTab({String url = ""}) {
+    if (StringUtil.isNotBlank(url)) {
+      var _currentWebInfo = currentWebInfo();
+      if (_currentWebInfo != null && StringUtil.isBlank(_currentWebInfo.url)) {
+        _currentWebInfo.url = url;
+        notifyListeners();
+        return;
+      }
+    }
+
     webInfos.add(WebInfo(_rndId(), url));
     index = webInfos.length - 1;
     notifyListeners();
@@ -175,23 +184,6 @@ class WebProvider extends ChangeNotifier {
 
       updateWebInfo(webInfo);
     } catch (e) {}
-  }
-
-  void addBookmark(BuildContext context, WebInfo webInfo) {
-    if (webInfo.browserHistory == null) {
-      return;
-    }
-
-    var bookmark = Bookmark();
-    bookmark.title = webInfo.title;
-    bookmark.url = webInfo.browserHistory!.url;
-    bookmark.favicon = webInfo.browserHistory!.favicon;
-    bookmark.weight = 0;
-    bookmark.addedToIndex = -1;
-    bookmark.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-
-    // BookmarkDB.insert(bookmark);
-    BookmarkEditDialog.show(context, bookmark);
   }
 
   void back(BuildContext context) {

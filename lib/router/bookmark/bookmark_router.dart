@@ -9,7 +9,10 @@ import 'package:nowser/component/bookmark_edit_dialog.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/deletable_list_mixin.dart';
 import 'package:nowser/component/url_list_item_componnet.dart';
+import 'package:nowser/main.dart';
+import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/util/router_util.dart';
+import 'package:provider/provider.dart';
 
 import '../../component/appbar_back_btn_component.dart';
 import '../../data/bookmark.dart';
@@ -24,23 +27,16 @@ class BookmarkRouter extends StatefulWidget {
 
 class _BookmarkRouter extends CustState<BookmarkRouter>
     with DeletableListMixin {
-  List<Bookmark> bookmarks = [];
-
   @override
-  Future<void> onReady(BuildContext context) async {
-    reload();
-  }
-
-  Future<void> reload() async {
-    bookmarks = await BookmarkDB.all();
-    setState(() {});
-  }
+  Future<void> onReady(BuildContext context) async {}
 
   List<int> selectedIds = [];
 
   @override
   Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
+    var _bookmarkProvider = Provider.of<BookmarkProvider>(context);
+    var bookmarks = _bookmarkProvider.bookmarks;
 
     return Scaffold(
       appBar: AppBar(
@@ -121,9 +117,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
   Future<void> doDelete() async {
     if (selectedIds.isNotEmpty) {
       await BookmarkDB.deleteByIds(selectedIds);
-      bookmarks.removeWhere((o) {
-        return selectedIds.contains(o.id);
-      });
+      await bookmarkProvider.reload();
       selectedIds.clear();
     }
   }
@@ -157,6 +151,6 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
 
   Future<void> doEdit(Bookmark bookmark) async {
     await BookmarkEditDialog.show(context, bookmark);
-    reload();
+    bookmarkProvider.reload();
   }
 }

@@ -12,6 +12,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
 import 'package:nowser/provider/android_signer_mixin.dart';
 import 'package:nowser/provider/app_provider.dart';
+import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/provider/build_in_relay_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
@@ -62,6 +63,8 @@ late BuildInRelayProvider buildInRelayProvider;
 
 const QuickActions quickActions = QuickActions();
 
+BookmarkProvider bookmarkProvider = BookmarkProvider();
+
 late MediaDataCache mediaDataCache;
 
 Future<void> main() async {
@@ -93,6 +96,8 @@ Future<void> main() async {
   }
 
   await doInit();
+
+  await bookmarkProvider.init();
 
   runApp(MyApp());
 }
@@ -172,6 +177,9 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<BuildInRelayProvider>.value(
           value: buildInRelayProvider,
+        ),
+        ListenableProvider<BookmarkProvider>.value(
+          value: bookmarkProvider,
         ),
       ],
       child: MaterialApp(
