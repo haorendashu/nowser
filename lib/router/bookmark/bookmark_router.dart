@@ -151,6 +151,5 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
 
   Future<void> doEdit(Bookmark bookmark) async {
     await BookmarkEditDialog.show(context, bookmark);
-    bookmarkProvider.reload();
   }
 }

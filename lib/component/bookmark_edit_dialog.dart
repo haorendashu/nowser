@@ -211,6 +211,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       print(e);
     }
 
+    await bookmarkProvider.reload();
     RouterUtil.back(context);
   }
 }
