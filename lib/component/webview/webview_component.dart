@@ -344,7 +344,7 @@ class _WebViewComponent extends State<WebViewComponent>
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
         print("Nowser_JS_nip04_decrypt $jsMsg");
-        var jsonObj = jsonDecode(jsMsg.message);
+        var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
         if (msg != null && msg is Map) {
@@ -411,7 +411,7 @@ class _WebViewComponent extends State<WebViewComponent>
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
         print("Nowser_JS_nip44_decrypt $jsMsg");
-        var jsonObj = jsonDecode(jsMsg.message);
+        var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
         if (msg != null && msg is Map) {
