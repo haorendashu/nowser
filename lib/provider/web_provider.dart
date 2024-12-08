@@ -141,7 +141,9 @@ class WebProvider extends ChangeNotifier {
       }
     }
 
-    if (i < index) {
+    if (i == index) {
+      index = 0;
+    } else if (i < index) {
       index--;
     }
 
