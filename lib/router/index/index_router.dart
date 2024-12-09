@@ -67,6 +67,8 @@ class _IndexRouter extends CustState<IndexRouter>
   @override
   Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
+    mediaDataCache.update(context);
+
     // if (PlatformUtil.isAndroid()) {
     //   WidgetsBinding.instance.addPostFrameCallback((_) async {
     //     var intent = await getInitialIntent();

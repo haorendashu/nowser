@@ -97,6 +97,7 @@ Future<void> main() async {
 
   await doInit();
 
+  mediaDataCache = MediaDataCache();
   await bookmarkProvider.init();
 
   runApp(MyApp());

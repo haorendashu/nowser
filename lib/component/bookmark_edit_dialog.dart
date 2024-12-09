@@ -118,25 +118,27 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       ),
     ));
 
-    list.add(Container(
-      child: Row(
-        children: [
-          Text("Add to quick action"),
-          Expanded(
-            child: Checkbox(
-              value: addedToQa,
-              onChanged: (v) {
-                if (v != null) {
-                  setState(() {
-                    addedToQa = v;
-                  });
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    ));
+    if (!PlatformUtil.isPC()) {
+      list.add(Container(
+        child: Row(
+          children: [
+            Text("Add to quick action"),
+            Expanded(
+              child: Checkbox(
+                value: addedToQa,
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() {
+                      addedToQa = v;
+                    });
+                  }
+                },
+              ),
+            )
+          ],
+        ),
+      ));
+    }
 
     list.add(Container(
       margin: EdgeInsets.only(
@@ -195,20 +197,22 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       await BookmarkDB.update(bookmark);
     }
 
-    try {
-      var allQas = await BookmarkDB.allQas();
-      List<ShortcutItem> qas = [];
-      for (var bk in allQas) {
-        if (StringUtil.isBlank(bk.title) || StringUtil.isBlank(bk.url)) {
-          continue;
-        }
+    if (!PlatformUtil.isPC()) {
+      try {
+        var allQas = await BookmarkDB.allQas();
+        List<ShortcutItem> qas = [];
+        for (var bk in allQas) {
+          if (StringUtil.isBlank(bk.title) || StringUtil.isBlank(bk.url)) {
+            continue;
+          }
 
-        qas.add(ShortcutItem(
-            type: bk.url!, localizedTitle: bk.title!, icon: 'ic_launcher'));
-        quickActions.setShortcutItems(qas);
+          qas.add(ShortcutItem(
+              type: bk.url!, localizedTitle: bk.title!, icon: 'ic_launcher'));
+          quickActions.setShortcutItems(qas);
+        }
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
     }
 
     await bookmarkProvider.reload();
