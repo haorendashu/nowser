@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/cust_state.dart';
@@ -65,6 +66,7 @@ class _IndexRouter extends CustState<IndexRouter>
 
   @override
   Widget doBuild(BuildContext context) {
+    var themeData = Theme.of(context);
     // if (PlatformUtil.isAndroid()) {
     //   WidgetsBinding.instance.addPostFrameCallback((_) async {
     //     var intent = await getInitialIntent();
@@ -112,7 +114,15 @@ class _IndexRouter extends CustState<IndexRouter>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        body: main,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light.copyWith(
+            statusBarColor: themeData.scaffoldBackgroundColor,
+            systemNavigationBarIconBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+          child: main,
+        ),
       ),
     );
   }
