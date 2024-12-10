@@ -1,7 +1,7 @@
 class Base {
   static const APP_NAME = "Nowser";
 
-  static String VERSION_NAME = "0.0.2";
+  static String VERSION_NAME = "0.0.3";
 
   static const double BASE_PADDING = 12;
 
