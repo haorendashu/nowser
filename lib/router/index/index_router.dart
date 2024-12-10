@@ -58,10 +58,12 @@ class _IndexRouter extends CustState<IndexRouter>
       }
     }
 
-    quickActions.initialize((shortcutType) {
-      print("find quickAction $shortcutType");
-      webProvider.checkAndOpenUrl(shortcutType);
-    });
+    if (PlatformUtil.isAndroid() || PlatformUtil.isIOS()) {
+      quickActions.initialize((shortcutType) {
+        print("find quickAction $shortcutType");
+        webProvider.checkAndOpenUrl(shortcutType);
+      });
+    }
   }
 
   @override
