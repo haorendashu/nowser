@@ -101,8 +101,12 @@ class _IndexWebComponent extends State<IndexWebComponent> {
                         }
 
                         var url = await webInfo.controller!.getUrl();
+                        var urlStr = url.toString();
+                        if (StringUtil.isBlank(urlStr) || urlStr == "null") {
+                          urlStr = webInfo.url;
+                        }
                         var value = await RouterUtil.router(
-                            context, RouterPath.WEB_URL_INPUT, url.toString());
+                            context, RouterPath.WEB_URL_INPUT, urlStr);
                         if (value != null && value is String) {
                           webProvider.goTo(webInfo, value);
                         }
