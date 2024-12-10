@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/event.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
+import 'package:nowser/const/base.dart';
 import 'package:nowser/data/browser_history.dart';
 import 'package:nowser/data/browser_history_db.dart';
 import 'package:nowser/main.dart';
@@ -45,11 +47,14 @@ class _WebViewComponent extends State<WebViewComponent>
 
   late ContextMenu contextMenu;
   InAppWebViewSettings settings = InAppWebViewSettings(
-      isInspectable: kDebugMode,
-      mediaPlaybackRequiresUserGesture: false,
-      allowsInlineMediaPlayback: true,
-      iframeAllow: "camera; microphone",
-      iframeAllowFullscreen: true);
+    isInspectable: kDebugMode,
+    mediaPlaybackRequiresUserGesture: false,
+    allowsInlineMediaPlayback: true,
+    iframeAllow: "camera; microphone",
+    iframeAllowFullscreen: true,
+    userAgent:
+        "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}",
+  );
 
   PullToRefreshController? pullToRefreshController;
 
