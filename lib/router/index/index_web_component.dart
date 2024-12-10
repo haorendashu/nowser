@@ -166,6 +166,7 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     webInfo.controller = controller;
     webInfo.title = title;
     webProvider.updateWebInfo(webInfo);
+    // TODO this setState will make windows's webview alway refresh !
     setState(() {});
   }
 
