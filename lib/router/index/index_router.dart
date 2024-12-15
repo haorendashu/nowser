@@ -9,6 +9,7 @@ import 'package:nowser/component/image_component.dart';
 import 'package:nowser/component/webview/web_home_component.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/web_provider.dart';
+import 'package:nowser/router/index/index_web_bottom_component.dart';
 import 'package:nowser/router/index/index_web_component.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class _IndexRouter extends CustState<IndexRouter>
 
     var main = IndexedStack(
       index: _webProvider.index,
-      children: _webProvider.getIndexWebviews(context, showControl),
+      children: _webProvider.getIndexWebviews(context),
     );
 
     return PopScope(
@@ -125,7 +126,12 @@ class _IndexRouter extends CustState<IndexRouter>
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
-          child: main,
+          child: Column(
+            children: [
+              Expanded(child: main),
+              IndexWebBottomComponent(showControl),
+            ],
+          ),
         ),
       ),
     );

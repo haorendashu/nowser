@@ -40,7 +40,7 @@ class WebProvider extends ChangeNotifier {
     return StringUtil.rndNameStr(10);
   }
 
-  void updateWebInfo(WebInfo webInfo) {
+  void updateWebInfo(WebInfo webInfo, {bool updateUI = true}) {
     for (var i = 0; i < webInfos.length; i++) {
       var owi = webInfos[i];
       if (owi.id == webInfo.id) {
@@ -49,7 +49,9 @@ class WebProvider extends ChangeNotifier {
       }
     }
 
-    notifyListeners();
+    if (updateUI) {
+      notifyListeners();
+    }
   }
 
   WebInfo? currentWebInfo() {
@@ -238,7 +240,7 @@ class WebProvider extends ChangeNotifier {
 
   Map<String, IndexWebComponent> indexWebviews = {};
 
-  List<Widget> getIndexWebviews(BuildContext context, Function showControl) {
+  List<Widget> getIndexWebviews(BuildContext context) {
     List<Widget> list = [];
     for (var webInfo in webInfos) {
       if (StringUtil.isBlank(webInfo.url)) {
@@ -246,8 +248,7 @@ class WebProvider extends ChangeNotifier {
       } else {
         var indexWebComp = indexWebviews[webInfo.id];
         if (indexWebComp == null) {
-          indexWebComp =
-              IndexWebComponent(webInfo, showControl, key: GlobalKey());
+          indexWebComp = IndexWebComponent(webInfo, key: GlobalKey());
           indexWebviews[webInfo.id] = indexWebComp;
         }
 

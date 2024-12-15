@@ -17,10 +17,7 @@ import 'web_control_component.dart';
 class IndexWebComponent extends StatefulWidget {
   WebInfo webInfo;
 
-  Function showControl;
-
-  IndexWebComponent(this.webInfo, this.showControl, {required GlobalKey key})
-      : super(key: key);
+  IndexWebComponent(this.webInfo, {required GlobalKey key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -50,7 +47,6 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     var maxWidth = mediaQuery.size.width;
     var titleWidth = maxWidth / 2;
 
-    Widget numberWidget = WebViewNumberComponent();
     var webInfo = widget.webInfo;
 
     if (StringUtil.isBlank(webInfo.url)) {
@@ -69,88 +65,7 @@ class _IndexWebComponent extends State<IndexWebComponent> {
           webProvider.onLoadStop(webInfo);
         });
 
-    String title = "";
-    if (StringUtil.isNotBlank(webInfo.title)) {
-      title = webInfo.title!;
-    } else if (StringUtil.isNotBlank(webInfo.url)) {
-      title = webInfo.url;
-    }
-
-    var main = Column(
-      children: [
-        Expanded(child: webComp),
-        Container(
-          height: 60,
-          child: Row(
-            children: [
-              wrapBottomBtn(const Icon(Icons.home_filled), left: 13, right: 8,
-                  onTap: () {
-                webProvider.goHome(webInfo);
-              }),
-              wrapBottomBtn(numberWidget, left: 8, right: 8, onTap: () {
-                RouterUtil.router(context, RouterPath.WEB_TABS);
-              }),
-              Expanded(
-                child: Hero(
-                  tag: "urlInput",
-                  child: Material(
-                    child: GestureDetector(
-                      onTap: () async {
-                        if (webInfo.controller == null) {
-                          return;
-                        }
-
-                        var url = await webInfo.controller!.getUrl();
-                        var urlStr = url.toString();
-                        if (StringUtil.isBlank(urlStr) || urlStr == "null") {
-                          urlStr = webInfo.url;
-                        }
-                        var value = await RouterUtil.router(
-                            context, RouterPath.WEB_URL_INPUT, urlStr);
-                        if (value != null && value is String) {
-                          webProvider.goTo(webInfo, value);
-                        }
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          left: 8,
-                          right: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius:
-                              BorderRadius.circular(Base.BASE_PADDING_HALF),
-                        ),
-                        padding: const EdgeInsets.only(
-                          left: Base.BASE_PADDING,
-                          right: Base.BASE_PADDING,
-                          top: Base.BASE_PADDING_HALF,
-                          bottom: Base.BASE_PADDING_HALF,
-                        ),
-                        width: titleWidth,
-                        child: Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              wrapBottomBtn(const Icon(Icons.space_dashboard), onTap: () {
-                widget.showControl();
-              }, left: 8, right: 8),
-              wrapBottomBtn(const Icon(Icons.segment), left: 8, right: 13,
-                  onTap: () {
-                RouterUtil.router(context, RouterPath.ME);
-              }),
-            ],
-          ),
-        ),
-      ],
-    );
+    var main = webComp;
 
     return Container(
       padding: EdgeInsets.only(
@@ -166,25 +81,5 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     webInfo.controller = controller;
     webInfo.title = title;
     webProvider.updateWebInfo(webInfo);
-    // TODO this setState will make windows's webview alway refresh !
-    setState(() {});
-  }
-
-  Widget wrapBottomBtn(Widget btn,
-      {double left = 10, double right = 10, Function? onTap}) {
-    return GestureDetector(
-      onTap: () {
-        if (onTap != null) {
-          onTap();
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.only(
-          left: left,
-          right: right,
-        ),
-        child: btn,
-      ),
-    );
   }
 }
