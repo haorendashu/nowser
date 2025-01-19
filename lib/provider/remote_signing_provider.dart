@@ -383,9 +383,10 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
   List<RemoteSigningInfo> get penddingRemoteApps => _penddingRemoteApps;
 
-  void saveRemoteSigningInfo(RemoteSigningInfo remoteSigningInfo) {
-    RemoteSigningInfoDB.insert(remoteSigningInfo);
-    reloadPenddingRemoteApps();
+  Future<void> saveRemoteSigningInfo(
+      RemoteSigningInfo remoteSigningInfo) async {
+    await RemoteSigningInfoDB.insert(remoteSigningInfo);
+    await reloadPenddingRemoteApps();
     notifyListeners();
   }
 
@@ -408,8 +409,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
           continue;
         }
 
-        var relays = connectToRelay(remoteSigningInfo);
         remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
+        var relays = connectToRelay(remoteSigningInfo);
         relayMap[remoteSignerPubkey] = relays;
       }
     }
