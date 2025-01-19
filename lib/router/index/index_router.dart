@@ -126,11 +126,14 @@ class _IndexRouter extends CustState<IndexRouter>
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
-          child: Column(
-            children: [
-              Expanded(child: main),
-              IndexWebBottomComponent(showControl),
-            ],
+          child: SafeArea(
+            bottom: true,
+            child: Column(
+              children: [
+                Expanded(child: main),
+                IndexWebBottomComponent(showControl),
+              ],
+            ),
           ),
         ),
       ),
