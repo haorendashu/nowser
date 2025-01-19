@@ -95,6 +95,13 @@ Future<void> main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
+  try {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+  } catch (e) {
+    print(e);
+  }
+
   await doInit();
 
   mediaDataCache = MediaDataCache();
@@ -161,6 +168,10 @@ class _MyApp extends State<MyApp> {
       RouterPath.BOOKMARK: (context) => BookmarkRouter(),
       RouterPath.AUTH_LOGS: (context) => AuthLogsRouter(),
     };
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: lightTheme.scaffoldBackgroundColor,
+    ));
 
     return MultiProvider(
       providers: [

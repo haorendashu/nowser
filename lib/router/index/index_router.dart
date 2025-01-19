@@ -119,22 +119,11 @@ class _IndexRouter extends CustState<IndexRouter>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.light.copyWith(
-            statusBarColor: themeData.scaffoldBackgroundColor,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.light,
-          ),
-          child: SafeArea(
-            bottom: true,
-            child: Column(
-              children: [
-                Expanded(child: main),
-                IndexWebBottomComponent(showControl),
-              ],
-            ),
-          ),
+        body: Column(
+          children: [
+            Expanded(child: main),
+            IndexWebBottomComponent(showControl),
+          ],
         ),
       ),
     );
