@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:android_content_provider/android_content_provider.dart';
 import 'package:nostr_sdk/event.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
+import 'package:nostr_sdk/nip19/nip19_tlv.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nostr_sdk/zap/private_zap.dart';
@@ -60,6 +61,11 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
         currentUser = projection[2];
       }
     }
+    if (StringUtil.isNotBlank(currentUser)) {
+      if (Nip19.isPubkey(currentUser!)) {
+        currentUser = Nip19.decode(currentUser);
+      }
+    }
 
     var authType = AuthType.GET_PUBLIC_KEY;
     if (authTypeStr == "GET_PUBLIC_KEY") {
@@ -82,6 +88,15 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
 
     int appType = AppType.ANDROID_APP;
     var code = await getCallingPackage();
+    if (StringUtil.isBlank(code)) {
+      if (currentUser != null) {
+        // code is null, but currentUser is not null, try to find currentUser depend on currentUser
+        var app = appProvider.getAppByUser(appType, currentUser);
+        if (app != null) {
+          code = app.code;
+        }
+      }
+    }
     if (StringUtil.isBlank(code)) {
       print("get calling package fail!");
       return null;

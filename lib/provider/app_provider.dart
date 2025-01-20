@@ -135,6 +135,23 @@ class AppProvider extends ChangeNotifier {
     return _appMap[appId];
   }
 
+  // try to find app depend on pubkey.
+  App? getAppByUser(int appType, String pubkey) {
+    List<App> findedList = [];
+
+    for (var app in _list) {
+      if (app.appType == appType && app.pubkey == pubkey) {
+        findedList.add(app);
+      }
+    }
+
+    if (findedList.length == 1) {
+      return findedList.first;
+    }
+
+    return null;
+  }
+
   App? getApp(int appType, String code) {
     for (var app in _list) {
       if (app.appType == appType && app.code == code) {
