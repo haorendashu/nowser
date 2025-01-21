@@ -38,6 +38,7 @@ import 'package:window_manager/window_manager.dart';
 import 'const/base.dart';
 import 'const/colors.dart';
 import 'const/router_path.dart';
+import 'const/theme_style.dart';
 import 'generated/l10n.dart';
 import 'provider/android_signer_content_resolver_provider.dart';
 import 'provider/data_util.dart';
@@ -163,8 +164,15 @@ class _MyApp extends State<MyApp> {
     var darkTheme = getDarkTheme();
     ThemeData defaultTheme;
     ThemeData? defaultDarkTheme;
-    defaultTheme = lightTheme;
-    defaultDarkTheme = darkTheme;
+    if (settingProvider.themeStyle == ThemeStyle.LIGHT) {
+      defaultTheme = lightTheme;
+    } else if (settingProvider.themeStyle == ThemeStyle.DARK) {
+      defaultTheme = darkTheme;
+    } else {
+      defaultTheme = lightTheme;
+      defaultDarkTheme = darkTheme;
+    }
+
     routes = {
       RouterPath.INDEX: (context) => IndexRouter(),
       RouterPath.WEB_TABS: (context) => WebTabsSelectRouter(),
