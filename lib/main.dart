@@ -160,14 +160,17 @@ class _MyApp extends State<MyApp> {
       }
     }
 
+    Brightness? statusBarIconBrightness;
     var lightTheme = getLightTheme();
     var darkTheme = getDarkTheme();
     ThemeData defaultTheme;
     ThemeData? defaultDarkTheme;
     if (settingProvider.themeStyle == ThemeStyle.LIGHT) {
       defaultTheme = lightTheme;
+      statusBarIconBrightness = Brightness.dark;
     } else if (settingProvider.themeStyle == ThemeStyle.DARK) {
       defaultTheme = darkTheme;
+      statusBarIconBrightness = Brightness.light;
     } else {
       defaultTheme = lightTheme;
       defaultDarkTheme = darkTheme;
@@ -189,7 +192,10 @@ class _MyApp extends State<MyApp> {
     };
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: lightTheme.scaffoldBackgroundColor,
+      systemNavigationBarColor: defaultTheme.scaffoldBackgroundColor,
+      systemNavigationBarIconBrightness: statusBarIconBrightness,
+      statusBarColor: defaultTheme.scaffoldBackgroundColor,
+      statusBarIconBrightness: statusBarIconBrightness,
     ));
 
     return MultiProvider(
