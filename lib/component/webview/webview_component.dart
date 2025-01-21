@@ -64,33 +64,33 @@ class _WebViewComponent extends State<WebViewComponent>
   void initState() {
     super.initState();
 
-    // contextMenu = ContextMenu(
-    //     menuItems: [
-    //       ContextMenuItem(
-    //           id: 1,
-    //           title: "Special",
-    //           action: () async {
-    //             print("Menu item Special clicked!");
-    //             print(await webViewController?.getSelectedText());
-    //             await webViewController?.clearFocus();
-    //           })
-    //     ],
-    //     settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
-    //     onCreateContextMenu: (hitTestResult) async {
-    //       print("onCreateContextMenu");
-    //       print(hitTestResult.extra);
-    //       print(await webViewController?.getSelectedText());
-    //     },
-    //     onHideContextMenu: () {
-    //       print("onHideContextMenu");
-    //     },
-    //     onContextMenuActionItemClicked: (contextMenuItemClicked) async {
-    //       var id = contextMenuItemClicked.id;
-    //       print("onContextMenuActionItemClicked: " +
-    //           id.toString() +
-    //           " " +
-    //           contextMenuItemClicked.title);
-    //     });
+    contextMenu = ContextMenu(
+        menuItems: [
+          ContextMenuItem(
+              id: 1,
+              title: "Special",
+              action: () async {
+                print("Menu item Special clicked!");
+                print(await webViewController?.getSelectedText());
+                await webViewController?.clearFocus();
+              })
+        ],
+        settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
+        onCreateContextMenu: (hitTestResult) async {
+          print("onCreateContextMenu");
+          print(hitTestResult.extra);
+          print(await webViewController?.getSelectedText());
+        },
+        onHideContextMenu: () {
+          print("onHideContextMenu");
+        },
+        onContextMenuActionItemClicked: (contextMenuItemClicked) async {
+          var id = contextMenuItemClicked.id;
+          print("onContextMenuActionItemClicked: " +
+              id.toString() +
+              " " +
+              contextMenuItemClicked.title);
+        });
 
     pullToRefreshController = kIsWeb ||
             ![TargetPlatform.iOS, TargetPlatform.android]
