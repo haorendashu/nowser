@@ -16,10 +16,10 @@ class AppTypeComponent extends StatefulWidget {
 }
 
 class _AppTypeComponent extends State<AppTypeComponent> {
-  late S s;
-
   @override
   Widget build(BuildContext context) {
+    var s = S.of(context);
+
     String typeName = s.WEB;
     if (widget.appType == AppType.ANDROID_APP) {
       typeName = s.Android;
