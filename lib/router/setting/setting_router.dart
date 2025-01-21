@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/text_input/text_input_dialog.dart';
 
 import '../../component/enum_selector_component.dart';
 import '../../const/base.dart';
@@ -45,6 +47,7 @@ class _SettingRouter extends State<SettingRouter> {
 
     initI18nList(s);
     initThemeStyleList(s);
+    initSearchEngineList(s);
 
     Widget titleWidget = Container(
       alignment: Alignment.topLeft,
@@ -75,8 +78,9 @@ class _SettingRouter extends State<SettingRouter> {
     ));
     configList.add(SettingItemComponent(
       s.Search_Engine,
-      value: "https://www.baidu.com/",
       showTopBorder: true,
+      onTap: pickSearchEngine,
+      child: getSearchEngineWidget(settingProvider.searchEngine),
     ));
     var configListWidget = genConfigListWidget(configList, themeData);
 
@@ -260,5 +264,53 @@ class _SettingRouter extends State<SettingRouter> {
       }
     }
     return themeStyleList![0];
+  }
+
+  List<EnumObj>? searchEngineList;
+
+  void initSearchEngineList(S s) {
+    if (searchEngineList == null) {
+      searchEngineList = [];
+      searchEngineList!
+          .add(EnumObj("https://duckduckgo.com/?&q=", "DuckDuckGo"));
+      searchEngineList!
+          .add(EnumObj("https://www.google.com/search?q=", "Google"));
+      searchEngineList!.add(EnumObj("https://www.bing.com/search?q=", "Bing"));
+      searchEngineList!.add(EnumObj("", s.Custom));
+    }
+  }
+
+  Future<void> pickSearchEngine() async {
+    EnumObj? resultEnumObj =
+        await EnumSelectorComponent.show(context, searchEngineList!);
+    if (resultEnumObj != null) {
+      if (StringUtil.isNotBlank(resultEnumObj.value)) {
+        settingProvider.searchEngine = resultEnumObj.value;
+        resetTheme();
+        return;
+      }
+
+      // custom config search engine
+      var value = await TextInputDialog.show(context, s.Input_search_url_des);
+      if (StringUtil.isNotBlank(value)) {
+        settingProvider.searchEngine = resultEnumObj.value;
+        resetTheme();
+      }
+    }
+  }
+
+  Widget getSearchEngineWidget(String? value) {
+    if (StringUtil.isNotBlank(value)) {
+      return Container(
+        width: 180,
+        child: Text(
+          value!,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+    } else {
+      return Text("DuckDuckGo");
+    }
   }
 }

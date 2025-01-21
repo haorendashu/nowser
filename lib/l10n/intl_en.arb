@@ -82,5 +82,7 @@
     "Search_Engine": "Search Engine",
     "About": "About",
     "About_Me": "About Me",
-    "Privacy": "Privacy"
+    "Privacy": "Privacy",
+    "Custom": "Custom",
+    "Input_search_url_des": "Please input searching url"
 }

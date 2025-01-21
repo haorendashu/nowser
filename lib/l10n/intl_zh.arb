@@ -82,5 +82,7 @@
     "Search_Engine": "搜索引擎",
     "About": "关于",
     "About_Me": "关于我",
-    "Privacy": "隐私"
+    "Privacy": "隐私",
+    "Custom": "自定义",
+    "Input_search_url_des": "请输入搜索链接"
 }

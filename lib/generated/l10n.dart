@@ -889,6 +889,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Custom`
+  String get Custom {
+    return Intl.message(
+      'Custom',
+      name: 'Custom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please input searching url`
+  String get Input_search_url_des {
+    return Intl.message(
+      'Please input searching url',
+      name: 'Input_search_url_des',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

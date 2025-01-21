@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ConnectType": MessageLookupByLibrary.simpleMessage("ConnectType"),
         "Connect_by": MessageLookupByLibrary.simpleMessage("Connect by"),
         "Copy_success": MessageLookupByLibrary.simpleMessage("Copy success"),
+        "Custom": MessageLookupByLibrary.simpleMessage("Custom"),
         "Dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "Decrypt04_name":
             MessageLookupByLibrary.simpleMessage("Decrypt (NIP-04)"),
@@ -86,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Historys": MessageLookupByLibrary.simpleMessage("Historys"),
         "Input_can_not_be_null":
             MessageLookupByLibrary.simpleMessage("Input can\'t be null"),
+        "Input_search_url_des":
+            MessageLookupByLibrary.simpleMessage("Please input searching url"),
         "Keys_Manager": MessageLookupByLibrary.simpleMessage("Keys Manager"),
         "Language": MessageLookupByLibrary.simpleMessage("Language"),
         "Light": MessageLookupByLibrary.simpleMessage("Light"),

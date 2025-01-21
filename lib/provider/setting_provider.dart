@@ -79,6 +79,8 @@ class SettingProvider extends ChangeNotifier {
 
   int? get tableMode => _settingData!.tableMode;
 
+  String? get searchEngine => _settingData!.searchEngine;
+
   set settingData(SettingData o) {
     _settingData = o;
     saveAndNotifyListeners();
@@ -144,6 +146,11 @@ class SettingProvider extends ChangeNotifier {
     saveAndNotifyListeners();
   }
 
+  set searchEngine(String? o) {
+    _settingData!.searchEngine = o;
+    saveAndNotifyListeners();
+  }
+
   Future<void> saveAndNotifyListeners({bool updateUI = true}) async {
     _settingData!.updatedTime = DateTime.now().millisecondsSinceEpoch;
     var m = _settingData!.toJson();
@@ -187,6 +194,8 @@ class SettingData {
 
   int? tableMode;
 
+  String? searchEngine;
+
   /// updated time
   late int updatedTime;
 
@@ -202,6 +211,7 @@ class SettingData {
     this.fontFamily,
     this.fontSize,
     this.tableMode,
+    this.searchEngine,
     this.updatedTime = 0,
   });
 
@@ -220,6 +230,7 @@ class SettingData {
     backgroundImage = json['backgroundImage'];
     fontSize = json['fontSize'];
     tableMode = json['tableMode'];
+    searchEngine = json['searchEngine'];
     if (json['updatedTime'] != null) {
       updatedTime = json['updatedTime'];
     } else {
@@ -240,6 +251,7 @@ class SettingData {
     data['fontFamily'] = this.fontFamily;
     data['fontSize'] = this.fontSize;
     data['tableMode'] = this.tableMode;
+    data['searchEngine'] = this.searchEngine;
     data['updatedTime'] = this.updatedTime;
     return data;
   }

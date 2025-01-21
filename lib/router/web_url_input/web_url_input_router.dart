@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/qrscanner.dart';
+import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
@@ -54,7 +55,7 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
           decoration: const InputDecoration(border: OutlineInputBorder()),
           focusNode: focusNode,
           onSubmitted: (value) {
-            RouterUtil.back(context, value);
+            checkAndBack(value);
           },
         ),
       ),
@@ -83,9 +84,7 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
               child: GestureDetector(
                 onTap: () async {
                   var url = await QRScanner.show(context);
-                  if (StringUtil.isNotBlank(url) && url!.startsWith("http")) {
-                    RouterUtil.back(context, url);
-                  }
+                  checkAndBack(url);
                 },
                 child: Icon(Icons.qr_code_scanner),
               ),
@@ -102,5 +101,22 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
         ),
       ),
     );
+  }
+
+  void checkAndBack(String? value) {
+    if (StringUtil.isNotBlank(value) && value!.startsWith("http")) {
+      RouterUtil.back(context, value);
+      return;
+    }
+    // TODO check if this is a url without http or https, add and open it !
+
+    // search
+    if (StringUtil.isNotBlank(value)) {
+      String? searchUrl = settingProvider.searchEngine;
+      searchUrl ??= "https://duckduckgo.com/?&q=";
+      searchUrl += value!;
+      print(searchUrl);
+      RouterUtil.back(context, searchUrl);
+    }
   }
 }
