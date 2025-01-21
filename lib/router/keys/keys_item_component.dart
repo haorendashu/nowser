@@ -27,7 +27,7 @@ class _KeysItemComponent extends State<KeysItemComponent> {
     List<Widget> list = [];
 
     list.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         right: Base.BASE_PADDING_HALF,
       ),
       child: UserPicComponent(
@@ -52,7 +52,7 @@ class _KeysItemComponent extends State<KeysItemComponent> {
     ));
 
     return Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color:
             widget.isDefault ? mainColor.withOpacity(0.5) : themeData.cardColor,

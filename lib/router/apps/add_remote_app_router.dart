@@ -58,8 +58,11 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
     localIp = await IpUtil.getIp();
   }
 
+  late S s;
+
   @override
   Widget doBuild(BuildContext context) {
+    s = S.of(context);
     var themeData = Theme.of(context);
     var textColor = themeData.textTheme.bodyMedium!.color;
     var mainColor = themeData.primaryColor;
@@ -112,11 +115,11 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
           });
         },
         behavior: HitTestBehavior.translucent,
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.expand_more),
-            Text("Edit"),
+            const Icon(Icons.expand_more),
+            Text(s.Edit),
           ],
         ),
       ),
@@ -131,11 +134,11 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
             });
           },
           behavior: HitTestBehavior.translucent,
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.expand_less),
-              Text("Close Edit"),
+              const Icon(Icons.expand_less),
+              Text(s.Close_Edit),
             ],
           ),
         ),
@@ -151,10 +154,10 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     right: Base.BASE_PADDING_HALF,
                   ),
-                  child: Text("Local Relay:"),
+                  child: Text("${s.Local_Relay}:"),
                 ),
                 Checkbox(
                   value: localRelay,
@@ -167,7 +170,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
           Container(
             child: TextField(
               decoration: InputDecoration(
-                labelText: "Relay",
+                labelText: s.Relay,
                 enabled: !localRelay,
               ),
               controller: relayAddrController,
@@ -176,7 +179,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
           Container(
             child: TextField(
               decoration: InputDecoration(
-                labelText: "Secret",
+                labelText: s.Secret,
               ),
               controller: secretController,
             ),
@@ -203,15 +206,15 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
               tabs: [
                 GestureDetector(
                   child: Text(
-                    "Connect by\nnostrconnect:// url",
+                    "${s.Connect_by}\nnostrconnect:// url",
                     textAlign: TextAlign.center,
                   ),
                   onTap: () {
-                    BotToast.showText(text: "Coming...");
+                    BotToast.showText(text: s.Comming_soon);
                   },
                 ),
                 Text(
-                  "Connect by\nbunker:// url",
+                  "${s.Connect_by}\nbunker:// url",
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -222,21 +225,23 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
             child: TabBarView(
               children: [
                 Container(
-                  padding: EdgeInsets.all(Base.BASE_PADDING),
+                  padding: const EdgeInsets.all(Base.BASE_PADDING),
                   child: ListView(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: Base.BASE_PADDING_HALF),
+                        margin:
+                            const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
                         child: TextField(
                           controller: nostrconnectConn,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
                           maxLines: 4,
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: Base.BASE_PADDING_HALF),
+                        margin:
+                            const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
                         child: Row(
                           children: [
                             Expanded(child: Container()),
@@ -244,19 +249,19 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
                               onPressed: () {
                                 scanNostrConnectQRCode();
                               },
-                              icon: Icon(Icons.qr_code_scanner),
+                              icon: const Icon(Icons.qr_code_scanner),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: Base.BASE_PADDING),
+                        margin: const EdgeInsets.only(top: Base.BASE_PADDING),
                         width: double.infinity,
                         child: FilledButton(
                           onPressed: () {
-                            BotToast.showText(text: "Coming...");
+                            BotToast.showText(text: s.Comming_soon);
                           },
-                          child: Text("Confirm"),
+                          child: Text(s.Confirm),
                         ),
                       ),
                     ],
@@ -301,7 +306,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
                         width: double.infinity,
                         child: FilledButton(
                           onPressed: confirmBunkerUrl,
-                          child: Text("Confirm"),
+                          child: Text(s.Confirm),
                         ),
                       ),
                     ],
@@ -318,7 +323,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "Add Remote App",
+          s.Add_Remote_App,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,
@@ -380,7 +385,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
 
   void copyBunkerUrl() {
     Clipboard.setData(ClipboardData(text: bunkerConn.text)).then((_) {
-      BotToast.showText(text: "Copy success");
+      BotToast.showText(text: S.of(context).Copy_success);
     });
   }
 

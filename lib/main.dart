@@ -26,6 +26,7 @@ import 'package:nowser/router/history/history_router.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
 import 'package:nowser/router/me/me_router.dart';
+import 'package:nowser/router/setting/setting_router.dart';
 import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
 import 'package:nowser/router/web_url_input/web_url_input_router.dart';
 import 'package:provider/provider.dart';
@@ -148,6 +149,15 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Locale? _locale;
+    if (StringUtil.isNotBlank(settingProvider.i18n)) {
+      for (var item in S.delegate.supportedLocales) {
+        if (item.languageCode == settingProvider.i18n &&
+            item.countryCode == settingProvider.i18nCC) {
+          _locale = Locale(settingProvider.i18n!, settingProvider.i18nCC);
+          break;
+        }
+      }
+    }
 
     var lightTheme = getLightTheme();
     var darkTheme = getDarkTheme();
@@ -167,6 +177,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.HISTORY: (context) => HistoryRouter(),
       RouterPath.BOOKMARK: (context) => BookmarkRouter(),
       RouterPath.AUTH_LOGS: (context) => AuthLogsRouter(),
+      RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
     };
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -175,6 +186,9 @@ class _MyApp extends State<MyApp> {
 
     return MultiProvider(
       providers: [
+        ListenableProvider<SettingProvider>.value(
+          value: settingProvider,
+        ),
         ListenableProvider<WebProvider>.value(
           value: webProvider,
         ),

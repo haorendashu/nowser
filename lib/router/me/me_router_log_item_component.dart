@@ -7,6 +7,8 @@ import 'package:nowser/data/auth_log.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
+
 class MeRouterLogItemComponent extends StatefulWidget {
   AuthLog authLog;
 
@@ -19,8 +21,11 @@ class MeRouterLogItemComponent extends StatefulWidget {
 }
 
 class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
+  late S s;
+
   @override
   Widget build(BuildContext context) {
+    s = S.of(context);
     var appProvider = Provider.of<AppProvider>(context);
     var app = appProvider.getAppById(widget.authLog.appId!);
 
@@ -58,7 +63,7 @@ class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
             bottom: 2,
           ),
           child: Text(
-            "Approve",
+            s.Approve,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -67,12 +72,12 @@ class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
       resultWidget = Card.filled(
         color: Colors.red,
         child: Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: Base.BASE_PADDING_HALF,
             right: Base.BASE_PADDING_HALF,
           ),
           child: Text(
-            "Reject",
+            s.Reject,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -84,7 +89,7 @@ class _MeRouterLogItemComponent extends State<MeRouterLogItemComponent> {
     authContent += AuthType.getAuthName(context, authType);
 
     if (authType == AuthType.SIGN_EVENT) {
-      authContent += " EventKind(${widget.authLog.eventKind})";
+      authContent += " ${s.EventKind}(${widget.authLog.eventKind})";
     } else if (authType >= AuthType.NIP04_ENCRYPT) {
       if (StringUtil.isNotBlank(widget.authLog.content)) {
         authContent += widget.authLog.content!;

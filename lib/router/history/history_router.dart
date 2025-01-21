@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/deletable_list_mixin.dart';
@@ -9,6 +8,7 @@ import 'package:nowser/util/router_util.dart';
 import '../../component/appbar_back_btn_component.dart';
 import '../../const/base.dart';
 import '../../data/browser_history.dart';
+import '../../generated/l10n.dart';
 
 class HistoryRouter extends StatefulWidget {
   @override
@@ -31,12 +31,13 @@ class _HistoryRouter extends CustState<HistoryRouter> with DeletableListMixin {
   @override
   Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
+    var s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "Historys",
+          s.Historys,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,

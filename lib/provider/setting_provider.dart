@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -7,7 +6,6 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../const/base.dart';
-import '../const/base_consts.dart';
 import '../const/theme_style.dart';
 import 'data_util.dart';
 
@@ -49,13 +47,6 @@ class SettingProvider extends ChangeNotifier {
 
   SettingData get settingData => _settingData!;
 
-  /// open lock
-  int get lockOpen => _settingData!.lockOpen;
-
-  String? get imageService => _settingData!.imageService;
-
-  String? get imageServiceAddr => _settingData!.imageServiceAddr;
-
   /// i18n
   String? get i18n => _settingData!.i18n;
 
@@ -88,28 +79,8 @@ class SettingProvider extends ChangeNotifier {
 
   int? get tableMode => _settingData!.tableMode;
 
-  int? get relayMode => _settingData!.relayMode;
-
-  int? get eventSignCheck => _settingData!.eventSignCheck;
-
   set settingData(SettingData o) {
     _settingData = o;
-    saveAndNotifyListeners();
-  }
-
-  /// open lock
-  set lockOpen(int o) {
-    _settingData!.lockOpen = o;
-    saveAndNotifyListeners();
-  }
-
-  set imageService(String? o) {
-    _settingData!.imageService = o;
-    saveAndNotifyListeners();
-  }
-
-  set imageServiceAddr(String? o) {
-    _settingData!.imageServiceAddr = o;
     saveAndNotifyListeners();
   }
 
@@ -173,16 +144,6 @@ class SettingProvider extends ChangeNotifier {
     saveAndNotifyListeners();
   }
 
-  set relayMode(int? o) {
-    _settingData!.relayMode = o;
-    saveAndNotifyListeners();
-  }
-
-  set eventSignCheck(int? o) {
-    _settingData!.eventSignCheck = o;
-    saveAndNotifyListeners();
-  }
-
   Future<void> saveAndNotifyListeners({bool updateUI = true}) async {
     _settingData!.updatedTime = DateTime.now().millisecondsSinceEpoch;
     var m = _settingData!.toJson();
@@ -197,13 +158,6 @@ class SettingProvider extends ChangeNotifier {
 }
 
 class SettingData {
-  /// open lock
-  late int lockOpen;
-
-  String? imageService;
-
-  String? imageServiceAddr;
-
   /// i18n
   String? i18n;
 
@@ -233,17 +187,10 @@ class SettingData {
 
   int? tableMode;
 
-  int? relayMode;
-
-  int? eventSignCheck;
-
   /// updated time
   late int updatedTime;
 
   SettingData({
-    this.lockOpen = OpenStatus.CLOSE,
-    this.imageService,
-    this.imageServiceAddr,
     this.i18n,
     this.i18nCC,
     this.themeStyle = ThemeStyle.AUTO,
@@ -255,19 +202,10 @@ class SettingData {
     this.fontFamily,
     this.fontSize,
     this.tableMode,
-    this.relayMode,
-    this.eventSignCheck,
     this.updatedTime = 0,
   });
 
   SettingData.fromJson(Map<String, dynamic> json) {
-    if (json['lockOpen'] != null) {
-      lockOpen = json['lockOpen'];
-    } else {
-      lockOpen = OpenStatus.CLOSE;
-    }
-    imageService = json['imageService'];
-    imageServiceAddr = json['imageServiceAddr'];
     i18n = json['i18n'];
     i18nCC = json['i18nCC'];
     if (json['themeStyle'] != null) {
@@ -282,8 +220,6 @@ class SettingData {
     backgroundImage = json['backgroundImage'];
     fontSize = json['fontSize'];
     tableMode = json['tableMode'];
-    relayMode = json['relayMode'];
-    eventSignCheck = json['eventSignCheck'];
     if (json['updatedTime'] != null) {
       updatedTime = json['updatedTime'];
     } else {
@@ -293,9 +229,6 @@ class SettingData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['lockOpen'] = this.lockOpen;
-    data['imageService'] = this.imageService;
-    data['imageServiceAddr'] = this.imageServiceAddr;
     data['i18n'] = this.i18n;
     data['i18nCC'] = this.i18nCC;
     data['themeStyle'] = this.themeStyle;
@@ -307,8 +240,6 @@ class SettingData {
     data['fontFamily'] = this.fontFamily;
     data['fontSize'] = this.fontSize;
     data['tableMode'] = this.tableMode;
-    data['relayMode'] = this.relayMode;
-    data['eventSignCheck'] = this.eventSignCheck;
     data['updatedTime'] = this.updatedTime;
     return data;
   }

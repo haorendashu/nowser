@@ -8,6 +8,7 @@ import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
+import '../../generated/l10n.dart';
 
 class AuthDialog extends StatefulWidget {
   App app;
@@ -51,46 +52,49 @@ class _AuthDialog extends State<AuthDialog> {
 
   bool always = false;
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var baseMargin = EdgeInsets.only(
+    var baseMargin = const EdgeInsets.only(
       top: Base.BASE_PADDING_HALF,
       bottom: Base.BASE_PADDING_HALF,
     );
     var hintColor = themeData.hintColor;
+    s = S.of(context);
 
     var appName = widget.app.name;
     if (StringUtil.isNotBlank(widget.app.code)) {
       appName = widget.app.code;
     }
     // handle this title and des with widget.authType
-    String authTitle = "Sign Event";
-    String authDes = "Allow $appName to ";
+    String authTitle = s.Sign_Event;
+    String authDes = "${s.Allow} $appName ${s.to} ";
     if (widget.authType == AuthType.GET_PUBLIC_KEY) {
-      authTitle = "Get Public Key";
-      authDes += "get public key";
+      authTitle = s.Get_Public_Key;
+      authDes += s.Get_Public_Key;
     } else if (widget.authType == AuthType.SIGN_EVENT) {
-      authTitle = "Sign Event";
-      authDes += "sign a ${widget.eventKind} event";
+      authTitle = s.Sign_Event;
+      authDes += "${s.sign} ${s.a} ${widget.eventKind} ${s.event}";
     } else if (widget.authType == AuthType.GET_RELAYS) {
-      authTitle = "Get Relays";
-      authDes += "get relays";
+      authTitle = s.Get_Relays;
+      authDes += s.Get_Relays;
     } else if (widget.authType == AuthType.NIP04_ENCRYPT) {
-      authTitle = "Encrypt (NIP-04)";
-      authDes += "Encrypt (NIP-04)";
+      authTitle = s.Encrypt04_name;
+      authDes += s.Encrypt04_name;
     } else if (widget.authType == AuthType.NIP04_DECRYPT) {
-      authTitle = "Decrypt (NIP-04)";
-      authDes += "Decrypt (NIP-04)";
+      authTitle = s.Decrypt04_name;
+      authDes += s.Decrypt04_name;
     } else if (widget.authType == AuthType.NIP44_ENCRYPT) {
-      authTitle = "Encrypt (NIP-44)";
-      authDes += "Encrypt (NIP-44)";
+      authTitle = s.Encrypt44_name;
+      authDes += s.Encrypt44_name;
     } else if (widget.authType == AuthType.NIP44_DECRYPT) {
-      authTitle = "Decrypt (NIP-44)";
-      authDes += "Decrypt (NIP-44)";
+      authTitle = s.Decrypt44_name;
+      authDes += s.Decrypt44_name;
     } else if (widget.authType == AuthType.DECRYPT_ZAP_EVENT) {
-      authTitle = "Decrypt zap event";
-      authDes += "Decrypt zap event";
+      authTitle = s.Decrypt_zap_event;
+      authDes += s.Decrypt_zap_event;
     }
 
     List<Widget> list = [];
@@ -112,7 +116,7 @@ class _AuthDialog extends State<AuthDialog> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("detail"),
+            Text(s.detail),
             showDetail ? Icon(Icons.expand_less) : Icon(Icons.expand_more),
           ],
         ),
@@ -165,7 +169,7 @@ class _AuthDialog extends State<AuthDialog> {
                 });
               },
             ),
-            Text("Always"),
+            Text(s.Always),
           ],
         ),
       ),

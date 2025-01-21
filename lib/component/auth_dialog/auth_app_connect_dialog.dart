@@ -9,6 +9,7 @@ import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
 import '../../data/app.dart';
+import '../../generated/l10n.dart';
 
 class AuthAppConnectDialog extends StatefulWidget {
   App app;
@@ -37,10 +38,12 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
 
   bool showDetail = false;
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var baseMargin = EdgeInsets.only(
+    var baseMargin = const EdgeInsets.only(
       top: Base.BASE_PADDING_HALF,
       bottom: Base.BASE_PADDING_HALF,
     );
@@ -52,24 +55,24 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
       value: ConnectType.FULLY_TRUST,
       groupValue: connectType,
       onChanged: onConnectTypeChange,
-      title: Text("I fully trust it"),
-      subtitle: Text("Auto-sign all requests (except payments)"),
+      title: Text(s.Full_trust_title),
+      subtitle: Text(s.Full_trust_des),
     ));
 
     list.add(RadioListTile(
       value: ConnectType.REASONABLE,
       groupValue: connectType,
       onChanged: onConnectTypeChange,
-      title: Text("Let's be reasonable"),
-      subtitle: Text("Auto-approve most common requests"),
+      title: Text(s.Reasonable_title),
+      subtitle: Text(s.Reasonable_des),
     ));
 
     list.add(RadioListTile(
       value: ConnectType.ALWAY_REJECT,
       groupValue: connectType,
       onChanged: onConnectTypeChange,
-      title: Text("I'm a bit paranoid"),
-      subtitle: Text("Do not sign anything without asking me!"),
+      title: Text(s.Always_reject_title),
+      subtitle: Text(s.Always_reject_des),
     ));
 
     var child = Column(
@@ -79,7 +82,7 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
 
     return AuthDialogBaseComponnet(
       app: widget.app,
-      title: "App Connect",
+      title: s.App_Connect,
       onConfirm: onConfirm,
       child: child,
     );

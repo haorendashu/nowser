@@ -8,6 +8,8 @@ import 'package:nowser/router/index/web_control_btn_component.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
+
 class WebControlComponent extends StatefulWidget {
   Function closeControl;
 
@@ -22,6 +24,7 @@ class WebControlComponent extends StatefulWidget {
 class _WebControlComponent extends State<WebControlComponent> {
   @override
   Widget build(BuildContext context) {
+    var s = S.of(context);
     var webProvider = Provider.of<WebProvider>(context);
     var webInfo = webProvider.currentWebInfo;
 
@@ -30,7 +33,7 @@ class _WebControlComponent extends State<WebControlComponent> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
@@ -38,8 +41,8 @@ class _WebControlComponent extends State<WebControlComponent> {
               children: [
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Back",
-                    icon: Icon(
+                    name: s.Back,
+                    icon: const Icon(
                       Icons.chevron_left,
                       size: 30,
                     ),
@@ -50,8 +53,8 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Forward",
-                    icon: Icon(
+                    name: s.Forward,
+                    icon: const Icon(
                       Icons.chevron_right,
                       size: 30,
                     ),
@@ -62,8 +65,8 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Refresh",
-                    icon: Icon(
+                    name: s.Refresh,
+                    icon: const Icon(
                       Icons.refresh,
                       size: 30,
                     ),
@@ -75,13 +78,13 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Stealth",
-                    icon: Icon(
+                    name: s.Stealth,
+                    icon: const Icon(
                       Icons.disabled_visible_outlined,
                       size: 30,
                     ),
                     onTap: () {
-                      BotToast.showText(text: "Coming...");
+                      BotToast.showText(text: s.Comming_soon);
                     },
                   ),
                 ),
@@ -89,13 +92,13 @@ class _WebControlComponent extends State<WebControlComponent> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(Base.BASE_PADDING),
+            padding: const EdgeInsets.all(Base.BASE_PADDING),
             child: Row(
               children: [
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Bookmarks",
-                    icon: Icon(
+                    name: s.Bookmarks,
+                    icon: const Icon(
                       Icons.bookmark_border,
                       size: 30,
                     ),
@@ -110,8 +113,8 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Stars",
-                    icon: Icon(
+                    name: s.Stars,
+                    icon: const Icon(
                       Icons.bookmark_add_outlined,
                       size: 30,
                     ),
@@ -126,8 +129,8 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Historys",
-                    icon: Icon(
+                    name: s.Historys,
+                    icon: const Icon(
                       Icons.history,
                       size: 30,
                     ),
@@ -142,13 +145,13 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: "Downloads",
-                    icon: Icon(
+                    name: s.Downloads,
+                    icon: const Icon(
                       Icons.download,
                       size: 30,
                     ),
                     onTap: () {
-                      BotToast.showText(text: "Coming...");
+                      BotToast.showText(text: s.Comming_soon);
                     },
                   ),
                 ),

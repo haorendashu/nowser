@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../../component/appbar_back_btn_component.dart';
 import '../../data/bookmark.dart';
 import '../../data/bookmark_db.dart';
+import '../../generated/l10n.dart';
 
 class BookmarkRouter extends StatefulWidget {
   @override
@@ -34,6 +35,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
 
   @override
   Widget doBuild(BuildContext context) {
+    var s = S.of(context);
     var themeData = Theme.of(context);
     var _bookmarkProvider = Provider.of<BookmarkProvider>(context);
     var bookmarks = _bookmarkProvider.bookmarks;
@@ -42,7 +44,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "Bookmarks",
+          s.Bookmarks,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,
@@ -75,7 +77,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               icon: Icons.add_home,
-              label: 'Desktop',
+              label: s.Desktop,
             ));
           }
           slidableActionList.add(SlidableAction(
@@ -85,7 +87,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
             icon: Icons.edit,
-            label: 'Edit',
+            label: s.Edit,
           ));
 
           main = Slidable(

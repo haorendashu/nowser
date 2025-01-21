@@ -6,6 +6,7 @@ import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
 
 import '../../const/base.dart';
+import '../../generated/l10n.dart';
 
 class UserLoginDialog extends StatefulWidget {
   static Future<void> show(BuildContext context) async {
@@ -27,15 +28,18 @@ class _UserLoginDialog extends State<UserLoginDialog> {
 
   TextEditingController controller = TextEditingController();
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
+    s = S.of(context);
 
     List<Widget> list = [];
     list.add(Container(
       margin: EdgeInsets.only(bottom: Base.BASE_PADDING * 2),
       child: Text(
-        "Login",
+        s.Login,
         style: TextStyle(
           fontSize: themeData.textTheme.bodyLarge!.fontSize,
           fontWeight: FontWeight.bold,
@@ -74,7 +78,7 @@ class _UserLoginDialog extends State<UserLoginDialog> {
     list.add(Container(
       margin: EdgeInsets.only(bottom: Base.BASE_PADDING * 2),
       width: double.infinity,
-      child: FilledButton(onPressed: confirm, child: Text("Confirm")),
+      child: FilledButton(onPressed: confirm, child: Text(s.Confirm)),
     ));
 
     list.add(GestureDetector(
@@ -84,7 +88,7 @@ class _UserLoginDialog extends State<UserLoginDialog> {
       },
       child: Container(
         child: Text(
-          "Generate a private key",
+          s.Generate_a_private_key,
           style: TextStyle(
             decoration: TextDecoration.underline,
           ),

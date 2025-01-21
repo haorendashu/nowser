@@ -7,6 +7,7 @@ import 'package:nowser/router/keys/keys_item_component.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/user/user_login_dialog.dart';
+import '../../generated/l10n.dart';
 
 class KeysRouter extends StatefulWidget {
   @override
@@ -22,8 +23,9 @@ class KeysRouter extends StatefulWidget {
 class _KeysRouter extends State<KeysRouter> {
   @override
   Widget build(BuildContext context) {
+    var s = S.of(context);
     var themeData = Theme.of(context);
-    var margin = EdgeInsets.only(
+    var margin = const EdgeInsets.only(
       left: Base.BASE_PADDING,
       right: Base.BASE_PADDING,
       top: Base.BASE_PADDING,
@@ -58,7 +60,7 @@ class _KeysRouter extends State<KeysRouter> {
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "Keys Manager",
+          s.Keys_Manager,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,

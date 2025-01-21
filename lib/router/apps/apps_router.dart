@@ -22,6 +22,7 @@ import '../../component/app/app_type_component.dart';
 import '../../component/appbar_back_btn_component.dart';
 import '../../const/base.dart';
 import '../../data/remote_signing_info.dart';
+import '../../generated/l10n.dart';
 import '../me/me_router_app_item_component.dart';
 
 class AppsRouter extends StatefulWidget {
@@ -34,6 +35,7 @@ class AppsRouter extends StatefulWidget {
 class _AppsRouter extends CustState<AppsRouter> {
   @override
   Widget doBuild(BuildContext context) {
+    var s = S.of(context);
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
     var appList = _appProvider.appList;
@@ -54,32 +56,6 @@ class _AppsRouter extends CustState<AppsRouter> {
               motion: ScrollMotion(),
               extentRatio: 0.25,
               children: [
-                // GestureDetector(
-                //   onTap: () {},
-                //   child: Container(
-                //     color: Colors.red,
-                //     alignment: Alignment.center,
-                //     padding: EdgeInsets.only(
-                //       left: Base.BASE_PADDING,
-                //       right: Base.BASE_PADDING,
-                //       top: 3,
-                //       bottom: 3,
-                //     ),
-                //     child: Row(
-                //       // mainAxisSize: MainAxisSize.min,
-                //       children: [
-                //         Icon(
-                //           Icons.delete_forever,
-                //           color: Colors.white,
-                //         ),
-                //         Text(
-                //           "Delete",
-                //           style: TextStyle(color: Colors.white),
-                //         )
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 SlidableAction(
                   onPressed: (context) {
                     var cancelFunc = BotToast.showLoading();
@@ -174,7 +150,7 @@ class _AppsRouter extends CustState<AppsRouter> {
           child: Container(
             margin: EdgeInsets.only(top: Base.BASE_PADDING),
             child: Text(
-              "Pendding connect remote apps",
+              s.Pendding_connect_remote_apps,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -205,7 +181,7 @@ class _AppsRouter extends CustState<AppsRouter> {
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "Apps Manager",
+          s.Apps_Manager,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,

@@ -18,6 +18,7 @@ import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/auth_log.dart';
+import '../../generated/l10n.dart';
 import '../keys/keys_router.dart';
 import 'me_router_app_item_component.dart';
 
@@ -30,6 +31,8 @@ class MeRouter extends StatefulWidget {
 
 class _MeRouter extends CustState<MeRouter> {
   List<AuthLog> authLogs = [];
+
+  late S s;
 
   @override
   Future<void> onReady(BuildContext context) async {
@@ -58,6 +61,7 @@ class _MeRouter extends CustState<MeRouter> {
     var mediaQueryData = MediaQuery.of(context);
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
+    s = S.of(context);
 
     var listWidgetMargin = const EdgeInsets.only(
       top: Base.BASE_PADDING,
@@ -84,7 +88,7 @@ class _MeRouter extends CustState<MeRouter> {
             onTap: () {
               KeysRouter.addKey(context);
             },
-            child: Text("Click and Login"),
+            child: Text(s.Click_and_Login),
           );
         },
         selector: (context, _provider) {
@@ -97,7 +101,7 @@ class _MeRouter extends CustState<MeRouter> {
       margin: const EdgeInsets.only(right: Base.BASE_PADDING),
       child: GestureDetector(
         onTap: () {
-          BotToast.showText(text: "Coming...");
+          RouterUtil.router(context, RouterPath.SETTING);
         },
         child: const Icon(Icons.settings),
       ),
@@ -157,7 +161,7 @@ class _MeRouter extends CustState<MeRouter> {
     List<Widget> webItemList = [];
     webItemList.add(MeRouterWebItemComponent(
       num: bookmarkNum,
-      name: "Bookmark",
+      name: s.Bookmarks,
       iconData: Icons.bookmark,
       onTap: () async {
         var url = await RouterUtil.router(context, RouterPath.BOOKMARK);
@@ -168,7 +172,7 @@ class _MeRouter extends CustState<MeRouter> {
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: historyNum,
-      name: "History",
+      name: s.Historys,
       iconData: Icons.history,
       onTap: () async {
         var url = await RouterUtil.router(context, RouterPath.HISTORY);
@@ -179,10 +183,10 @@ class _MeRouter extends CustState<MeRouter> {
     ));
     webItemList.add(MeRouterWebItemComponent(
       num: downloadNum,
-      name: "Download",
+      name: s.Downloads,
       iconData: Icons.download,
       onTap: () {
-        BotToast.showText(text: "Coming...");
+        BotToast.showText(text: s.Comming_soon);
       },
     ));
     // webItemList.add(MeRouterWebItemComponent(
@@ -215,7 +219,7 @@ class _MeRouter extends CustState<MeRouter> {
         },
         behavior: HitTestBehavior.translucent,
         child: Container(
-          child: Text("no apps now"),
+          child: Text(s.no_apps_now),
         ),
       ));
       appWidgetList.add(Divider());
@@ -228,7 +232,7 @@ class _MeRouter extends CustState<MeRouter> {
         },
         behavior: HitTestBehavior.translucent,
         child: Text(
-          "Show more apps",
+          s.Show_more_apps,
           style: TextStyle(
             decoration: TextDecoration.underline,
           ),
@@ -261,14 +265,14 @@ class _MeRouter extends CustState<MeRouter> {
     }
     if (logList.isEmpty) {
       logList.add(Container(
-        child: Text("no logs now"),
+        child: Text(s.no_logs_now),
       ));
       logList.add(Divider());
     }
     logList.add(Container(
       alignment: Alignment.center,
       child: Text(
-        "Show more logs",
+        s.Show_more_logs,
         style: TextStyle(
           decoration: TextDecoration.underline,
         ),

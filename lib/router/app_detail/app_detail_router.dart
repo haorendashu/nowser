@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../component/appbar_back_btn_component.dart';
 import '../../const/base.dart';
+import '../../generated/l10n.dart';
 import '../../provider/key_provider.dart';
 
 class AppDetailRouter extends StatefulWidget {
@@ -41,6 +42,8 @@ class _AppDetailRouter extends State<AppDetailRouter> {
 
   bool changed = false;
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -60,9 +63,9 @@ class _AppDetailRouter extends State<AppDetailRouter> {
 
     List<Widget> list = [];
 
-    var baseMargin = EdgeInsets.only(bottom: Base.BASE_PADDING);
+    var baseMargin = const EdgeInsets.only(bottom: Base.BASE_PADDING);
 
-    Widget imageWidget = Icon(
+    Widget imageWidget = const Icon(
       Icons.image,
       size: 80,
     );
@@ -106,7 +109,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
       margin: baseMargin,
       child: TextField(
         controller: nameController,
-        decoration: InputDecoration(hintText: "Name"),
+        decoration: InputDecoration(hintText: s.Name),
       ),
     ));
 
@@ -137,7 +140,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
         children: [
           Container(
             margin: EdgeInsets.only(right: Base.BASE_PADDING),
-            child: Text("Pubkey:"),
+            child: Text("${s.Pubkey}:"),
           ),
           Expanded(child: keyWidget),
         ],
@@ -146,18 +149,18 @@ class _AppDetailRouter extends State<AppDetailRouter> {
 
     List<DropdownMenuItem<int>> connectTypeItems = [];
     connectTypeItems.add(DropdownMenuItem(
-        child: Text("Fully trust"), value: ConnectType.FULLY_TRUST));
+        value: ConnectType.FULLY_TRUST, child: Text(s.Fully_trust)));
     connectTypeItems.add(DropdownMenuItem(
-        child: Text("Reasonable"), value: ConnectType.REASONABLE));
+        value: ConnectType.REASONABLE, child: Text(s.Reasonable)));
     connectTypeItems.add(DropdownMenuItem(
-        child: Text("Alway reject"), value: ConnectType.ALWAY_REJECT));
+        value: ConnectType.ALWAY_REJECT, child: Text(s.Alway_reject)));
     list.add(Container(
       margin: baseMargin,
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: Base.BASE_PADDING),
-            child: Text("ConnectType:"),
+            margin: const EdgeInsets.only(right: Base.BASE_PADDING),
+            child: Text("${s.ConnectType}:"),
           ),
           Expanded(
               child: DropdownButton<int>(
@@ -187,7 +190,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
             margin: baseMargin,
             alignment: Alignment.centerLeft,
             child: Text(
-              "Always Allow:",
+              "${s.Always_Allow}:",
             ),
           ));
           list.add(Container(
@@ -211,7 +214,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
             margin: baseMargin,
             alignment: Alignment.centerLeft,
             child: Text(
-              "Always Reject:",
+              "${s.Always_Reject}:",
             ),
           ));
           list.add(Container(
@@ -241,7 +244,7 @@ class _AppDetailRouter extends State<AppDetailRouter> {
       appBar: AppBar(
         leading: AppbarBackBtnComponent(),
         title: Text(
-          "App Detail",
+          s.App_Detail,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: themeData.textTheme.bodyLarge!.fontSize,

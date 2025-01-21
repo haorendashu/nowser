@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nowser/const/app_type.dart';
 
+import '../../generated/l10n.dart';
 import '../tag_component.dart';
 
 class AppTypeComponent extends StatefulWidget {
@@ -15,13 +16,15 @@ class AppTypeComponent extends StatefulWidget {
 }
 
 class _AppTypeComponent extends State<AppTypeComponent> {
+  late S s;
+
   @override
   Widget build(BuildContext context) {
-    String typeName = "WEB";
+    String typeName = s.WEB;
     if (widget.appType == AppType.ANDROID_APP) {
-      typeName = "Android";
+      typeName = s.Android;
     } else if (widget.appType == AppType.REMOTE) {
-      typeName = "Remote";
+      typeName = s.Remote;
     }
 
     return TagComponent(typeName);

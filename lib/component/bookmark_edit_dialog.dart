@@ -8,6 +8,7 @@ import 'package:nowser/data/bookmark_db.dart';
 import 'package:quick_actions/quick_actions.dart';
 
 import '../const/base.dart';
+import '../generated/l10n.dart';
 import '../main.dart';
 import '../util/router_util.dart';
 import '../util/table_mode_util.dart';
@@ -61,9 +62,12 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
     }
   }
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
+    s = S.of(context);
 
     List<Widget> list = [];
     list.add(Container(
@@ -71,7 +75,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
         bottom: Base.BASE_PADDING,
       ),
       child: Text(
-        "Add bookmark",
+        s.Add_bookmark,
         style: TextStyle(
           fontSize: themeData.textTheme.bodyLarge!.fontSize,
           fontWeight: FontWeight.bold,
@@ -83,7 +87,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       child: TextField(
         controller: nameTextController,
         decoration: InputDecoration(
-          labelText: "Name",
+          labelText: s.Name,
         ),
       ),
     ));
@@ -92,7 +96,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       child: TextField(
         controller: urlTextController,
         decoration: InputDecoration(
-          labelText: "Url",
+          labelText: s.Url,
         ),
       ),
     ));
@@ -101,7 +105,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       margin: EdgeInsets.only(top: Base.BASE_PADDING_HALF),
       child: Row(
         children: [
-          Text("Add to index"),
+          Text(s.Add_to_index),
           Expanded(
             child: Checkbox(
               value: addedToIndex,
@@ -122,7 +126,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
       list.add(Container(
         child: Row(
           children: [
-            Text("Add to quick action"),
+            Text(s.Add_to_quick_action),
             Expanded(
               child: Checkbox(
                 value: addedToQa,
@@ -146,7 +150,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
         bottom: Base.BASE_PADDING,
       ),
       width: double.infinity,
-      child: FilledButton(onPressed: confirm, child: Text("Confirm")),
+      child: FilledButton(onPressed: confirm, child: Text(s.Confirm)),
     ));
 
     Widget main = Container(
@@ -187,7 +191,7 @@ class _BookmarkEditDialog extends State<BookmarkEditDialog> {
 
     if (StringUtil.isBlank(bookmark.title) ||
         StringUtil.isBlank(bookmark.url)) {
-      BotToast.showText(text: "Input can't be null");
+      BotToast.showText(text: s.Input_can_not_be_null);
       return;
     }
 

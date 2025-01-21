@@ -36,12 +36,15 @@ class _TextInputDialogInnerComponent
     controller = TextEditingController(text: widget.value);
   }
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    s = S.of(context);
 
     List<Widget> list = [];
 
@@ -74,7 +77,7 @@ class _TextInputDialogInnerComponent
       width: double.infinity,
       child: FilledButton(
         onPressed: _onConfirm,
-        child: Text("Confirm"),
+        child: Text(s.Confirm),
       ),
     ));
 

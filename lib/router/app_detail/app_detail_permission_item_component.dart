@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nowser/component/tag_component.dart';
 import 'package:nowser/const/auth_type.dart';
 
+import '../../generated/l10n.dart';
+
 class AppDetailPermissionItemComponent extends StatefulWidget {
   bool allow;
 
@@ -24,11 +26,13 @@ class _AppDetailPermissionItemComponent
     extends State<AppDetailPermissionItemComponent> {
   bool tapFirst = false;
 
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var permissionText = AuthType.getAuthName(context, widget.authType);
     if (widget.eventKind != null) {
-      permissionText += " (EventKind ${widget.eventKind})";
+      permissionText += " (${s.EventKind} ${widget.eventKind})";
     }
     var main = TagComponent(permissionText);
 

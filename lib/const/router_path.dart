@@ -10,4 +10,5 @@ class RouterPath {
   static const String HISTORY = "/history";
   static const String BOOKMARK = "/bookmark";
   static const String AUTH_LOGS = "/authLogs";
+  static const String SETTING = "/setting";
 }

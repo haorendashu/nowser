@@ -7,6 +7,7 @@ import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/l10n.dart';
 import '../app/simple_app_info_component.dart';
 import '../logo_component.dart';
 
@@ -42,14 +43,17 @@ class AuthDialogBaseComponnet extends StatefulWidget {
 }
 
 class _AuthDialog extends State<AuthDialogBaseComponnet> {
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var baseMargin = EdgeInsets.only(
+    var baseMargin = const EdgeInsets.only(
       top: Base.BASE_PADDING_HALF,
       bottom: Base.BASE_PADDING_HALF,
     );
     var hintColor = themeData.hintColor;
+    s = S.of(context);
 
     List<Widget> list = [];
 
@@ -158,7 +162,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
                 RouterUtil.back(context);
               }
             },
-            child: Text("Cancel"),
+            child: Text(s.Cancel),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(Colors.red),
             ),
@@ -171,7 +175,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
               onPressed: () {
                 widget.onConfirm();
               },
-              child: Text("Confirm"),
+              child: Text(s.Confirm),
             ),
           )
         ],
