@@ -17,6 +17,7 @@ import 'package:nowser/provider/build_in_relay_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
+import 'package:nowser/router/about_me/about_me_router.dart';
 import 'package:nowser/router/app_detail/app_detail_router.dart';
 import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
@@ -189,6 +190,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.BOOKMARK: (context) => BookmarkRouter(),
       RouterPath.AUTH_LOGS: (context) => AuthLogsRouter(),
       RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
+      RouterPath.ABOUT_ME: (context) => AboutMeRouter(),
     };
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

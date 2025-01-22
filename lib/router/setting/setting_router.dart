@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/text_input/text_input_dialog.dart';
+import 'package:nowser/const/router_path.dart';
 
 import '../../component/enum_selector_component.dart';
 import '../../const/base.dart';
@@ -86,17 +87,20 @@ class _SettingRouter extends State<SettingRouter> {
 
     Widget aboutTitleWidget = genTitle(s.About, themeData);
     List<Widget> aboutList = [];
-    aboutList.add(SettingItemComponent("FAQ", child: moreWidget));
+    // aboutList.add(SettingItemComponent("FAQ", child: moreWidget));
     aboutList.add(SettingItemComponent(
       s.About_Me,
+      // showTopBorder: true,
+      onTap: () {
+        RouterUtil.router(context, RouterPath.ABOUT_ME);
+      },
       child: moreWidget,
-      showTopBorder: true,
     ));
-    aboutList.add(SettingItemComponent(
-      s.Privacy,
-      child: moreWidget,
-      showTopBorder: true,
-    ));
+    // aboutList.add(SettingItemComponent(
+    //   s.Privacy,
+    //   child: moreWidget,
+    //   showTopBorder: true,
+    // ));
     var aboutListWidget = genConfigListWidget(aboutList, themeData);
 
     var main = SingleChildScrollView(
@@ -293,7 +297,7 @@ class _SettingRouter extends State<SettingRouter> {
       // custom config search engine
       var value = await TextInputDialog.show(context, s.Input_search_url_des);
       if (StringUtil.isNotBlank(value)) {
-        settingProvider.searchEngine = resultEnumObj.value;
+        settingProvider.searchEngine = value;
         resetTheme();
       }
     }
