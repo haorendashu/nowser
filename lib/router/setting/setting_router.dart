@@ -280,6 +280,8 @@ class _SettingRouter extends State<SettingRouter> {
       searchEngineList!
           .add(EnumObj("https://www.google.com/search?q=", "Google"));
       searchEngineList!.add(EnumObj("https://www.bing.com/search?q=", "Bing"));
+      searchEngineList!
+          .add(EnumObj("https://www.baidu.com/s?ie=UTF-8&wd=", "Baidu"));
       searchEngineList!.add(EnumObj("", s.Custom));
     }
   }
