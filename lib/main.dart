@@ -160,7 +160,7 @@ class _MyApp extends State<MyApp> {
       }
     }
 
-    Brightness? statusBarIconBrightness;
+    Brightness statusBarIconBrightness = Brightness.dark;
     var lightTheme = getLightTheme();
     var darkTheme = getDarkTheme();
     ThemeData defaultTheme;
