@@ -61,6 +61,8 @@ class _AppDetailRouter extends State<AppDetailRouter> {
       return Container();
     }
 
+    s = S.of(context);
+
     List<Widget> list = [];
 
     var baseMargin = const EdgeInsets.only(bottom: Base.BASE_PADDING);
