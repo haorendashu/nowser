@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/qrscanner.dart';
+import 'package:nowser/data/bookmark.dart';
 import 'package:nowser/main.dart';
+import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/util/router_util.dart';
+import 'package:provider/provider.dart';
+import 'package:searchfield/searchfield.dart';
 
 import '../../const/base.dart';
 
@@ -45,17 +49,61 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
       }
     }
 
+    var bookmarkProvider = Provider.of<BookmarkProvider>(context);
+    var bookmarks = bookmarkProvider.bookmarks;
+
     List<Widget> list = [];
 
+    List<SearchFieldListItem<Bookmark>> suggestions = [];
+    for (var bookmark in bookmarks) {
+      suggestions.add(SearchFieldListItem(
+        bookmark.url!,
+        item: bookmark,
+      ));
+    }
     var inputWidget = Hero(
       tag: "urlInput",
       child: Material(
-        child: TextField(
+        child: SearchField(
+          suggestions: suggestions,
           controller: textEditingController,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
-          focusNode: focusNode,
-          onSubmitted: (value) {
+          suggestionDirection: SuggestionDirection.up,
+          searchInputDecoration: SearchInputDecoration(
+            border: OutlineInputBorder(),
+          ),
+          onSubmit: (value) {
             checkAndBack(value);
+          },
+          focusNode: focusNode,
+          onSuggestionTap: (suggestion) {
+            var item = suggestion.item;
+            if (item != null) {
+              checkAndBack(item.url);
+            }
+          },
+          onSearchTextChanged: (input) {
+            print("onSearchTextChanged");
+            List<SearchFieldListItem> matchList = [];
+            if (StringUtil.isBlank(input)) {
+              return matchList;
+            }
+
+            for (var suggestion in suggestions) {
+              var item = suggestion.item;
+              if (item != null && StringUtil.isNotBlank(item.url)) {
+                if (item.url!.contains(input)) {
+                  matchList.add(suggestion);
+                  continue;
+                }
+
+                if (item.title != null && item.title!.contains(input)) {
+                  matchList.add(suggestion);
+                  continue;
+                }
+              }
+            }
+
+            return matchList;
           },
         ),
       ),

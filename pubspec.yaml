@@ -55,6 +55,7 @@ dependencies:
   quick_actions: ^1.0.8
   flutter_pinned_shortcut_plus: ^0.0.2
   flutter_cache_manager: ^3.4.1
+  searchfield: 1.2.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
