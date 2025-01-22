@@ -30,6 +30,7 @@ class _AppDetailPermissionItemComponent
 
   @override
   Widget build(BuildContext context) {
+    s = S.of(context);
     var permissionText = AuthType.getAuthName(context, widget.authType);
     if (widget.eventKind != null) {
       permissionText += " (${s.EventKind} ${widget.eventKind})";

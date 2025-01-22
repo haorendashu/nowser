@@ -51,7 +51,6 @@ class _AppDetailRouter extends State<AppDetailRouter> {
     if (arg != null && arg is App) {
       if (app == null || app!.id != arg.id) {
         app = App.fromJson(arg.toJson());
-        print(app!.name);
         nameController.text = app!.name ?? "";
       }
     }
