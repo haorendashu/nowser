@@ -48,6 +48,7 @@ class _AuthAppConnectDialog extends State<AuthAppConnectDialog> {
       bottom: Base.BASE_PADDING_HALF,
     );
     var hintColor = themeData.hintColor;
+    s = S.of(context);
 
     List<Widget> list = [];
 
