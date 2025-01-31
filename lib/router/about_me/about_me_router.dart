@@ -55,12 +55,12 @@ class _AboutMeRouter extends State<AboutMeRouter> {
 
     list.add(Container(
       margin: EdgeInsets.only(bottom: 50),
-      child: Text(
-        s.Privacy,
-        style: TextStyle(
-          fontSize: themeData.textTheme.bodySmall!.fontSize,
-        ),
-      ),
+      // child: Text(
+      //   s.Privacy,
+      //   style: TextStyle(
+      //     fontSize: themeData.textTheme.bodySmall!.fontSize,
+      //   ),
+      // ),
     ));
 
     var backBtn = GestureDetector(
