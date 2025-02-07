@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:nostr_sdk/utils/platform_util.dart';
+import 'package:nostr_sdk/utils/db_util.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:process_run/shell_run.dart';
 
 class DB {
   static const _VERSION = 2;
@@ -13,23 +9,15 @@ class DB {
   static Database? _database;
 
   static init() async {
-    String path = _dbName;
-
-    if (!PlatformUtil.isWeb()) {
-      var databasesPath = await getDatabasesPath();
-      path = join(databasesPath, _dbName);
-    }
+    String path = await DBUtil.getPath(_dbName);
+    print("path $path");
 
     try {
       _database = await openDatabase(path,
           version: _VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
     } catch (e) {
-      if (Platform.isLinux) {
-        // maybe it need install sqlite first, but this command need run by root.
-        await run('sudo apt-get -y install libsqlite3-0 libsqlite3-dev');
-        _database = await openDatabase(path,
-            version: _VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
-      }
+      print("db open fail");
+      print(e);
     }
   }
 

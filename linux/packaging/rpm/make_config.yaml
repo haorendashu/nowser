@@ -1,0 +1,25 @@
+display_name: Nowser
+icon: assets/imgs/logo/logo512.png
+summary: A Nostr Signer
+group: Applications/Sociality
+vendor: DASHU
+packager: DASHU
+packagerEmail: haorendashu@gmail.com
+license: GNU General Public License v3.0
+url: https://github.com/haorendashu/nowser
+
+requires:
+  - sqlite3
+  - sqlite-devel
+  - libsecret-devel
+
+keywords:
+  - Nostr
+  - Nostr signer
+
+generic_name: Nowser
+
+categories:
+  - Network
+
+startup_notify: true

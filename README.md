@@ -21,6 +21,8 @@ This app helps you manage your nostr identity securely across devices while main
 | Android | √ | √ | √ |
 | IOS | √ | √ | |
 | MacOS | √ | √ | |
+| Windows | √ | √ | |
+| Linux | √ | √ | |
 
 ## Downloads
 
@@ -30,88 +32,121 @@ IOS: Download from [TestFlight](https://testflight.apple.com/join/b4zVVxaM) http
 
 MacOS: Download from [TestFlight](https://testflight.apple.com/join/9VD8rk5B) https://testflight.apple.com/join/9VD8rk5B
 
-## Building from Source
+## Git Module
 
-### Prerequisites
-- Flutter SDK
-- Android Studio (for Android builds)
-- Xcode (for iOS builds)
-- Git
+Nowser is a multi module project, after you clone this project, please run git module scrpit to init the module git repos.
 
-### Platform-Specific Notes
-
-#### iOS/macOS Prerequisites
-1. Install CocoaPods if you haven't already:
-```bash
-sudo gem install cocoapods
-```
-
-2. Install project CocoaPods:
-```bash
-cd ios  # or 'cd macos' for macOS builds
-pod install
-```
-
-3. Open the workspace in Xcode:
-```bash
-open ios/Runner.xcworkspace  # or 'open macos/Runner.xcworkspace' for macOS
-```
-
-4. In Xcode:
-   - Select the Runner project in the navigator
-   - Select the Runner target
-   - Under Signing & Capabilities:
-     - Select your Team
-     - Update Bundle Identifier if needed
-   - If building for macOS, ensure the following capabilities are enabled:
-     - Outgoing Connections (Client)
-     - Incoming Connections (Server)
-
-#### Web
-```bash
-flutter build web
-```
-- The web build will be available in `build/web` directory
-- You can serve it using any web server
-- For local testing, you can use Python's built-in server:
-```bash
-cd build/web
-python -m http.server 8000
-```
-
-#### Desktop Builds
-- For Windows, you need Visual Studio with "Desktop development with C++" workload
-- For Linux, you need the following dependencies:
-```bash
-sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-```
-
-### Build Instructions
-
-1. Clone the repository with submodules:
-```bash
-git clone --recursive https://github.com/haorendashu/nowser.git
-cd nowser
-```
-
-2. If you already cloned without submodules, initialize and update them:
-```bash
+``` bash
 git submodule init
 git submodule update
 ```
 
-3. Install Flutter dependencies:
-```bash
-flutter pub get
+## Build Script
+
+### Android
+
+```
+-- build for appbundle
+flutter build appbundle --release
+
+-- build for apk
+flutter build apk --release --split-per-abi
 ```
 
-4. Build the app:
-- For Android:
-```bash
-flutter build apk
+### IOS and MacOS
+
+build by XCode
+
+### Windows
+
 ```
-- For iOS:
-```bash
-flutter build ios
+flutter build windows --release
 ```
 
+### Linux
+
+Linux depend on ```libsecret-1-dev```, ```libsqlite3-0```, ```libsqlite3-dev``` you can try to run this script to install before it run: 
+
+Ubuntu:
+
+```
+sudo apt-get -y install libsecret-1-dev libsqlite3-0 libsqlite3-dev
+```
+
+Fedora:
+
+```
+sudo dnf install libsecret-devel sqlite3 sqlite-devel
+```
+
+```
+flutter build linux --release
+```
+
+#### About Linux package
+
+We use ```flutter_distributor``` to build linux package, so you should install ```flutter_distributor``` and add some other config.
+
+Install ```flutter_distributor``` to your system:
+
+```
+dart pub global activate flutter_distributor
+```
+
+Install some compile tools:
+
+
+```
+sudo apt-get install clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+```
+
+rpm package requirements:
+
+Debian/Ubuntu: 
+
+```
+apt install rpm patchelf
+```
+
+Fedora: 
+
+```
+dnf install gcc rpm-build rpm-devel rpmlint make python bash coreutils diffutils patch rpmdevtools patchelf
+```
+
+Arch:
+
+```
+yay -S rpmdevtools patchelf or pamac install rpmdevtools patchelf
+```
+
+appimage package requirements:
+
+install ```flutter_distriutor```
+
+```
+dart pub global activate flutter_distributor
+```
+
+install and update filedbs:
+
+```
+sudo apt install locate
+sudo updatedb
+```
+
+install Appimage Builder:
+
+```
+wget -O appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+chmod +x appimagetool
+sudo mv appimagetool /usr/local/bin/
+```
+
+If your config all the steps, you can run these script to package the packages:
+
+```
+flutter_distributor release --name=dev --jobs=release-dev-linux-deb
+flutter_distributor release --name=dev --jobs=release-dev-linux-rpm
+flutter_distributor release --name=dev --jobs=release-dev-linux-appimage
+```
