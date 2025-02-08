@@ -50,12 +50,13 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   pretty_qr_code: ^3.3.0
   qr_code_scanner: ^1.0.1
-  flutter_slidable: ^4.0.0
+  flutter_slidable: ^3.1.1
   window_manager: ^0.4.2
   quick_actions: ^1.0.8
   flutter_pinned_shortcut_plus: ^0.0.2
   flutter_cache_manager: ^3.4.1
-  searchfield: ^1.2.4
+  searchfield: 1.2.0
+  webview_cef: ^0.2.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

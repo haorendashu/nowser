@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/component/webview/webview_component.dart';
+import 'package:nowser/component/webview/webview_controller.dart';
+import 'package:nowser/component/webview/webview_linux_component.dart';
+import 'package:nowser/component/webview/webview_linux_controller.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/const/router_path.dart';
 import 'package:nowser/main.dart';
@@ -53,17 +58,48 @@ class _IndexWebComponent extends State<IndexWebComponent> {
       return WebHomeComponent(webInfo);
     }
 
-    var webComp = WebViewComponent(
+    Widget? webComp;
+    if (!Platform.isLinux) {
+      webComp = WebViewComponent(
         webInfo,
         (webInfo, controller) {
-          webInfo.controller = controller;
+          webInfo.controller = WebviewController(controller);
           webProvider.updateWebInfo(webInfo);
         },
         onTitleChanged,
         (webInfo, controller) {
-          webInfo.controller = controller;
+          webInfo.controller = WebviewController(controller);
           webProvider.onLoadStop(webInfo);
         });
+    } else {
+      webComp = WebViewLinuxComponent(
+        webInfo,
+        (webInfo, controller) {
+          webInfo.controller = WebviewLinuxController(controller);
+          webProvider.updateWebInfo(webInfo);
+        },
+        (webInfo, controller, title) {
+          if (webInfo.controller is WebviewLinuxController && StringUtil.isNotBlank(title)) {
+            (webInfo.controller as WebviewLinuxController).setTitle(title!);
+            webInfo.title = title;
+            webProvider.updateWebInfo(webInfo);
+          }
+        },
+        (webInfo, controller, url) {
+          if (webInfo.controller is WebviewLinuxController && StringUtil.isNotBlank(url)) {
+            print("url change! $url");
+            (webInfo.controller as WebviewLinuxController).setUrl(url!);
+            webInfo.url = url;
+          }
+        },
+        (webInfo, controller) async {
+          webInfo.controller ??= WebviewLinuxController(controller);
+          var title = await webInfo.controller!.getTitle();
+          webInfo.title = title;
+          webProvider.onLoadStop(webInfo);
+        });
+    }
+    
 
     var main = webComp;
 
@@ -78,7 +114,7 @@ class _IndexWebComponent extends State<IndexWebComponent> {
 
   void onTitleChanged(
       WebInfo webInfo, InAppWebViewController controller, String? title) {
-    webInfo.controller = controller;
+    webInfo.controller = WebviewController(controller);
     webInfo.title = title;
     webProvider.updateWebInfo(webInfo);
   }

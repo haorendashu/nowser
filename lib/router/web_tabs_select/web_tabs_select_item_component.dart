@@ -25,10 +25,10 @@ class _WebTabsSelectItemComponent extends State<WebTabsSelectItemComponent> {
 
   Future<void> loadFavicon() async {
     if (widget.webInfo.controller != null) {
-      var favicons = await widget.webInfo.controller!.getFavicons();
-      if (favicons.isNotEmpty) {
+      var favicon = await widget.webInfo.controller!.getFavicon();
+      if (StringUtil.isNotBlank(favicon)) {
         setState(() {
-          faviconUrl = favicons.first.url.toString();
+          faviconUrl = favicon;
         });
       }
     }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:receive_intent/receive_intent.dart' as receiveIntent;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:webview_cef/webview_cef.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'const/base.dart';
@@ -103,6 +105,10 @@ Future<void> main() async {
         overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
   } catch (e) {
     print(e);
+  }
+
+  if (Platform.isLinux) {
+    WebviewManager().initialize(userAgent: Base.USER_AGENT);
   }
 
   await doInit();

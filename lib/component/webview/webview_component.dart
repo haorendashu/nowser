@@ -53,7 +53,7 @@ class _WebViewComponent extends State<WebViewComponent>
     iframeAllow: "camera; microphone",
     iframeAllowFullscreen: true,
     userAgent:
-        "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}",
+        Base.USER_AGENT,
   );
 
   PullToRefreshController? pullToRefreshController;

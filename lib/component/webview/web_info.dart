@@ -1,6 +1,6 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../../data/browser_history.dart';
+import 'webview_controller_interface.dart';
 
 class WebInfo {
   String id;
@@ -9,7 +9,7 @@ class WebInfo {
 
   WebInfo(this.id, this.url);
 
-  InAppWebViewController? controller;
+  WebviewControllerInterface? controller;
 
   String? title;
 

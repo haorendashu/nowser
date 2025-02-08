@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
@@ -161,21 +163,26 @@ class WebProvider extends ChangeNotifier {
     }
 
     try {
+      String? urlStr;
       var url = await webInfo.controller!.getUrl();
       if (url == null) {
+        if (Platform.isLinux) {
+          urlStr = webInfo.url;
+        }
+      } else {
+        urlStr = url.toString();
+      }
+
+      if (urlStr == null) {
         return;
       }
 
       var title = await webInfo.controller!.getTitle();
-      var favicons = await webInfo.controller!.getFavicons();
-      String? favicon;
-      if (favicons.isNotEmpty) {
-        favicon = favicons.first.url.toString();
-      }
+      String? favicon = await webInfo.controller!.getFavicon();
       var browserHistory = BrowserHistory(
         title: title,
         favicon: favicon,
-        url: url.toString(),
+        url: urlStr,
         createdAt: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       );
       if (webInfo.browserHistory != null &&
@@ -226,7 +233,7 @@ class WebProvider extends ChangeNotifier {
       webInfo.url = url;
       webInfo.title = null;
       if (webInfo.controller != null) {
-        webInfo.controller!.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
+        webInfo.controller!.loadUrl(url);
         return true;
       } else {
         updateWebInfo(webInfo);

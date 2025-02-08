@@ -1,3 +1,5 @@
+import 'package:nostr_sdk/utils/platform_util.dart';
+
 class Base {
   static const APP_NAME = "Nowser";
 
@@ -8,4 +10,6 @@ class Base {
   static const double BASE_PADDING_HALF = 6;
 
   static double BASE_FONT_SIZE = 15;
+
+  static String USER_AGENT = "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}";
 }
