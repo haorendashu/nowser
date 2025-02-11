@@ -193,7 +193,7 @@ class WebProvider extends ChangeNotifier {
       webInfo.browserHistory = browserHistory;
       BrowserHistoryDB.insert(browserHistory);
 
-      updateWebInfo(webInfo);
+      updateWebInfo(webInfo, updateUI: false);
     } catch (e) {}
   }
 

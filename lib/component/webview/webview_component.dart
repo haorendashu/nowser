@@ -52,8 +52,7 @@ class _WebViewComponent extends State<WebViewComponent>
     allowsInlineMediaPlayback: true,
     iframeAllow: "camera; microphone",
     iframeAllowFullscreen: true,
-    userAgent:
-        Base.USER_AGENT,
+    userAgent: Base.USER_AGENT,
   );
 
   PullToRefreshController? pullToRefreshController;
@@ -116,91 +115,76 @@ class _WebViewComponent extends State<WebViewComponent>
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Stack(
-        children: [
-          InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri(widget.webInfo.url)),
-            initialUserScripts: UnmodifiableListView<UserScript>([]),
-            initialSettings: settings,
-            contextMenu: contextMenu,
-            pullToRefreshController: pullToRefreshController,
-            onWebViewCreated: (controller) async {
-              webViewController = controller;
-              initJSHandle(controller);
-              widget.onWebViewCreated(widget.webInfo, controller);
-            },
-            onTitleChanged: (controller, title) {
-              widget.onTitleChanged(widget.webInfo, controller, title);
-            },
-            onLoadStart: (controller, url) async {},
-            onPermissionRequest: (controller, request) async {
-              return PermissionResponse(
-                  resources: request.resources,
-                  action: PermissionResponseAction.GRANT);
-            },
-            shouldOverrideUrlLoading: (controller, navigationAction) async {
-              // var uri = navigationAction.request.url!;
-              // if (uri.scheme == "lightning" &&
-              //     StringUtil.isNotBlank(uri.path)) {
-              //   var result =
-              //       await NIP07Dialog.show(context, NIP07Methods.lightning);
-              //   if (result == true) {
-              //     await LightningUtil.goToPay(context, uri.path);
-              //   }
-              //   return NavigationActionPolicy.CANCEL;
-              // }
+      child: InAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri(widget.webInfo.url)),
+        initialUserScripts: UnmodifiableListView<UserScript>([]),
+        initialSettings: settings,
+        contextMenu: contextMenu,
+        pullToRefreshController: pullToRefreshController,
+        onWebViewCreated: (controller) async {
+          webViewController = controller;
+          initJSHandle(controller);
+          widget.onWebViewCreated(widget.webInfo, controller);
+        },
+        onTitleChanged: (controller, title) {
+          widget.onTitleChanged(widget.webInfo, controller, title);
+        },
+        onLoadStart: (controller, url) async {},
+        onPermissionRequest: (controller, request) async {
+          return PermissionResponse(
+              resources: request.resources,
+              action: PermissionResponseAction.GRANT);
+        },
+        shouldOverrideUrlLoading: (controller, navigationAction) async {
+          // var uri = navigationAction.request.url!;
+          // if (uri.scheme == "lightning" &&
+          //     StringUtil.isNotBlank(uri.path)) {
+          //   var result =
+          //       await NIP07Dialog.show(context, NIP07Methods.lightning);
+          //   if (result == true) {
+          //     await LightningUtil.goToPay(context, uri.path);
+          //   }
+          //   return NavigationActionPolicy.CANCEL;
+          // }
 
-              // if (uri.scheme == "nostr+walletconnect") {
-              //   webViewProvider.closeAndReturn(uri.toString());
-              //   return NavigationActionPolicy.CANCEL;
-              // }
+          // if (uri.scheme == "nostr+walletconnect") {
+          //   webViewProvider.closeAndReturn(uri.toString());
+          //   return NavigationActionPolicy.CANCEL;
+          // }
 
-              // if (![
-              //   "http",
-              //   "https",
-              //   "file",
-              //   "chrome",
-              //   "data",
-              //   "javascript",
-              //   "about"
-              // ].contains(uri.scheme)) {
-              //   if (await canLaunchUrl(uri)) {
-              //     // Launch the App
-              //     await launchUrl(
-              //       uri,
-              //     );
-              //     // and cancel the request
-              //     return NavigationActionPolicy.CANCEL;
-              //   }
-              // }
+          // if (![
+          //   "http",
+          //   "https",
+          //   "file",
+          //   "chrome",
+          //   "data",
+          //   "javascript",
+          //   "about"
+          // ].contains(uri.scheme)) {
+          //   if (await canLaunchUrl(uri)) {
+          //     // Launch the App
+          //     await launchUrl(
+          //       uri,
+          //     );
+          //     // and cancel the request
+          //     return NavigationActionPolicy.CANCEL;
+          //   }
+          // }
 
-              return NavigationActionPolicy.ALLOW;
-            },
-            onLoadStop: (controller, url) async {
-              pullToRefreshController?.endRefreshing();
-              addInitScript(controller);
-              widget.onLoadStop(widget.webInfo, controller);
-            },
-            onReceivedError: (controller, request, error) {
-              pullToRefreshController?.endRefreshing();
-            },
-            onProgressChanged: (controller, progress) {
-              if (progress == 100) {
-                pullToRefreshController?.endRefreshing();
-              }
-              setState(() {
-                this.progress = progress / 100;
-              });
-            },
-            onUpdateVisitedHistory: (controller, url, isReload) {},
-            onConsoleMessage: (controller, consoleMessage) {
-              print(consoleMessage);
-            },
-          ),
-          progress < 1.0
-              ? LinearProgressIndicator(value: progress)
-              : Container(),
-        ],
+          return NavigationActionPolicy.ALLOW;
+        },
+        onLoadStop: (controller, url) async {
+          pullToRefreshController?.endRefreshing();
+          addInitScript(controller);
+          widget.onLoadStop(widget.webInfo, controller);
+        },
+        onReceivedError: (controller, request, error) {
+          pullToRefreshController?.endRefreshing();
+        },
+        onUpdateVisitedHistory: (controller, url, isReload) {},
+        onConsoleMessage: (controller, consoleMessage) {
+          print(consoleMessage);
+        },
       ),
     );
   }
