@@ -106,7 +106,6 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     return Container(
       padding: EdgeInsets.only(
         top: padding.top,
-        bottom: padding.bottom,
       ),
       child: main,
     );

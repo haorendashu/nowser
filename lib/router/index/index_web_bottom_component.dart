@@ -42,7 +42,7 @@ class _IndexWebBottomComponent extends State<IndexWebBottomComponent> {
       }
       Widget numberWidget = WebViewNumberComponent();
 
-      return Container(
+      var main = Container(
         height: 60,
         child: Row(
           children: [
@@ -112,6 +112,12 @@ class _IndexWebBottomComponent extends State<IndexWebBottomComponent> {
           ],
         ),
       );
+
+      return main;
+      // return SafeArea(
+      //   top: false,
+      //   child: main,
+      // );
     }, selector: (context, provider) {
       return provider.currentWebInfo();
     });
