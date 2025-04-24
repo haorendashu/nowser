@@ -89,11 +89,15 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     int appType = AppType.ANDROID_APP;
     var code = await getCallingPackage();
     if (StringUtil.isBlank(code)) {
-      if (currentUser != null) {
-        // code is null, but currentUser is not null, try to find currentUser depend on currentUser
-        var app = appProvider.getAppByUser(appType, currentUser);
-        if (app != null) {
-          code = app.code;
+      code = await getCallingPackageUnchecked();
+      print("getCallingPackage null && getCallingPackageUnchecked $code");
+      if (StringUtil.isBlank(code)) {
+        if (currentUser != null) {
+          // code is null, but currentUser is not null, try to find currentUser depend on currentUser
+          var app = appProvider.getAppByUser(appType, currentUser);
+          if (app != null) {
+            code = app.code;
+          }
         }
       }
     }
