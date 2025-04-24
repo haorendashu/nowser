@@ -26,7 +26,7 @@ This app helps you manage your nostr identity securely across devices while main
 
 ## Downloads
 
-Android: Downlaod From [Release](https://github.com/haorendashu/nowser/releases) https://github.com/haorendashu/nowser/releases
+Android, Windows, Linux, MacOS: Download From [Release](https://github.com/haorendashu/nowser/releases) https://github.com/haorendashu/nowser/releases
 
 IOS: Download from [TestFlight](https://testflight.apple.com/join/b4zVVxaM) https://testflight.apple.com/join/b4zVVxaM
 
