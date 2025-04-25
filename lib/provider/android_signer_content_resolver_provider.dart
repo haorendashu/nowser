@@ -37,13 +37,20 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     return null;
   }
 
+  int now() {
+    return DateTime.now().millisecondsSinceEpoch;
+  }
+
   String? _localCacheCallingPackage;
+
+  int? _localCacheUpdateTime = DateTime.now().millisecondsSinceEpoch;
 
   @override
   Future<void> onCallingPackageChanged() async {
     var callingPackage = await getCallingPackage();
     if (callingPackage != null) {
       _localCacheCallingPackage = callingPackage;
+      _localCacheUpdateTime = now();
     }
   }
 
@@ -109,7 +116,8 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
         }
       }
     }
-    if (StringUtil.isBlank(code)) {
+    if (StringUtil.isBlank(code) && now() - _localCacheUpdateTime! < 5000) {
+      // if calling package is null, try to use local cache calling package, and the cache must seted within 5s.
       code = _localCacheCallingPackage;
     }
     if (StringUtil.isBlank(code)) {
@@ -230,7 +238,6 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       saveAuthLog(app!, authType, eventKind, authDetail, AuthResult.OK);
     }
 
-    print("query resolver $uri authType $authType result ${data?.toString()}");
     return data;
   }
 
