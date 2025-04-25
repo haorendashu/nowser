@@ -43,7 +43,7 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
 
   String? _localCacheCallingPackage;
 
-  int? _localCacheUpdateTime = DateTime.now().millisecondsSinceEpoch;
+  int _localCacheUpdateTime = DateTime.now().millisecondsSinceEpoch;
 
   @override
   Future<void> onCallingPackageChanged() async {
@@ -105,18 +105,18 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
 
     int appType = AppType.ANDROID_APP;
     var code = await getCallingPackage();
+    // print(
+    //     "code $code _localCacheCallingPackage $_localCacheCallingPackage ${now() - _localCacheUpdateTime}");
     if (StringUtil.isBlank(code)) {
-      if (StringUtil.isBlank(code)) {
-        if (currentUser != null) {
-          // code is null, but currentUser is not null, try to find currentUser depend on currentUser
-          var app = appProvider.getAppByUser(appType, currentUser);
-          if (app != null) {
-            code = app.code;
-          }
+      if (currentUser != null) {
+        // code is null, but currentUser is not null, try to find currentUser depend on currentUser
+        var app = appProvider.getAppByUser(appType, currentUser);
+        if (app != null) {
+          code = app.code;
         }
       }
     }
-    if (StringUtil.isBlank(code) && now() - _localCacheUpdateTime! < 5000) {
+    if (StringUtil.isBlank(code) && now() - _localCacheUpdateTime < 5000) {
       // if calling package is null, try to use local cache calling package, and the cache must seted within 5s.
       code = _localCacheCallingPackage;
     }
