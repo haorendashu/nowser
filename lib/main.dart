@@ -410,7 +410,7 @@ Color _getMainColor() {
 }
 
 @pragma('vm:entry-point')
-Future<void> nowserSignerProviderEntrypoint() async {
+void nowserSignerProviderEntrypoint() {
   // if we call content resolver this should init first, to receive request.
   // so, doInit() method move to query method.
   AndroidSignerContentResolverProvider(
