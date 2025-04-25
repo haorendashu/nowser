@@ -37,6 +37,16 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     return null;
   }
 
+  String? _localCacheCallingPackage;
+
+  @override
+  Future<void> onCallingPackageChanged() async {
+    var callingPackage = await getCallingPackage();
+    if (callingPackage != null) {
+      _localCacheCallingPackage = callingPackage;
+    }
+  }
+
   bool inited = false;
 
   @override
@@ -89,8 +99,6 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     int appType = AppType.ANDROID_APP;
     var code = await getCallingPackage();
     if (StringUtil.isBlank(code)) {
-      code = await getCallingPackageUnchecked();
-      print("getCallingPackage null && getCallingPackageUnchecked $code");
       if (StringUtil.isBlank(code)) {
         if (currentUser != null) {
           // code is null, but currentUser is not null, try to find currentUser depend on currentUser
@@ -100,6 +108,9 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
           }
         }
       }
+    }
+    if (StringUtil.isBlank(code)) {
+      code = _localCacheCallingPackage;
     }
     if (StringUtil.isBlank(code)) {
       print("get calling package fail!");
@@ -219,6 +230,7 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
       saveAuthLog(app!, authType, eventKind, authDetail, AuthResult.OK);
     }
 
+    print("query resolver $uri authType $authType result ${data?.toString()}");
     return data;
   }
 
