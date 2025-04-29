@@ -79,7 +79,10 @@ class WebProvider extends ChangeNotifier {
     }
   }
 
-  void addTab({String url = ""}) {
+  void addTab({
+    String url = "",
+    bool openTab = true,
+  }) {
     if (StringUtil.isNotBlank(url)) {
       var _currentWebInfo = currentWebInfo();
       if (_currentWebInfo != null && StringUtil.isBlank(_currentWebInfo.url)) {
@@ -90,7 +93,9 @@ class WebProvider extends ChangeNotifier {
     }
 
     webInfos.add(WebInfo(_rndId(), url));
-    index = webInfos.length - 1;
+    if (openTab) {
+      index = webInfos.length - 1;
+    }
     notifyListeners();
   }
 

@@ -84,5 +84,12 @@
     "About_Me": "About Me",
     "Privacy": "Privacy",
     "Custom": "Custom",
-    "Input_search_url_des": "Please input searching url"
+    "Input_search_url_des": "Please input searching url",
+    "Copy_Title": "Copy Title",
+    "Copy_Link": "Copy Link",
+    "Open_in_a_New_Tab": "Open in a New Tab",
+    "Open_with_Stealth_Mode": "Open with Stealth Mode",
+    "Open_backgroundly": "Open backgroundly",
+    "Open_image_in_a_New_Tab": "Open image in a new tab",
+    "Download_image": "Download image"
 }

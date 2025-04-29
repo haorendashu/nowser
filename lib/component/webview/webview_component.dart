@@ -7,6 +7,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/event.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/webview/long_press_dialog.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
@@ -43,6 +44,12 @@ class WebViewComponent extends StatefulWidget {
 
 class _WebViewComponent extends State<WebViewComponent>
     with PermissionCheckMixin {
+  static const List<InAppWebViewHitTestResultType> _longPressResultSupported = [
+    InAppWebViewHitTestResultType.SRC_IMAGE_ANCHOR_TYPE,
+    InAppWebViewHitTestResultType.SRC_ANCHOR_TYPE,
+    InAppWebViewHitTestResultType.IMAGE_TYPE
+  ];
+
   InAppWebViewController? webViewController;
 
   late ContextMenu contextMenu;
@@ -64,32 +71,42 @@ class _WebViewComponent extends State<WebViewComponent>
     super.initState();
 
     contextMenu = ContextMenu(
-        menuItems: [
-          ContextMenuItem(
-              id: 1,
-              title: "Special",
-              action: () async {
-                print("Menu item Special clicked!");
-                print(await webViewController?.getSelectedText());
-                await webViewController?.clearFocus();
-              })
-        ],
-        settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
-        onCreateContextMenu: (hitTestResult) async {
-          print("onCreateContextMenu");
-          print(hitTestResult.extra);
-          print(await webViewController?.getSelectedText());
-        },
-        onHideContextMenu: () {
-          print("onHideContextMenu");
-        },
-        onContextMenuActionItemClicked: (contextMenuItemClicked) async {
-          var id = contextMenuItemClicked.id;
-          print("onContextMenuActionItemClicked: " +
-              id.toString() +
-              " " +
-              contextMenuItemClicked.title);
-        });
+      menuItems: [
+        // ContextMenuItem(
+        //     id: 1,
+        //     title: "Special",
+        //     action: () async {
+        //       print("Menu item Special clicked!");
+        //       print(await webViewController?.getSelectedText());
+        //       await webViewController?.clearFocus();
+        //     })
+      ],
+      settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
+      onCreateContextMenu: (hitTestResult) async {
+        // print("onCreateContextMenu");
+        // print(hitTestResult.type);
+        // print(hitTestResult.extra);
+        // print(_longPressResultSupported
+        //     .contains(hitTestResult.type)); // true or false
+        // print(hitTestResult.extra);
+        // print(await webViewController?.getSelectedText());
+
+        if (!_longPressResultSupported.contains(hitTestResult.type)) {
+          var selectedText = await webViewController?.getSelectedText();
+          // TODO try to decode selectedText
+        }
+      },
+      onHideContextMenu: () {
+        // print("onHideContextMenu");
+      },
+      onContextMenuActionItemClicked: (contextMenuItemClicked) async {
+        // var id = contextMenuItemClicked.id;
+        // print("onContextMenuActionItemClicked: " +
+        //     id.toString() +
+        //     " " +
+        //     contextMenuItemClicked.title);
+      },
+    );
 
     pullToRefreshController = kIsWeb ||
             ![TargetPlatform.iOS, TargetPlatform.android]
@@ -184,6 +201,21 @@ class _WebViewComponent extends State<WebViewComponent>
         onUpdateVisitedHistory: (controller, url, isReload) {},
         onConsoleMessage: (controller, consoleMessage) {
           print(consoleMessage);
+        },
+        onLongPressHitTestResult: (controller, hitTestResult) async {
+          if (_longPressResultSupported.contains(hitTestResult.type)) {
+            var requestFocusNodeHrefResult =
+                await controller.requestFocusNodeHref();
+            if (requestFocusNodeHrefResult != null) {
+              int infoType = LongPressDialog.TYPE_IMAGE;
+              if (InAppWebViewHitTestResultType.SRC_ANCHOR_TYPE.toValue() ==
+                  hitTestResult.type!.toValue()) {
+                infoType = LongPressDialog.TYPE_URL;
+              }
+              LongPressDialog.show(
+                  context, infoType, requestFocusNodeHrefResult.toJson());
+            }
+          }
         },
       ),
     );

@@ -644,6 +644,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Copy Title`
+  String get Copy_Title {
+    return Intl.message('Copy Title', name: 'Copy_Title', desc: '', args: []);
+  }
+
+  /// `Copy Link`
+  String get Copy_Link {
+    return Intl.message('Copy Link', name: 'Copy_Link', desc: '', args: []);
+  }
+
+  /// `Open in a New Tab`
+  String get Open_in_a_New_Tab {
+    return Intl.message(
+      'Open in a New Tab',
+      name: 'Open_in_a_New_Tab',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open with Stealth Mode`
+  String get Open_with_Stealth_Mode {
+    return Intl.message(
+      'Open with Stealth Mode',
+      name: 'Open_with_Stealth_Mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open backgroundly`
+  String get Open_backgroundly {
+    return Intl.message(
+      'Open backgroundly',
+      name: 'Open_backgroundly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open image in a new tab`
+  String get Open_image_in_a_New_Tab {
+    return Intl.message(
+      'Open image in a new tab',
+      name: 'Open_image_in_a_New_Tab',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download image`
+  String get Download_image {
+    return Intl.message(
+      'Download image',
+      name: 'Download_image',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

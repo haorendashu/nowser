@@ -56,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "Confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "ConnectType": MessageLookupByLibrary.simpleMessage("ConnectType"),
     "Connect_by": MessageLookupByLibrary.simpleMessage("Connect by"),
+    "Copy_Link": MessageLookupByLibrary.simpleMessage("Copy Link"),
+    "Copy_Title": MessageLookupByLibrary.simpleMessage("Copy Title"),
     "Copy_success": MessageLookupByLibrary.simpleMessage("Copy success"),
     "Custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "Dark": MessageLookupByLibrary.simpleMessage("Dark"),
@@ -65,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Decrypt zap event",
     ),
     "Desktop": MessageLookupByLibrary.simpleMessage("Desktop"),
+    "Download_image": MessageLookupByLibrary.simpleMessage("Download image"),
     "Downloads": MessageLookupByLibrary.simpleMessage("Downloads"),
     "Edit": MessageLookupByLibrary.simpleMessage("Edit"),
     "Encrypt04_name": MessageLookupByLibrary.simpleMessage("Encrypt (NIP-04)"),
@@ -97,6 +100,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "Local_Relay": MessageLookupByLibrary.simpleMessage("Local Relay"),
     "Login": MessageLookupByLibrary.simpleMessage("Login"),
     "Name": MessageLookupByLibrary.simpleMessage("Name"),
+    "Open_backgroundly": MessageLookupByLibrary.simpleMessage(
+      "Open backgroundly",
+    ),
+    "Open_image_in_a_New_Tab": MessageLookupByLibrary.simpleMessage(
+      "Open image in a new tab",
+    ),
+    "Open_in_a_New_Tab": MessageLookupByLibrary.simpleMessage(
+      "Open in a New Tab",
+    ),
+    "Open_with_Stealth_Mode": MessageLookupByLibrary.simpleMessage(
+      "Open with Stealth Mode",
+    ),
     "Pendding_connect_remote_apps": MessageLookupByLibrary.simpleMessage(
       "Pendding connect remote apps",
     ),
