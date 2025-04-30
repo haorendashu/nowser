@@ -124,7 +124,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Sự kiện chữ ký"),
     "Stars": MessageLookupByLibrary.simpleMessage("Lưu Đánh dấu"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Tàng hình"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Loại chủ đề"),
     "Url": MessageLookupByLibrary.simpleMessage("Liên kết"),
     "WEB": MessageLookupByLibrary.simpleMessage("Trang web"),

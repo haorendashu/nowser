@@ -140,7 +140,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gebeurtenissen ondertekenen",
     ),
     "Stars": MessageLookupByLibrary.simpleMessage("Bladwizers opslaan"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Onzichtbaar"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Type onderwerp"),
     "Url": MessageLookupByLibrary.simpleMessage("Links"),
     "WEB": MessageLookupByLibrary.simpleMessage("Webpagina"),

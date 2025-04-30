@@ -61,53 +61,61 @@ class _IndexWebComponent extends State<IndexWebComponent> {
     Widget? webComp;
     if (!Platform.isLinux) {
       webComp = WebViewComponent(
-        webInfo,
-        (webInfo, controller) {
-          webInfo.controller = WebviewController(controller);
-          webProvider.updateWebInfo(webInfo);
-        },
-        onTitleChanged,
-        (webInfo, controller) {
-          webInfo.controller = WebviewController(controller);
-          webProvider.onLoadStop(webInfo);
-        });
-    } else {
-      webComp = WebViewLinuxComponent(
-        webInfo,
-        (webInfo, controller) {
-          webInfo.controller = WebviewLinuxController(controller);
-          webProvider.updateWebInfo(webInfo);
-        },
-        (webInfo, controller, title) {
-          if (webInfo.controller is WebviewLinuxController && StringUtil.isNotBlank(title)) {
-            (webInfo.controller as WebviewLinuxController).setTitle(title!);
-            webInfo.title = title;
+          webInfo,
+          (webInfo, controller) {
+            webInfo.controller = WebviewController(controller);
             webProvider.updateWebInfo(webInfo);
-          }
-        },
-        (webInfo, controller, url) {
-          if (webInfo.controller is WebviewLinuxController && StringUtil.isNotBlank(url)) {
-            print("url change! $url");
-            (webInfo.controller as WebviewLinuxController).setUrl(url!);
-            webInfo.url = url;
-          }
-        },
-        (webInfo, controller) async {
-          webInfo.controller ??= WebviewLinuxController(controller);
-          var title = await webInfo.controller!.getTitle();
+          },
+          onTitleChanged,
+          (webInfo, controller, url) {
+            var urlStr = url.toString();
+            if (urlStr.startsWith("https")) {
+              webInfo.isSecure = true;
+            } else {
+              webInfo.isSecure = false;
+            }
+          },
+          (webInfo, controller) {
+            webInfo.controller = WebviewController(controller);
+            webProvider.onLoadStop(webInfo);
+          });
+    } else {
+      webComp = WebViewLinuxComponent(webInfo, (webInfo, controller) {
+        webInfo.controller = WebviewLinuxController(controller);
+        webProvider.updateWebInfo(webInfo);
+      }, (webInfo, controller, title) {
+        if (webInfo.controller is WebviewLinuxController &&
+            StringUtil.isNotBlank(title)) {
+          (webInfo.controller as WebviewLinuxController).setTitle(title!);
           webInfo.title = title;
-          webProvider.onLoadStop(webInfo);
-        });
-    }
-    
+          webProvider.updateWebInfo(webInfo);
+        }
+      }, (webInfo, controller, url) {
+        if (webInfo.controller is WebviewLinuxController &&
+            StringUtil.isNotBlank(url)) {
+          if (url!.startsWith("https")) {
+            webInfo.isSecure = true;
+          } else {
+            webInfo.isSecure = false;
+          }
 
-    var main = webComp;
+          print("url change! $url");
+          (webInfo.controller as WebviewLinuxController).setUrl(url!);
+          webInfo.url = url;
+        }
+      }, (webInfo, controller) async {
+        webInfo.controller ??= WebviewLinuxController(controller);
+        var title = await webInfo.controller!.getTitle();
+        webInfo.title = title;
+        webProvider.onLoadStop(webInfo);
+      });
+    }
 
     return Container(
       padding: EdgeInsets.only(
         top: padding.top,
       ),
-      child: main,
+      child: webComp,
     );
   }
 

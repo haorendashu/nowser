@@ -150,7 +150,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Aláírási esemény"),
     "Stars": MessageLookupByLibrary.simpleMessage("Könyvjelző mentése"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("rejthetetlen"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Téma típusa"),
     "Url": MessageLookupByLibrary.simpleMessage("hivatkozások"),
     "WEB": MessageLookupByLibrary.simpleMessage("weboldal"),

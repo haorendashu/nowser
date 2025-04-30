@@ -26,7 +26,9 @@ class _WebControlComponent extends State<WebControlComponent> {
   Widget build(BuildContext context) {
     var s = S.of(context);
     var webProvider = Provider.of<WebProvider>(context);
-    var webInfo = webProvider.currentWebInfo;
+    var webInfo = webProvider.currentWebInfo();
+    var themeData = Theme.of(context);
+    Color mainColor = themeData.colorScheme.primary;
 
     return Container(
       child: Column(
@@ -78,13 +80,15 @@ class _WebControlComponent extends State<WebControlComponent> {
                 ),
                 Expanded(
                   child: WebControlBtnComponent(
-                    name: s.Stealth,
-                    icon: const Icon(
+                    name: s.Incognito,
+                    icon: Icon(
                       Icons.disabled_visible_outlined,
                       size: 30,
+                      color: webInfo?.incognitoMode == true ? mainColor : null,
                     ),
                     onTap: () {
-                      BotToast.showText(text: s.Comming_soon);
+                      webProvider.setIcognitoMode();
+                      widget.closeControl();
                     },
                   ),
                 ),

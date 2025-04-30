@@ -136,7 +136,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("กิจกรรมลายเซ็น"),
     "Stars": MessageLookupByLibrary.simpleMessage("บันทึกที่คั่นหน้า"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("ชิงทรัพย์"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("ประเภทหัวข้อ"),
     "Url": MessageLookupByLibrary.simpleMessage("ลิงค์"),
     "WEB": MessageLookupByLibrary.simpleMessage("เว็บเพจ"),

@@ -140,7 +140,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Allkirja sündmus"),
     "Stars": MessageLookupByLibrary.simpleMessage("Järjehoidja salvestamine"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("varjatus"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Teema tüüp"),
     "Url": MessageLookupByLibrary.simpleMessage("lingid"),
     "WEB": MessageLookupByLibrary.simpleMessage("Veebilehekülg"),

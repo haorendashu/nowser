@@ -146,7 +146,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Εκδήλωση υπογραφής"),
     "Stars": MessageLookupByLibrary.simpleMessage("αποθήκευση σελιδοδείκτη"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Ακρυφότητα"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Τύπος θέματος"),
     "Url": MessageLookupByLibrary.simpleMessage("σύνδεση"),
     "WEB": MessageLookupByLibrary.simpleMessage("Ιστοσελίδα"),

@@ -79,9 +79,23 @@ class WebProvider extends ChangeNotifier {
     }
   }
 
+  void setIcognitoMode({bool? incognito}) {
+    var webInfo = currentWebInfo();
+    if (webInfo != null) {
+      if (incognito != null) {
+        webInfo.incognitoMode = incognito;
+      } else {
+        webInfo.incognitoMode = !(webInfo.incognitoMode);
+      }
+
+      updateWebInfo(webInfo);
+    }
+  }
+
   void addTab({
     String url = "",
     bool openTab = true,
+    bool incognito = false,
   }) {
     if (StringUtil.isNotBlank(url)) {
       var _currentWebInfo = currentWebInfo();
@@ -92,7 +106,8 @@ class WebProvider extends ChangeNotifier {
       }
     }
 
-    webInfos.add(WebInfo(_rndId(), url));
+    var webInfo = WebInfo(_rndId(), url, incognitoMode: incognito);
+    webInfos.add(webInfo);
     if (openTab) {
       index = webInfos.length - 1;
     }
@@ -196,7 +211,9 @@ class WebProvider extends ChangeNotifier {
       }
 
       webInfo.browserHistory = browserHistory;
-      BrowserHistoryDB.insert(browserHistory);
+      if (!webInfo.incognitoMode) {
+        BrowserHistoryDB.insert(browserHistory);
+      }
 
       updateWebInfo(webInfo, updateUI: false);
     } catch (e) {}

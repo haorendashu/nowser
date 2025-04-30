@@ -88,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Get_Public_Key": MessageLookupByLibrary.simpleMessage("Get Public Key"),
     "Get_Relays": MessageLookupByLibrary.simpleMessage("Get Relays"),
     "Historys": MessageLookupByLibrary.simpleMessage("Historys"),
+    "Incognito": MessageLookupByLibrary.simpleMessage("Incognito"),
     "Input_can_not_be_null": MessageLookupByLibrary.simpleMessage(
       "Input can\'t be null",
     ),
@@ -109,8 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "Open_in_a_New_Tab": MessageLookupByLibrary.simpleMessage(
       "Open in a New Tab",
     ),
-    "Open_with_Stealth_Mode": MessageLookupByLibrary.simpleMessage(
-      "Open with Stealth Mode",
+    "Open_with_Incognito_Mode": MessageLookupByLibrary.simpleMessage(
+      "Open with Incognito Mode",
     ),
     "Pendding_connect_remote_apps": MessageLookupByLibrary.simpleMessage(
       "Pendding connect remote apps",
@@ -135,7 +136,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("Show more logs"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Sign Event"),
     "Stars": MessageLookupByLibrary.simpleMessage("Stars"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Stealth"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("ThemeStyle"),
     "Url": MessageLookupByLibrary.simpleMessage("Url"),
     "WEB": MessageLookupByLibrary.simpleMessage("WEB"),

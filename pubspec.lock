@@ -279,6 +279,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
+  flutter_font_icons:
+    dependency: "direct main"
+    description:
+      name: flutter_font_icons
+      sha256: d06eb0ab903d0e90a9a758de30892ea0d43221f03dad059970384e62479c787e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.7"
   flutter_font_picker:
     dependency: "direct main"
     description:

@@ -27,12 +27,15 @@ class WebViewComponent extends StatefulWidget {
 
   Function(WebInfo, InAppWebViewController, String?) onTitleChanged;
 
+  Function(WebInfo, InAppWebViewController, WebUri? url) onLoadStart;
+
   Function(WebInfo, InAppWebViewController) onLoadStop;
 
   WebViewComponent(
     this.webInfo,
     this.onWebViewCreated,
     this.onTitleChanged,
+    this.onLoadStart,
     this.onLoadStop,
   );
 
@@ -131,6 +134,8 @@ class _WebViewComponent extends State<WebViewComponent>
 
   @override
   Widget build(BuildContext context) {
+    settings.incognito = widget.webInfo.incognitoMode;
+
     return Container(
       child: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.webInfo.url)),
@@ -146,7 +151,9 @@ class _WebViewComponent extends State<WebViewComponent>
         onTitleChanged: (controller, title) {
           widget.onTitleChanged(widget.webInfo, controller, title);
         },
-        onLoadStart: (controller, url) async {},
+        onLoadStart: (controller, url) async {
+          widget.onLoadStart(widget.webInfo, controller, url);
+        },
         onPermissionRequest: (controller, request) async {
           return PermissionResponse(
               resources: request.resources,

@@ -2,7 +2,7 @@
     "Back": "后退",
     "Forward": "前进",
     "Refresh": "刷新",
-    "Stealth": "隐身",
+    "Incognito": "无痕",
     "Comming_soon": "很快到达...",
     "Bookmarks": "书签",
     "Stars": "保存书签",
@@ -84,5 +84,12 @@
     "About_Me": "关于我",
     "Privacy": "隐私",
     "Custom": "自定义",
-    "Input_search_url_des": "请输入搜索链接"
+    "Input_search_url_des": "请输入搜索链接",
+    "Copy_Title": "复制标题",
+    "Copy_Link": "复制链接",
+    "Open_in_a_New_Tab": "打开新标签",
+    "Open_with_Incognito_Mode": "无痕模式打开",
+    "Open_backgroundly": "后台打开",
+    "Open_image_in_a_New_Tab": "新标签打开图片",
+    "Download_image": "下载图片"
 }

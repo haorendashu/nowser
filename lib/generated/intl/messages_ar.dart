@@ -134,7 +134,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("توقيع الحدث"),
     "Stars": MessageLookupByLibrary.simpleMessage("حفظ العناوين"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("خلسة"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("نوع الموضوع"),
     "Url": MessageLookupByLibrary.simpleMessage("لينك ."),
     "WEB": MessageLookupByLibrary.simpleMessage("صفحة ويب"),

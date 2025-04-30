@@ -150,7 +150,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("Mostra altri log"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Firma dell\' evento"),
     "Stars": MessageLookupByLibrary.simpleMessage("Salva segnalibri"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Invisibile"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Tipo di argomento"),
     "Url": MessageLookupByLibrary.simpleMessage("Collegamenti"),
     "WEB": MessageLookupByLibrary.simpleMessage("Pagina web"),

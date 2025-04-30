@@ -142,7 +142,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Allekirjoittaa tapahtuma",
     ),
     "Stars": MessageLookupByLibrary.simpleMessage("Tallenna kirjanmerkki"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Piiloton"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Teematyyppi"),
     "Url": MessageLookupByLibrary.simpleMessage("Linkkejä"),
     "WEB": MessageLookupByLibrary.simpleMessage("Verkkosivu"),

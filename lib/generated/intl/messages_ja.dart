@@ -106,7 +106,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("詳細なログを表示"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("署名イベント"),
     "Stars": MessageLookupByLibrary.simpleMessage("ブックマークの保存"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("身を隠す"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("トピック・タイプ"),
     "Url": MessageLookupByLibrary.simpleMessage("リンク＃リンク＃"),
     "WEB": MessageLookupByLibrary.simpleMessage("Webページ"),

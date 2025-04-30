@@ -148,7 +148,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Событие подписи"),
     "Stars": MessageLookupByLibrary.simpleMessage("Сохранить закладки"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Скрытие"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Тип темы"),
     "Url": MessageLookupByLibrary.simpleMessage("Ссылки"),
     "WEB": MessageLookupByLibrary.simpleMessage("Веб - страница"),

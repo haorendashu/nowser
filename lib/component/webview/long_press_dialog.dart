@@ -75,7 +75,7 @@ class _LongPressDialog extends State<LongPressDialog> {
           },
         ));
         list.add(LongPressDialogItem(
-          s.Open_with_Stealth_Mode,
+          s.Open_with_Incognito_Mode,
           onTap: () {
             webProvider.addTab(url: url);
           },

@@ -142,7 +142,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Dogodek podpisa"),
     "Stars": MessageLookupByLibrary.simpleMessage("shrani zaznamek"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("nevidni"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Vrsta teme"),
     "Url": MessageLookupByLibrary.simpleMessage("povezava"),
     "WEB": MessageLookupByLibrary.simpleMessage("Spletna stran"),

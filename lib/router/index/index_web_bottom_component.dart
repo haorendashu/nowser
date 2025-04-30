@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/provider/web_provider.dart';
@@ -28,10 +29,21 @@ class _IndexWebBottomComponent extends State<IndexWebBottomComponent> {
     var padding = mediaQuery.padding;
     var maxWidth = mediaQuery.size.width;
     var titleWidth = maxWidth / 2;
+    var themeData = Theme.of(context);
+    var mediumFontSize = themeData.textTheme.bodyMedium?.fontSize;
 
     return Selector<WebProvider, WebInfo?>(builder: (context, webInfo, child) {
       if (webInfo == null || StringUtil.isBlank(webInfo.url)) {
         return Container();
+      }
+
+      var webStatusIcon =
+          Icon(Icons.lock, color: Colors.green, size: mediumFontSize);
+      if (webInfo.incognitoMode) {
+        webStatusIcon =
+            Icon(MaterialCommunityIcons.incognito, size: mediumFontSize);
+      } else if (!webInfo.isSecure) {
+        webStatusIcon = Icon(Icons.lock_open, size: mediumFontSize);
       }
 
       String title = "";
@@ -92,10 +104,21 @@ class _IndexWebBottomComponent extends State<IndexWebBottomComponent> {
                         bottom: Base.BASE_PADDING_HALF,
                       ),
                       width: titleWidth,
-                      child: Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                right: Base.BASE_PADDING_HALF),
+                            child: webStatusIcon,
+                          ),
+                          Expanded(
+                            child: Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

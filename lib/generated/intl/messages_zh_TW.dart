@@ -98,7 +98,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("顯示更多日誌"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("簽名事件"),
     "Stars": MessageLookupByLibrary.simpleMessage("保存書簽"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("隱身"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("主題類型"),
     "Url": MessageLookupByLibrary.simpleMessage("鏈接"),
     "WEB": MessageLookupByLibrary.simpleMessage("網頁"),

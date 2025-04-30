@@ -2,7 +2,7 @@
     "Back": "Back",
     "Forward": "Forward",
     "Refresh": "Refresh",
-    "Stealth": "Stealth",
+    "Incognito": "Incognito",
     "Comming_soon": "Comming soon...",
     "Bookmarks": "Bookmarks",
     "Stars": "Stars",
@@ -88,7 +88,7 @@
     "Copy_Title": "Copy Title",
     "Copy_Link": "Copy Link",
     "Open_in_a_New_Tab": "Open in a New Tab",
-    "Open_with_Stealth_Mode": "Open with Stealth Mode",
+    "Open_with_Incognito_Mode": "Open with Incognito Mode",
     "Open_backgroundly": "Open backgroundly",
     "Open_image_in_a_New_Tab": "Open image in a new tab",
     "Download_image": "Download image"

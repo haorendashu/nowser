@@ -136,7 +136,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Signatur begivenhed"),
     "Stars": MessageLookupByLibrary.simpleMessage("Gem bogmærker"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Skyldig"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Tematype"),
     "Url": MessageLookupByLibrary.simpleMessage("Links"),
     "WEB": MessageLookupByLibrary.simpleMessage("hjemmeside"),

@@ -146,7 +146,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("Visa fler loggar"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Signaturhändelse"),
     "Stars": MessageLookupByLibrary.simpleMessage("Spara bokmärke"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Osymlig"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Ämnestyp"),
     "Url": MessageLookupByLibrary.simpleMessage("länk"),
     "WEB": MessageLookupByLibrary.simpleMessage("Webbplatser"),

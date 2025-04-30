@@ -108,7 +108,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "Show_more_logs": MessageLookupByLibrary.simpleMessage("추가 로그 표시"),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("서명 이벤트"),
     "Stars": MessageLookupByLibrary.simpleMessage("책갈피 저장"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("은신"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("주제 유형"),
     "Url": MessageLookupByLibrary.simpleMessage("링크"),
     "WEB": MessageLookupByLibrary.simpleMessage("웹 페이지"),

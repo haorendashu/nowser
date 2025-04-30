@@ -150,7 +150,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Подписване на събитие"),
     "Stars": MessageLookupByLibrary.simpleMessage("запис на отметка"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("невидими"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Вид тема"),
     "Url": MessageLookupByLibrary.simpleMessage("връзка"),
     "WEB": MessageLookupByLibrary.simpleMessage("уеб страница"),

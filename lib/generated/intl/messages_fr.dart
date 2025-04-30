@@ -154,7 +154,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Événements signés"),
     "Stars": MessageLookupByLibrary.simpleMessage("Sauvegarder les signets"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Furtivité"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Type de thème"),
     "Url": MessageLookupByLibrary.simpleMessage("Liens"),
     "WEB": MessageLookupByLibrary.simpleMessage("Page Web"),

@@ -138,7 +138,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "Sign_Event": MessageLookupByLibrary.simpleMessage("Podpis události"),
     "Stars": MessageLookupByLibrary.simpleMessage("Uložit záložku"),
-    "Stealth": MessageLookupByLibrary.simpleMessage("Nevytnost"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("Typ tématu"),
     "Url": MessageLookupByLibrary.simpleMessage("odkaz"),
     "WEB": MessageLookupByLibrary.simpleMessage("Webové stránky"),

@@ -70,9 +70,9 @@ class S {
     return Intl.message('Refresh', name: 'Refresh', desc: '', args: []);
   }
 
-  /// `Stealth`
-  String get Stealth {
-    return Intl.message('Stealth', name: 'Stealth', desc: '', args: []);
+  /// `Incognito`
+  String get Incognito {
+    return Intl.message('Incognito', name: 'Incognito', desc: '', args: []);
   }
 
   /// `Comming soon...`
@@ -665,11 +665,11 @@ class S {
     );
   }
 
-  /// `Open with Stealth Mode`
-  String get Open_with_Stealth_Mode {
+  /// `Open with Incognito Mode`
+  String get Open_with_Incognito_Mode {
     return Intl.message(
-      'Open with Stealth Mode',
-      name: 'Open_with_Stealth_Mode',
+      'Open with Incognito Mode',
+      name: 'Open_with_Incognito_Mode',
       desc: '',
       args: [],
     );
