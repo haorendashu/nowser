@@ -80,35 +80,35 @@ class _IndexWebComponent extends State<IndexWebComponent> {
             webProvider.onLoadStop(webInfo);
           });
     } else {
-      webComp = WebViewLinuxComponent(webInfo, (webInfo, controller) {
-        webInfo.controller = WebviewLinuxController(controller);
-        webProvider.updateWebInfo(webInfo);
-      }, (webInfo, controller, title) {
-        if (webInfo.controller is WebviewLinuxController &&
-            StringUtil.isNotBlank(title)) {
-          (webInfo.controller as WebviewLinuxController).setTitle(title!);
-          webInfo.title = title;
-          webProvider.updateWebInfo(webInfo);
-        }
-      }, (webInfo, controller, url) {
-        if (webInfo.controller is WebviewLinuxController &&
-            StringUtil.isNotBlank(url)) {
-          if (url!.startsWith("https")) {
-            webInfo.isSecure = true;
-          } else {
-            webInfo.isSecure = false;
-          }
+      // webComp = WebViewLinuxComponent(webInfo, (webInfo, controller) {
+      //   webInfo.controller = WebviewLinuxController(controller);
+      //   webProvider.updateWebInfo(webInfo);
+      // }, (webInfo, controller, title) {
+      //   if (webInfo.controller is WebviewLinuxController &&
+      //       StringUtil.isNotBlank(title)) {
+      //     (webInfo.controller as WebviewLinuxController).setTitle(title!);
+      //     webInfo.title = title;
+      //     webProvider.updateWebInfo(webInfo);
+      //   }
+      // }, (webInfo, controller, url) {
+      //   if (webInfo.controller is WebviewLinuxController &&
+      //       StringUtil.isNotBlank(url)) {
+      //     if (url!.startsWith("https")) {
+      //       webInfo.isSecure = true;
+      //     } else {
+      //       webInfo.isSecure = false;
+      //     }
 
-          print("url change! $url");
-          (webInfo.controller as WebviewLinuxController).setUrl(url!);
-          webInfo.url = url;
-        }
-      }, (webInfo, controller) async {
-        webInfo.controller ??= WebviewLinuxController(controller);
-        var title = await webInfo.controller!.getTitle();
-        webInfo.title = title;
-        webProvider.onLoadStop(webInfo);
-      });
+      //     print("url change! $url");
+      //     (webInfo.controller as WebviewLinuxController).setUrl(url!);
+      //     webInfo.url = url;
+      //   }
+      // }, (webInfo, controller) async {
+      //   webInfo.controller ??= WebviewLinuxController(controller);
+      //   var title = await webInfo.controller!.getTitle();
+      //   webInfo.title = title;
+      //   webProvider.onLoadStop(webInfo);
+      // });
     }
 
     return Container(
