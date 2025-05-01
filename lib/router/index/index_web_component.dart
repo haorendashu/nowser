@@ -68,14 +68,10 @@ class _IndexWebComponent extends State<IndexWebComponent> {
           },
           onTitleChanged,
           (webInfo, controller, url) {
-            var urlStr = url.toString();
-            if (urlStr.startsWith("https")) {
-              webInfo.isSecure = true;
-            } else {
-              webInfo.isSecure = false;
-            }
+            _checkSecure(webInfo, url.toString());
           },
-          (webInfo, controller) {
+          (webInfo, controller, url) {
+            _checkSecure(webInfo, url.toString());
             webInfo.controller = WebviewController(controller);
             webProvider.onLoadStop(webInfo);
           });
@@ -117,6 +113,14 @@ class _IndexWebComponent extends State<IndexWebComponent> {
       ),
       child: webComp,
     );
+  }
+
+  void _checkSecure(WebInfo webInfo, String url) {
+    if (url.startsWith("https")) {
+      webInfo.isSecure = true;
+    } else {
+      webInfo.isSecure = false;
+    }
   }
 
   void onTitleChanged(

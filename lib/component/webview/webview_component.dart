@@ -29,7 +29,7 @@ class WebViewComponent extends StatefulWidget {
 
   Function(WebInfo, InAppWebViewController, WebUri? url) onLoadStart;
 
-  Function(WebInfo, InAppWebViewController) onLoadStop;
+  Function(WebInfo, InAppWebViewController, WebUri? url) onLoadStop;
 
   WebViewComponent(
     this.webInfo,
@@ -200,7 +200,7 @@ class _WebViewComponent extends State<WebViewComponent>
         onLoadStop: (controller, url) async {
           pullToRefreshController?.endRefreshing();
           addInitScript(controller);
-          widget.onLoadStop(widget.webInfo, controller);
+          widget.onLoadStop(widget.webInfo, controller, url);
         },
         onReceivedError: (controller, request, error) {
           pullToRefreshController?.endRefreshing();
