@@ -22,20 +22,20 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
 
   String? url;
 
-  late FocusNode focusNode;
+  // late FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
-    Future.delayed(const Duration(milliseconds: 350), () {
-      focusNode.requestFocus();
-    });
+    // focusNode = FocusNode();
+    // Future.delayed(const Duration(milliseconds: 350), () {
+    //   focusNode.requestFocus();
+    // });
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    // focusNode.dispose();
     super.dispose();
   }
 
@@ -74,7 +74,8 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
           onSubmit: (value) {
             checkAndBack(value);
           },
-          focusNode: focusNode,
+          autofocus: true,
+          // focusNode: focusNode,
           onSuggestionTap: (suggestion) {
             var item = suggestion.item;
             if (item != null) {
