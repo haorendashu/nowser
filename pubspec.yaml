@@ -37,6 +37,10 @@ dependencies:
     path: packages/nostr_sdk
   relay_sdk:
     path: packages/relay_sdk
+  flutter_nesigner_sdk:
+    path: packages/flutter_nesigner_sdk
+  nesigner_adapter:
+    path: packages/nesigner_adapter
     
   receive_intent: ^0.2.5
   provider: ^6.1.2

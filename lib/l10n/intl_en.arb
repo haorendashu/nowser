@@ -91,5 +91,8 @@
     "Open_with_Incognito_Mode": "Open with Incognito Mode",
     "Open_backgroundly": "Open backgroundly",
     "Open_image_in_a_New_Tab": "Open image in a new tab",
-    "Download_image": "Download image"
+    "Download_image": "Download image",
+    "or": "or",
+    "Login_with_Nesigner": "Login with Nesigner",
+    "Login_fail": "Login_fail"
 }

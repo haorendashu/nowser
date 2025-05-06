@@ -100,6 +100,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Light": MessageLookupByLibrary.simpleMessage("Light"),
     "Local_Relay": MessageLookupByLibrary.simpleMessage("Local Relay"),
     "Login": MessageLookupByLibrary.simpleMessage("Login"),
+    "Login_fail": MessageLookupByLibrary.simpleMessage("Login_fail"),
+    "Login_with_Nesigner": MessageLookupByLibrary.simpleMessage(
+      "Login with Nesigner",
+    ),
     "Name": MessageLookupByLibrary.simpleMessage("Name"),
     "Open_backgroundly": MessageLookupByLibrary.simpleMessage(
       "Open backgroundly",
@@ -145,6 +149,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "event": MessageLookupByLibrary.simpleMessage("event"),
     "no_apps_now": MessageLookupByLibrary.simpleMessage("no apps now"),
     "no_logs_now": MessageLookupByLibrary.simpleMessage("no logs now"),
+    "or": MessageLookupByLibrary.simpleMessage("or"),
     "sign": MessageLookupByLibrary.simpleMessage("sign"),
     "to": MessageLookupByLibrary.simpleMessage("to"),
   };

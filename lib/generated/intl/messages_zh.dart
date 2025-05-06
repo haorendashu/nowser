@@ -82,6 +82,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "Light": MessageLookupByLibrary.simpleMessage("浅色"),
     "Local_Relay": MessageLookupByLibrary.simpleMessage("本地中继"),
     "Login": MessageLookupByLibrary.simpleMessage("登录"),
+    "Login_fail": MessageLookupByLibrary.simpleMessage("登录失败"),
+    "Login_with_Nesigner": MessageLookupByLibrary.simpleMessage(
+      "使用 Nesigner 登录",
+    ),
     "Name": MessageLookupByLibrary.simpleMessage("名称"),
     "Open_backgroundly": MessageLookupByLibrary.simpleMessage("后台打开"),
     "Open_image_in_a_New_Tab": MessageLookupByLibrary.simpleMessage("新标签打开图片"),
@@ -115,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "event": MessageLookupByLibrary.simpleMessage("事件"),
     "no_apps_now": MessageLookupByLibrary.simpleMessage("目前没有应用"),
     "no_logs_now": MessageLookupByLibrary.simpleMessage("目前没有日志"),
+    "or": MessageLookupByLibrary.simpleMessage("或者"),
     "sign": MessageLookupByLibrary.simpleMessage("签名"),
     "to": MessageLookupByLibrary.simpleMessage("做"),
   };

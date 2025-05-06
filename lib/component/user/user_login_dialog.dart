@@ -1,12 +1,19 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/util/router_util.dart';
+import 'package:nesigner_adapter/nesigner_adapter.dart';
+import 'package:hex/hex.dart';
 
 import '../../const/base.dart';
 import '../../generated/l10n.dart';
+import '../cust_state.dart';
+import 'nesigner_login_dialog.dart';
 
 class UserLoginDialog extends StatefulWidget {
   static Future<void> show(BuildContext context) async {
@@ -23,15 +30,39 @@ class UserLoginDialog extends StatefulWidget {
   }
 }
 
-class _UserLoginDialog extends State<UserLoginDialog> {
+class _UserLoginDialog extends CustState<UserLoginDialog> {
   bool obscureText = true;
 
   TextEditingController controller = TextEditingController();
 
   late S s;
 
+  bool existNesigner = false;
+
   @override
-  Widget build(BuildContext context) {
+  Future<void> onReady(BuildContext context) async {
+    if (PlatformUtil.isPC()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        checkNesigner();
+      });
+    }
+  }
+
+  void checkNesigner() {
+    try {
+      var exist = NesignerUtil.checkNesignerExist();
+      if (exist != existNesigner) {
+        setState(() {
+          existNesigner = exist;
+        });
+      }
+    } catch (e) {
+      print("checkNesigner error $e");
+    }
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
     s = S.of(context);
 
@@ -96,6 +127,24 @@ class _UserLoginDialog extends State<UserLoginDialog> {
       ),
     ));
 
+    if (existNesigner) {
+      list.add(Container(
+        child: Text(s.or),
+      ));
+
+      list.add(GestureDetector(
+        onTap: loginWithNesigner,
+        child: Container(
+          child: Text(
+            s.Login_with_Nesigner,
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ));
+    }
+
     var main = Column(
       mainAxisSize: MainAxisSize.min,
       children: list,
@@ -107,6 +156,56 @@ class _UserLoginDialog extends State<UserLoginDialog> {
         child: main,
       ),
     );
+  }
+
+  Future<void> loginWithNesigner() async {
+    var nesignerInputStr = await NesignerLoginDialog.show(context);
+    if (nesignerInputStr == null) {
+      return;
+    }
+
+    var strs = nesignerInputStr.split(":");
+    var aesKey = strs[0];
+
+    var cancelFunc = BotToast.showLoading();
+
+    var nesigner = Nesigner(aesKey);
+    try {
+      if (!(await nesigner.start())) {
+        BotToast.showText(text: "Connect to nesigner fail.");
+        return;
+      }
+
+      if (strs.length > 1) {
+        var privateKey = strs[1];
+        var aesKeyBin = HEX.decode(aesKey);
+        var updateResult =
+            await nesigner.updateKey(Uint8List.fromList(aesKeyBin), privateKey);
+        print("update result $updateResult");
+      }
+
+      var pubkey = await nesigner.getPublicKey();
+      if (StringUtil.isBlank(pubkey)) {
+        try {
+          // login fail, should close the signer.
+          nesigner.close();
+        } catch (e) {
+          print("getPublicKey error $e");
+        }
+        BotToast.showText(text: s.Login_fail);
+        return;
+      }
+
+      var keyStr = Nesigner.genKey(aesKey, pubkey: pubkey);
+      keyProvider.addKey(keyStr);
+    } finally {
+      try {
+        nesigner.close();
+      } catch (e) {}
+      cancelFunc.call();
+    }
+
+    RouterUtil.back(context);
   }
 
   void confirm() {

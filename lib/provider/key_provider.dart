@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:nesigner_adapter/nesigner.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/signer/local_nostr_signer.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
@@ -16,8 +17,18 @@ class KeyProvider extends ChangeNotifier {
 
   Map<String, String> keysMap = {};
 
+  Map<String, Nesigner> _nesignerMap = {};
+
   Future<void> init() async {
     await reload();
+  }
+
+  String? _getPubkeyFromKeyStr(String keyStr) {
+    if (Nesigner.isNesignerKey(keyStr)) {
+      return Nesigner.getPubkeyFromKey(keyStr);
+    }
+
+    return getPublicKey(keyStr);
   }
 
   Future<void> reload() async {
@@ -33,9 +44,11 @@ class KeyProvider extends ChangeNotifier {
         for (var jsonObjItem in jsonObj) {
           if (jsonObjItem is String) {
             keys.add(jsonObjItem);
-            var pubkey = getPublicKey(jsonObjItem);
-            keysMap[pubkey] = jsonObjItem;
-            pubkeys.add(pubkey);
+            var pubkey = _getPubkeyFromKeyStr(jsonObjItem);
+            if (StringUtil.isNotBlank(pubkey)) {
+              keysMap[pubkey!] = jsonObjItem;
+              pubkeys.add(pubkey);
+            }
           }
         }
       }
@@ -49,9 +62,11 @@ class KeyProvider extends ChangeNotifier {
     pubkeys = [];
 
     for (var key in keys) {
-      var pubkey = getPublicKey(key);
-      keysMap[pubkey] = key;
-      pubkeys.add(pubkey);
+      var pubkey = _getPubkeyFromKeyStr(key);
+      if (StringUtil.isNotBlank(pubkey)) {
+        keysMap[pubkey!] = key;
+        pubkeys.add(pubkey);
+      }
     }
   }
 
@@ -76,14 +91,18 @@ class KeyProvider extends ChangeNotifier {
     await storage.write(key: KEY_NAME, value: jsonStr);
   }
 
-  void addKey(String privateKey) {
-    if (exist(privateKey)) {
+  void addKey(String keyStr) {
+    if (exist(keyStr)) {
       return;
     }
 
-    keys.add(privateKey);
-    var pubkey = getPublicKey(privateKey);
-    keysMap[pubkey] = privateKey;
+    var pubkey = _getPubkeyFromKeyStr(keyStr);
+    if (StringUtil.isBlank(pubkey)) {
+      return;
+    }
+
+    keys.add(keyStr);
+    keysMap[pubkey!] = keyStr;
     pubkeys.add(pubkey);
 
     _saveKey();
@@ -92,11 +111,11 @@ class KeyProvider extends ChangeNotifier {
   }
 
   void removeKey(String pubkey) {
-    var privateKey = keysMap.remove(pubkey);
-    if (StringUtil.isNotBlank(privateKey)) {
-      keys.remove(privateKey);
-      pubkeys.remove(pubkey);
+    var keyStr = keysMap.remove(pubkey);
+    if (StringUtil.isNotBlank(keyStr)) {
+      keys.remove(keyStr);
     }
+    pubkeys.remove(pubkey);
 
     _saveKey();
     _regenMemKeys();
@@ -107,10 +126,27 @@ class KeyProvider extends ChangeNotifier {
     return keys.contains(privateKey);
   }
 
-  NostrSigner? getSigner(String pubkey) {
+  Future<NostrSigner?> getSigner(String pubkey) async {
+    var nesigner = _nesignerMap[pubkey];
+    if (nesigner != null) {
+      return nesigner;
+    }
+
     var key = keysMap[pubkey];
     if (StringUtil.isNotBlank(key)) {
-      return LocalNostrSigner(key!);
+      if (Nesigner.isNesignerKey(key!)) {
+        var aesKey = Nesigner.getAesKeyFromKey(key);
+        if (StringUtil.isBlank(aesKey)) {
+          return null;
+        }
+
+        nesigner = Nesigner(aesKey, pubkey: pubkey);
+        await nesigner.start();
+        _nesignerMap[pubkey] = nesigner;
+        return nesigner;
+      }
+
+      return LocalNostrSigner(key);
     }
 
     return null;

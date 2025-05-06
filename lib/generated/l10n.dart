@@ -704,6 +704,26 @@ class S {
       args: [],
     );
   }
+
+  /// `or`
+  String get or {
+    return Intl.message('or', name: 'or', desc: '', args: []);
+  }
+
+  /// `Login with Nesigner`
+  String get Login_with_Nesigner {
+    return Intl.message(
+      'Login with Nesigner',
+      name: 'Login_with_Nesigner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login_fail`
+  String get Login_fail {
+    return Intl.message('Login_fail', name: 'Login_fail', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

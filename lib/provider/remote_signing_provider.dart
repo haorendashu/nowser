@@ -311,7 +311,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       return;
     }
     var remoteSigner = LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
-    var signer = keyProvider.getSigner(remoteSigningInfo.remotePubkey!);
+    var signer = await keyProvider.getSigner(remoteSigningInfo.remotePubkey!);
     if (signer == null) {
       return;
     }

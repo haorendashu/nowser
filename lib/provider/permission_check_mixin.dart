@@ -42,7 +42,7 @@ mixin PermissionCheckMixin {
       return;
     }
 
-    var signer = getSigner(app.pubkey!);
+    var signer = await getSigner(app.pubkey!);
     if (signer == null) {
       saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
       reject(app);
@@ -124,7 +124,7 @@ mixin PermissionCheckMixin {
     return App(appType: appType, code: code);
   }
 
-  NostrSigner? getSigner(String pubkey) {
+  Future<NostrSigner?> getSigner(String pubkey) {
     return keyProvider.getSigner(pubkey);
   }
 }

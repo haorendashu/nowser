@@ -91,5 +91,8 @@
     "Open_with_Incognito_Mode": "无痕模式打开",
     "Open_backgroundly": "后台打开",
     "Open_image_in_a_New_Tab": "新标签打开图片",
-    "Download_image": "下载图片"
+    "Download_image": "下载图片",
+    "or": "或者",
+    "Login_with_Nesigner": "使用 Nesigner 登录",
+    "Login_fail": "登录失败"
 }

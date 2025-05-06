@@ -4,7 +4,9 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_inappwebview_windows
+  flutter_nesigner_sdk
   flutter_secure_storage_windows
+  nesigner_adapter
   screen_retriever_windows
   window_manager
 )
