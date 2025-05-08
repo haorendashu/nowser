@@ -12,4 +12,5 @@ class RouterPath {
   static const String AUTH_LOGS = "/authLogs";
   static const String SETTING = "/setting";
   static const String ABOUT_ME = "/aboutMe";
+  static const String DOWNLOADS = "/downloads";
 }

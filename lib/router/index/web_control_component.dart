@@ -155,7 +155,7 @@ class _WebControlComponent extends State<WebControlComponent> {
                       size: 30,
                     ),
                     onTap: () {
-                      BotToast.showText(text: s.Comming_soon);
+                      RouterUtil.router(context, RouterPath.DOWNLOADS);
                     },
                   ),
                 ),

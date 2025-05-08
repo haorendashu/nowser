@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/download_task_dialog.dart';
 import 'package:nowser/main.dart';
 
 import '../../const/base.dart';
@@ -98,7 +99,9 @@ class _LongPressDialog extends State<LongPressDialog> {
       ));
       list.add(LongPressDialogItem(
         s.Download_image,
-        onTap: () {},
+        onTap: () {
+          DownloadTaskDialog.show(context, src);
+        },
         showBottomLine: false,
       ));
     }
@@ -180,10 +183,10 @@ class LongPressDialogItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        RouterUtil.back(context);
         if (onTap != null) {
           onTap!();
         }
-        RouterUtil.back(context);
       },
       child: Container(
         decoration: BoxDecoration(

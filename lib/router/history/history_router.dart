@@ -86,6 +86,10 @@ class _HistoryRouter extends CustState<HistoryRouter> with DeletableListMixin {
               setState(() {
                 selectedIds.add(history.id!);
               });
+            } else {
+              setState(() {
+                selectedIds.remove(history.id!);
+              });
             }
           });
 

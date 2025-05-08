@@ -7,6 +7,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:nostr_sdk/event.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/download_task_dialog.dart';
 import 'package:nowser/component/webview/long_press_dialog.dart';
 import 'package:nowser/component/webview/web_info.dart';
 import 'package:nowser/const/app_type.dart';
@@ -223,6 +224,11 @@ class _WebViewComponent extends State<WebViewComponent>
                   context, infoType, requestFocusNodeHrefResult.toJson());
             }
           }
+        },
+        onDownloadStartRequest: (InAppWebViewController controller,
+            DownloadStartRequest downloadStartRequest) {
+          String downloadUrl = downloadStartRequest.url.path;
+          DownloadTaskDialog.show(context, downloadUrl);
         },
       ),
     );

@@ -15,6 +15,7 @@ import 'package:nowser/provider/android_signer_mixin.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/provider/build_in_relay_provider.dart';
+import 'package:nowser/provider/download_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:nowser/provider/web_provider.dart';
@@ -24,6 +25,7 @@ import 'package:nowser/router/apps/add_remote_app_router.dart';
 import 'package:nowser/router/apps/apps_router.dart';
 import 'package:nowser/router/auth_log/auth_logs_router.dart';
 import 'package:nowser/router/bookmark/bookmark_router.dart';
+import 'package:nowser/router/downloads/downloads_router.dart';
 import 'package:nowser/router/history/history_router.dart';
 import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
@@ -64,6 +66,8 @@ late Map<String, WidgetBuilder> routes;
 late RootIsolateToken rootIsolateToken;
 
 late BuildInRelayProvider buildInRelayProvider;
+
+late DownloadProvider downloadProvider;
 
 const QuickActions quickActions = QuickActions();
 
@@ -135,6 +139,7 @@ Future<void> doInit() async {
   settingProvider = futureResultList[0] as SettingProvider;
   webProvider = WebProvider();
   remoteSigningProvider = RemoteSigningProvider();
+  downloadProvider = DownloadProvider();
 }
 
 class MyApp extends StatefulWidget {
@@ -197,6 +202,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.AUTH_LOGS: (context) => AuthLogsRouter(),
       RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
       RouterPath.ABOUT_ME: (context) => AboutMeRouter(),
+      RouterPath.DOWNLOADS: (context) => DownloadsRouter(),
     };
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -228,6 +234,9 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<BookmarkProvider>.value(
           value: bookmarkProvider,
+        ),
+        ListenableProvider<DownloadProvider>.value(
+          value: downloadProvider,
         ),
       ],
       child: MaterialApp(

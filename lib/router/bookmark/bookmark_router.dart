@@ -105,6 +105,10 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
               setState(() {
                 selectedIds.add(bookmark.id!);
               });
+            } else {
+              setState(() {
+                selectedIds.remove(bookmark.id!);
+              });
             }
           });
 
