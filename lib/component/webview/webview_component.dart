@@ -227,7 +227,7 @@ class _WebViewComponent extends State<WebViewComponent>
         },
         onDownloadStartRequest: (InAppWebViewController controller,
             DownloadStartRequest downloadStartRequest) {
-          String downloadUrl = downloadStartRequest.url.path;
+          String downloadUrl = downloadStartRequest.url.toString();
           DownloadTaskDialog.show(context, downloadUrl);
         },
       ),

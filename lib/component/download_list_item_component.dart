@@ -1,10 +1,14 @@
 import 'package:background_downloader/background_downloader.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/util/file_size_util.dart';
 import 'package:path/path.dart' as path;
+
+import '../generated/l10n.dart';
 
 class DownloadListItemComponent extends StatefulWidget {
   // DownloadLog downloadLog;
@@ -21,9 +25,12 @@ class DownloadListItemComponent extends StatefulWidget {
 }
 
 class _DownloadListItemComponent extends State<DownloadListItemComponent> {
+  late S s;
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
+    s = S.of(context);
 
     var taskRecord = widget.taskRecord;
 
@@ -69,11 +76,33 @@ class _DownloadListItemComponent extends State<DownloadListItemComponent> {
       );
     }
 
-    Widget rightIcon = GestureDetector(
-      onTap: () {},
+    Widget rightIcon = PopupMenuButton(
       child: const Icon(
         Icons.more_horiz,
       ),
+      itemBuilder: (context) {
+        return <PopupMenuEntry>[
+          PopupMenuItem(
+            child: Text(s.Copy_Link),
+            onTap: () {
+              Clipboard.setData(
+                  ClipboardData(text: widget.taskRecord.task.url));
+              BotToast.showText(text: s.Copy_success);
+            },
+          ),
+          PopupMenuItem(
+            child: Text(
+              s.Delete,
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+            onTap: () {
+              downloadProvider.deleteTasks([widget.taskRecord.taskId]);
+            },
+          ),
+        ];
+      },
     );
     if (taskRecord.status == TaskStatus.running) {
       rightIcon = GestureDetector(
@@ -83,7 +112,7 @@ class _DownloadListItemComponent extends State<DownloadListItemComponent> {
           }
         },
         child: const Icon(
-          Icons.stop_circle_outlined,
+          Icons.pause_circle_outline,
         ),
       );
     } else if (taskRecord.status == TaskStatus.paused) {

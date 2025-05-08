@@ -43,7 +43,7 @@ class DownloadProvider extends ChangeNotifier {
 
     var downloadDirPath = downloadDir.absolute.path;
 
-    print("url $url fileName $fileName downloadDirPath $downloadDirPath");
+    // print("url $url fileName $fileName downloadDirPath $downloadDirPath");
 
     final task = DownloadTask(
       url: url,
@@ -56,7 +56,7 @@ class DownloadProvider extends ChangeNotifier {
       allowPause: true,
     );
 
-    var downloadResult = await fileDownloader.download(
+    fileDownloader.download(
       task,
       onProgress: (progress) {
         print('Progress: ${progress * 100}%');
@@ -64,11 +64,12 @@ class DownloadProvider extends ChangeNotifier {
       },
       onStatus: (status) {
         print('Status: $status');
+        if (status == TaskStatus.running) {
+          reloadData();
+        }
         notifyListeners();
       },
     );
-
-    await reloadData();
     notifyListeners();
   }
 }

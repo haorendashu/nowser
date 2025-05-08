@@ -58,6 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Decrypt04_name": MessageLookupByLibrary.simpleMessage("解密 (NIP-04)"),
     "Decrypt44_name": MessageLookupByLibrary.simpleMessage("解密 (NIP-44)"),
     "Decrypt_zap_event": MessageLookupByLibrary.simpleMessage("解密私密Zap"),
+    "Delete": MessageLookupByLibrary.simpleMessage("删除"),
     "Desktop": MessageLookupByLibrary.simpleMessage("桌面"),
     "Download_image": MessageLookupByLibrary.simpleMessage("下载图片"),
     "Downloads": MessageLookupByLibrary.simpleMessage("下载"),

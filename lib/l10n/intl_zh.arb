@@ -94,5 +94,6 @@
     "Download_image": "下载图片",
     "or": "或者",
     "Login_with_Nesigner": "使用 Nesigner 登录",
-    "Login_fail": "登录失败"
+    "Login_fail": "登录失败",
+    "Delete": "删除"
 }

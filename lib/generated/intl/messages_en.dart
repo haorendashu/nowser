@@ -66,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Decrypt_zap_event": MessageLookupByLibrary.simpleMessage(
       "Decrypt zap event",
     ),
+    "Delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "Desktop": MessageLookupByLibrary.simpleMessage("Desktop"),
     "Download_image": MessageLookupByLibrary.simpleMessage("Download image"),
     "Downloads": MessageLookupByLibrary.simpleMessage("Downloads"),

@@ -724,6 +724,11 @@ class S {
   String get Login_fail {
     return Intl.message('Login_fail', name: 'Login_fail', desc: '', args: []);
   }
+
+  /// `Delete`
+  String get Delete {
+    return Intl.message('Delete', name: 'Delete', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
