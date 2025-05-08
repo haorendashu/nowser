@@ -71,15 +71,14 @@ class _HistoryRouter extends CustState<HistoryRouter> with DeletableListMixin {
           }
 
           Widget main = UrlListItemComponnet(
-            selectable: deleting,
-            selected: selectedIds.contains(history.id),
             image: history.favicon,
             title: history.title ?? "",
             url: history.url ?? "",
             dateTime: history.createdAt,
           );
 
-          main = wrapListItem(main, onTap: () {
+          main =
+              wrapListItem(main, selectedIds.contains(history.id), onTap: () {
             RouterUtil.back(context, history.url);
           }, onSelect: () {
             if (!selectedIds.contains(history.id)) {

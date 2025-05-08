@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_nesigner_sdk
   flutter_secure_storage_linux
   nesigner_adapter
+  open_file_linux
   screen_retriever_linux
   window_manager
 )

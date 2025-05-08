@@ -3,10 +3,6 @@ import 'package:nowser/component/image_component.dart';
 import 'package:nowser/const/base.dart';
 
 class UrlListItemComponnet extends StatefulWidget {
-  bool selected;
-
-  bool selectable;
-
   String? image;
 
   String title;
@@ -16,8 +12,6 @@ class UrlListItemComponnet extends StatefulWidget {
   int? dateTime;
 
   UrlListItemComponnet({
-    this.selected = false,
-    this.selectable = false,
     this.image,
     required this.title,
     required this.url,
@@ -37,14 +31,6 @@ class _UrlListItemComponnet extends State<UrlListItemComponnet> {
     var smallFontSize = themeData.textTheme.bodySmall!.fontSize;
 
     List<Widget> list = [];
-    if (widget.selectable) {
-      list.add(Container(
-        child: Checkbox(
-          value: widget.selected,
-          onChanged: (bool? value) {},
-        ),
-      ));
-    }
 
     Widget iconWidget = Icon(
       Icons.image,

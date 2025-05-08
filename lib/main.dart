@@ -140,6 +140,7 @@ Future<void> doInit() async {
   webProvider = WebProvider();
   remoteSigningProvider = RemoteSigningProvider();
   downloadProvider = DownloadProvider();
+  await downloadProvider.init();
 }
 
 class MyApp extends StatefulWidget {

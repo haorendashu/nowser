@@ -1,45 +1,41 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:nowser/data/download_log_db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:background_downloader/background_downloader.dart';
-
-import '../data/download_log.dart';
 
 class DownloadProvider extends ChangeNotifier {
   FileDownloader fileDownloader = FileDownloader();
 
-  List<DownloadLog> currentDownloadLogs = [];
+  List<TaskRecord> _allRecords = [];
 
-  Map<String, DownloadTask> taskMap = {};
+  List<TaskRecord> get allRecords => _allRecords;
 
-  // Future<void> init() async {
-  //   await _reloadData();
-  // }
-
-  // Future<void> _reloadData() async {
-  //   // _downloadLogs = await BookmarkDB.all();
-  // }
-
-  // Future<void> reload() async {
-  //   await _reloadData();
-  //   notifyListeners();
-  // }
-
-  void pauseDownload(String taskId) {
-    fileDownloader.database.allRecords();
-    var downloadTask = taskMap[taskId];
-    if (downloadTask != null) {
-      fileDownloader.pause(downloadTask);
-    }
+  Future<void> reloadData() async {
+    _allRecords = await fileDownloader.database.allRecords();
   }
 
-  void resumeDownload(String taskId) {
-    var downloadTask = taskMap[taskId];
-    if (downloadTask != null) {
-      fileDownloader.resume(downloadTask);
-    }
+  Future<void> init() async {
+    await fileDownloader.start();
+    await reloadData();
+  }
+
+  Future<void> deleteTasks(List<String> taskIds) async {
+    await fileDownloader.database.deleteRecordsWithIds(taskIds);
+    await reloadData();
+    notifyListeners();
+  }
+
+  Future<void> pauseDownload(DownloadTask downloadTask) async {
+    fileDownloader.pause(downloadTask);
+    await reloadData();
+    notifyListeners();
+  }
+
+  Future<void> resumeDownload(DownloadTask downloadTask) async {
+    fileDownloader.resume(downloadTask);
+    await reloadData();
+    notifyListeners();
   }
 
   Future<void> startDownload(String url, String fileName) async {
@@ -60,41 +56,19 @@ class DownloadProvider extends ChangeNotifier {
       allowPause: true,
     );
 
-    var downloadLog = DownloadLog(
-      url: url,
-      filePath:
-          "$downloadDirPath${Platform.pathSeparator}downloads${Platform.pathSeparator}$fileName",
-      fileName: fileName,
-      taskId: task.taskId,
-      progress: 0,
-    );
-
-    currentDownloadLogs.add(downloadLog);
-    taskMap[task.taskId] = task;
-
-    // Start download, and wait for result. Show progress and status changes
-    // while downloading
     var downloadResult = await fileDownloader.download(
       task,
       onProgress: (progress) {
         print('Progress: ${progress * 100}%');
-        downloadLog.progress = progress;
         notifyListeners();
       },
       onStatus: (status) {
         print('Status: $status');
+        notifyListeners();
       },
     );
 
-    if (downloadResult.status == TaskStatus.complete) {
-      var file = File(downloadLog.filePath!);
-      downloadLog.fileSize = file.lengthSync();
-      downloadLog.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-
-      DownloadLogDB.insert(downloadLog);
-    }
-
-    currentDownloadLogs.remove(downloadLog);
+    await reloadData();
     notifyListeners();
   }
 }

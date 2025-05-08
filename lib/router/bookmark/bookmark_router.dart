@@ -61,8 +61,6 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
           var bookmark = bookmarks[index];
 
           Widget main = UrlListItemComponnet(
-            selectable: deleting,
-            selected: selectedIds.contains(bookmark.id),
             image: bookmark.favicon,
             title: bookmark.title ?? "",
             url: bookmark.url ?? "",
@@ -98,7 +96,8 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
             child: main,
           );
 
-          main = wrapListItem(main, onTap: () {
+          main =
+              wrapListItem(main, selectedIds.contains(bookmark.id), onTap: () {
             RouterUtil.back(context, bookmark.url);
           }, onSelect: () {
             if (!selectedIds.contains(bookmark.id)) {

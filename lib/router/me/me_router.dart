@@ -9,7 +9,6 @@ import 'package:nowser/const/router_path.dart';
 import 'package:nowser/data/auth_log_db.dart';
 import 'package:nowser/data/bookmark_db.dart';
 import 'package:nowser/data/browser_history_db.dart';
-import 'package:nowser/data/download_log_db.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
@@ -54,7 +53,7 @@ class _MeRouter extends CustState<MeRouter> {
   Future<void> updateNumber() async {
     bookmarkNum = await BookmarkDB.total();
     historyNum = await BrowserHistoryDB.total();
-    downloadNum = await DownloadLogDB.total();
+    downloadNum = downloadProvider.allRecords.length;
     setState(() {});
   }
 

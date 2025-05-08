@@ -1,62 +1,72 @@
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:nowser/const/base.dart';
-import 'package:nowser/data/download_log.dart';
 import 'package:nowser/main.dart';
 import 'package:nowser/util/file_size_util.dart';
 import 'package:path/path.dart' as path;
 
-class DownloadListItemComponent extends StatelessWidget {
-  DownloadLog downloadLog;
+class DownloadListItemComponent extends StatefulWidget {
+  // DownloadLog downloadLog;
+  TaskRecord taskRecord;
 
-  DownloadListItemComponent(this.downloadLog);
+  DownloadListItemComponent({
+    required this.taskRecord,
+  });
 
+  @override
+  State<StatefulWidget> createState() {
+    return _DownloadListItemComponent();
+  }
+}
+
+class _DownloadListItemComponent extends State<DownloadListItemComponent> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
+
+    var taskRecord = widget.taskRecord;
 
     Widget fileIconWidget = const Icon(
       AntDesign.file1,
       size: 40,
     );
-    if (downloadLog.fileName != null) {
-      var mimeType = getFileType(downloadLog.fileName!);
-      if (mimeType.contains("image")) {
-        fileIconWidget = const Icon(
-          Icons.image,
-          size: 40,
-        );
-      } else if (mimeType.contains("markdown")) {
-        fileIconWidget = const Icon(
-          AntDesign.file_markdown,
-          size: 40,
-        );
-      } else if (mimeType.contains("document")) {
-        fileIconWidget = const Icon(
-          AntDesign.filetext1,
-          size: 40,
-        );
-      } else if (mimeType.contains("video")) {
-        fileIconWidget = const Icon(
-          Icons.movie,
-          size: 40,
-        );
-      } else if (mimeType.contains("audio")) {
-        fileIconWidget = const Icon(
-          Icons.music_note,
-          size: 40,
-        );
-      } else if (mimeType.contains("archive")) {
-        fileIconWidget = const Icon(
-          Icons.folder_zip,
-          size: 40,
-        );
-      } else if (mimeType.contains("apk")) {
-        fileIconWidget = const Icon(
-          AntDesign.android,
-          size: 40,
-        );
-      }
+    var mimeType = getFileType(widget.taskRecord.task.filename);
+    if (mimeType.contains("image")) {
+      fileIconWidget = const Icon(
+        Icons.image,
+        size: 40,
+      );
+    } else if (mimeType.contains("markdown")) {
+      fileIconWidget = const Icon(
+        AntDesign.file_markdown,
+        size: 40,
+      );
+    } else if (mimeType.contains("document")) {
+      fileIconWidget = const Icon(
+        AntDesign.filetext1,
+        size: 40,
+      );
+    } else if (mimeType.contains("video")) {
+      fileIconWidget = const Icon(
+        Icons.movie,
+        size: 40,
+      );
+    } else if (mimeType.contains("audio")) {
+      fileIconWidget = const Icon(
+        Icons.music_note,
+        size: 40,
+      );
+    } else if (mimeType.contains("archive")) {
+      fileIconWidget = const Icon(
+        Icons.folder_zip,
+        size: 40,
+      );
+    } else if (mimeType.contains("apk")) {
+      fileIconWidget = const Icon(
+        AntDesign.android,
+        size: 40,
+      );
     }
 
     Widget rightIcon = GestureDetector(
@@ -65,27 +75,43 @@ class DownloadListItemComponent extends StatelessWidget {
         Icons.more_horiz,
       ),
     );
-    if (downloadLog.progress != null) {
+    if (taskRecord.status == TaskStatus.running) {
       rightIcon = GestureDetector(
-        onTap: () {},
+        onTap: () {
+          if (taskRecord.task is DownloadTask) {
+            downloadProvider.pauseDownload(taskRecord.task as DownloadTask);
+          }
+        },
         child: const Icon(
           Icons.stop_circle_outlined,
         ),
       );
+    } else if (taskRecord.status == TaskStatus.paused) {
+      rightIcon = GestureDetector(
+        onTap: () {
+          if (taskRecord.task is DownloadTask) {
+            downloadProvider.resumeDownload(taskRecord.task as DownloadTask);
+          }
+        },
+        child: const Icon(
+          Icons.play_arrow,
+        ),
+      );
     }
+    // print(taskRecord.status);
 
     Widget fileStatusWidget = Container();
-    if (downloadLog.progress != null) {
+    if (taskRecord.progress > 0 && taskRecord.progress < 1) {
       fileStatusWidget = Text(
-        "${(downloadLog.progress! * 100).toStringAsFixed(1)}%",
+        "${(taskRecord.progress * 100).toStringAsFixed(1)}%",
         style: TextStyle(
           fontSize: themeData.textTheme.bodySmall!.fontSize,
           color: themeData.hintColor,
         ),
       );
-    } else if (downloadLog.fileSize != null) {
+    } else if (taskRecord.expectedFileSize > 0) {
       fileStatusWidget = Text(
-        FileSizeUtil.getFileSize(downloadLog.fileSize!),
+        FileSizeUtil.getFileSize(taskRecord.expectedFileSize),
         style: TextStyle(
           fontSize: themeData.textTheme.bodySmall!.fontSize,
           color: themeData.hintColor,
@@ -113,7 +139,7 @@ class DownloadListItemComponent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    downloadLog.fileName ?? "unknow_file",
+                    taskRecord.task.filename,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

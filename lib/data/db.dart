@@ -2,7 +2,7 @@ import 'package:nostr_sdk/utils/db_util.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DB {
-  static const _VERSION = 3;
+  static const _VERSION = 2;
 
   static const _dbName = "nowser.db";
 
@@ -41,9 +41,6 @@ class DB {
         "create table bookmark(id             integer not null constraint bookmark_pk primary key autoincrement,title          text,url            text    not null,favicon        text,weight         integer,added_to_index integer, added_to_qa integer,created_at     integer);");
     db.execute(
         "create table browser_history(id         integer not null constraint browser_history_pk primary key autoincrement,title      text,url        text    not null,favicon    text,created_at integer);");
-
-    db.execute(
-        "create table download_log(id         integer constraint download_log_pk primary key autoincrement,url        text,file_path  text,file_name  TEXT,file_size  integer,created_at integer);");
   }
 
   static Future<void> _onUpgrade(
@@ -51,11 +48,6 @@ class DB {
     if (oldVersion == 1) {
       db.execute(
           "alter table bookmark add added_to_qa integer after added_to_index");
-    }
-
-    if (oldVersion <= 2) {
-      db.execute(
-          "create table download_log(id         integer constraint download_log_pk primary key autoincrement,url        text,file_path  text,file_name  TEXT,file_size  integer,created_at integer);");
     }
   }
 

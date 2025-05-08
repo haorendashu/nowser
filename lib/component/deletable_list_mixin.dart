@@ -11,6 +11,7 @@ mixin DeletableListMixin<T extends StatefulWidget> on State<T> {
         ? [
             GestureDetector(
               onTap: delete,
+              behavior: HitTestBehavior.translucent,
               child: Container(
                 padding: const EdgeInsets.all(Base.BASE_PADDING),
                 child: Icon(Icons.delete_sweep_outlined),
@@ -20,20 +21,29 @@ mixin DeletableListMixin<T extends StatefulWidget> on State<T> {
         : [];
   }
 
-  Widget wrapListItem(Widget child,
+  Widget wrapListItem(Widget child, bool selected,
       {required Function onTap, required Function onSelect}) {
     if (deleting) {
       return GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () {
           onSelect();
         },
-        child: child,
+        child: Row(
+          children: [
+            Container(
+              child: Checkbox(value: selected, onChanged: (bool? value) {}),
+            ),
+            Expanded(child: child),
+          ],
+        ),
       );
     } else {
       return GestureDetector(
         onTap: () {
           onTap();
         },
+        behavior: HitTestBehavior.translucent,
         onLongPress: () {
           setState(() {
             deleting = true;
