@@ -2,7 +2,7 @@ nowser:
   android:
     identifier: com.github.haorendashu.nowser
     name: Nowser
-    description: A nostr signing project.
+    description: A secure nostr key management and signing app for iOS, Android, MacOS, Windows and Linux that supports multiple authentication methods:\n\n- **NIP-07**, Acts as a browser extension replacement for mobile, allowing you to securely sign into nostr web apps\n- **NIP-46**, Functions as a remote signer (like a "bunker"), letting you keep your private keys on your phone while signing requests from your desktop\n- **NIP-55**, Supports Android's native key management system for secure key storage (similar to Apple Keychain)\n- **Nesigner**, A hardware signer allows you to store and process sign requests in hardware
     repository: https://github.com/haorendashu/nowser
     license: GPL-3.0
     builder: npub19yeqjawls407xjnmgkk6yss7936pcd7qzd5srlj8wye6j8433vrsjazqwk

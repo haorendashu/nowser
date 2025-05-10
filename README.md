@@ -4,11 +4,12 @@
 
 # Nowser
 
-A secure nostr key management and signing app for iOS and Android that supports multiple authentication methods:
+A secure nostr key management and signing app for iOS, Android, MacOS, Windows and Linux that supports multiple authentication methods:
 
 - **NIP-07**: Acts as a browser extension replacement for mobile, allowing you to securely sign into nostr web apps
 - **NIP-46**: Functions as a remote signer (like a "bunker"), letting you keep your private keys on your phone while signing requests from your desktop
 - **NIP-55**: Supports Android's native key management system for secure key storage (similar to Apple Keychain)
+- **Nesigner**: A hardware signer allows you to store and process sign requests in hardware
 
 This app helps you manage your nostr identity securely across devices while maintaining control of your private keys. It's designed to be a mobile-first solution for the growing nostr ecosystem.
 
