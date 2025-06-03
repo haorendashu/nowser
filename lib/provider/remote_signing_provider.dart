@@ -231,7 +231,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       }
 
       checkPermission(context!, appType, code, authType,
-          eventKind: eventKind, authDetail: authDetail, (app) {
+          eventKind: eventKind, authDetail: authDetail, (app, rejectType) {
         response = NostrRemoteResponse(request.id, "", error: "forbid");
         sendResponse(
             relays, response, signerSigner, localPubkey, remoteSignerPubkey);

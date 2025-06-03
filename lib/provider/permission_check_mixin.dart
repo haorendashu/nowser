@@ -4,6 +4,7 @@ import 'package:nowser/component/auth_dialog/auth_app_connect_dialog.dart';
 import 'package:nowser/component/auth_dialog/auth_dialog.dart';
 import 'package:nowser/component/user/user_login_dialog.dart';
 import 'package:nowser/const/auth_result.dart';
+import 'package:nowser/const/reject_type.dart';
 import 'package:nowser/data/auth_log.dart';
 import 'package:nowser/data/auth_log_db.dart';
 import 'package:nowser/main.dart';
@@ -12,9 +13,15 @@ import '../const/connect_type.dart';
 import '../data/app.dart';
 
 mixin PermissionCheckMixin {
-  Future<void> checkPermission(BuildContext? context, int appType, String code,
-      int authType, Function(App?) reject, Function(App, NostrSigner) confirm,
-      {int? eventKind, String? authDetail}) async {
+  Future<void> checkPermission(
+      BuildContext? context,
+      int appType,
+      String code,
+      int authType,
+      Function(App?, int rejectType) reject,
+      Function(App, NostrSigner) confirm,
+      {int? eventKind,
+      String? authDetail}) async {
     if (keyProvider.keys.isEmpty) {
       // should add a key first
       if (context != null) {
@@ -38,14 +45,14 @@ mixin PermissionCheckMixin {
 
     if (app == null) {
       // not allow connect
-      reject(null);
+      reject(null, RejectType.OTHERS);
       return;
     }
 
     var signer = await getSigner(app.pubkey!);
     if (signer == null) {
       saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
-      reject(app);
+      reject(app, RejectType.OTHERS);
       return;
     }
 
@@ -55,7 +62,7 @@ mixin PermissionCheckMixin {
         saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
       } catch (e) {
         print("confirm error $e");
-        reject(app);
+        reject(app, RejectType.OTHERS);
         saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
       }
       return;
@@ -69,13 +76,13 @@ mixin PermissionCheckMixin {
           saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
         } catch (e) {
           print("confirm error $e");
-          reject(app);
+          reject(app, RejectType.OTHERS);
           saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
         }
         return;
       } else if (permissionCheckResult == AuthResult.REJECT) {
         saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
-        reject(app);
+        reject(app, RejectType.REJECT);
         return;
       }
 
@@ -88,17 +95,19 @@ mixin PermissionCheckMixin {
             saveAuthLog(app, authType, eventKind, authDetail, AuthResult.OK);
           } catch (e) {
             print("confirm error $e");
-            reject(app);
+            reject(app, RejectType.OTHERS);
             saveAuthLog(
                 app, authType, eventKind, authDetail, AuthResult.REJECT);
           }
           return;
+        } else if (authResult == AuthResult.REJECT) {
+          // return reject here ?
         }
       }
     }
 
     saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
-    reject(app);
+    reject(app, RejectType.OTHERS);
     return;
   }
 

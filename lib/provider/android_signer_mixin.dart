@@ -109,7 +109,7 @@ mixin AndroidSignerMixin on PermissionCheckMixin {
             }
 
             checkPermission(context, AppType.ANDROID_APP, code!, authType,
-                eventKind: eventKind, authDetail: playload, (app) {
+                eventKind: eventKind, authDetail: playload, (app, rejectType) {
               // this place should do some about reject
               if (app != null) {
                 saveAuthLog(

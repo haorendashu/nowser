@@ -10,6 +10,7 @@ import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nostr_sdk/zap/private_zap.dart';
 import 'package:nowser/const/app_type.dart';
+import 'package:nowser/const/reject_type.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 
 import '../const/auth_result.dart';
@@ -148,13 +149,14 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
 
     App? app;
     NostrSigner? signer;
-    var complete = Completer();
+    var complete = Completer<int?>();
 
-    rejectFunc(_app) {
+    rejectFunc(_app, rejectType) {
       if (_app != null) {
         saveAuthLog(_app, authType, eventKind, authDetail, AuthResult.REJECT);
       }
-      complete.complete();
+
+      complete.complete(rejectType);
     }
 
     confirmFunc(_app, _signer) {
@@ -166,8 +168,17 @@ class AndroidSignerContentResolverProvider extends AndroidContentProvider
     checkPermission(null, appType, code!, authType, rejectFunc, confirmFunc,
         eventKind: eventKind, authDetail: authDetail);
 
-    await complete.future;
+    var rejectType = await complete.future;
     if (signer == null || app == null) {
+      if (rejectType == AuthResult.REJECT) {
+        // if there is a rejected colum, the app will not open the signer app.
+        data = MatrixCursorData(
+            columnNames: ["rejected"], notificationUris: [uri]);
+        data.addRow(["Could not decrypt the message"]);
+        return data;
+      }
+
+      /// The app will open the signer with to ask sign request again.
       return null;
     }
 
