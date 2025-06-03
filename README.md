@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./assets/imgs/logo/logo_android.png" alt="Nostrmo Logo" title="Nostrmo logo" width="80"/>
+<img src="./assets/imgs/logo/logo_android.png" alt="Nowser Logo" title="Nowser logo" width="80"/>
 
 # Nowser
 
