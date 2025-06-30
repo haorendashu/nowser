@@ -135,12 +135,12 @@ class KeyProvider extends ChangeNotifier {
     var key = keysMap[pubkey];
     if (StringUtil.isNotBlank(key)) {
       if (Nesigner.isNesignerKey(key!)) {
-        var aesKey = Nesigner.getAesKeyFromKey(key);
-        if (StringUtil.isBlank(aesKey)) {
+        var pinCode = Nesigner.getPinCodeFromKey(key);
+        if (StringUtil.isBlank(pinCode)) {
           return null;
         }
 
-        nesigner = Nesigner(aesKey, pubkey: pubkey);
+        nesigner = Nesigner(pinCode, pubkey: pubkey);
         await nesigner.start();
         _nesignerMap[pubkey] = nesigner;
         return nesigner;

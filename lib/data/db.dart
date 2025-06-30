@@ -1,6 +1,8 @@
 import 'package:nostr_sdk/utils/db_util.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../const/base.dart';
+
 class DB {
   static const _VERSION = 2;
 
@@ -9,7 +11,7 @@ class DB {
   static Database? _database;
 
   static init() async {
-    String path = await DBUtil.getPath(_dbName);
+    String path = await DBUtil.getPath(Base.APP_NAME, _dbName);
     print("path $path");
 
     try {

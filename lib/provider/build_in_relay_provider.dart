@@ -84,7 +84,7 @@ class BuildInRelayProvider extends ChangeNotifier {
 
   RelayManager _getRelayManager() {
     if (_relayManager == null) {
-      _relayManager = RelayManager(rootIsolateToken);
+      _relayManager = RelayManager(rootIsolateToken, Base.APP_NAME);
       _relayManager!.openFilterCheck = true;
       _relayManager!.openDB = false;
       // _relayManager!.trafficCounter = trafficCounterProvider;

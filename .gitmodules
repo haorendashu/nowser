@@ -13,3 +13,6 @@
 [submodule "packages/libusb_ffi"]
 	path = packages/libusb_ffi
 	url = git@github.com:haorendashu/libusb_ffi.git
+[submodule "packages/relay_isar_db"]
+	path = packages/relay_isar_db
+	url = git@github.com:haorendashu/relay_isar_db.git

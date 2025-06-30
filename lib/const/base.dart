@@ -11,5 +11,6 @@ class Base {
 
   static double BASE_FONT_SIZE = 15;
 
-  static String USER_AGENT = "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}";
+  static String USER_AGENT =
+      "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}";
 }

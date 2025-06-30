@@ -48,9 +48,9 @@ class _UserLoginDialog extends CustState<UserLoginDialog> {
     }
   }
 
-  void checkNesigner() {
+  Future<void> checkNesigner() async {
     try {
-      var exist = NesignerUtil.checkNesignerExist();
+      var exist = await NesignerUtil.checkNesignerExist();
       if (exist != existNesigner) {
         setState(() {
           existNesigner = exist;
@@ -165,11 +165,11 @@ class _UserLoginDialog extends CustState<UserLoginDialog> {
     }
 
     var strs = nesignerInputStr.split(":");
-    var aesKey = strs[0];
+    var pinCode = strs[0];
 
     var cancelFunc = BotToast.showLoading();
 
-    var nesigner = Nesigner(aesKey);
+    var nesigner = Nesigner(pinCode);
     try {
       if (!(await nesigner.start())) {
         BotToast.showText(text: "Connect to nesigner fail.");
@@ -178,9 +178,7 @@ class _UserLoginDialog extends CustState<UserLoginDialog> {
 
       if (strs.length > 1) {
         var privateKey = strs[1];
-        var aesKeyBin = HEX.decode(aesKey);
-        var updateResult =
-            await nesigner.updateKey(Uint8List.fromList(aesKeyBin), privateKey);
+        var updateResult = await nesigner.updateKey(pinCode, privateKey);
         print("update result $updateResult");
       }
 
@@ -196,7 +194,7 @@ class _UserLoginDialog extends CustState<UserLoginDialog> {
         return;
       }
 
-      var keyStr = Nesigner.genKey(aesKey, pubkey: pubkey);
+      var keyStr = Nesigner.genKey(pinCode, pubkey: pubkey);
       keyProvider.addKey(keyStr);
     } finally {
       try {

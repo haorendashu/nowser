@@ -8,8 +8,10 @@ import Foundation
 import cryptography_flutter
 import device_info_plus
 import flutter_inappwebview_macos
+import flutter_libserialport
 import flutter_nesigner_sdk
 import flutter_secure_storage_macos
+import isar_flutter_libs
 import nesigner_adapter
 import open_file_mac
 import path_provider_foundation
@@ -22,8 +24,10 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   CryptographyFlutterPlugin.register(with: registry.registrar(forPlugin: "CryptographyFlutterPlugin"))
   DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
   InAppWebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "InAppWebViewFlutterPlugin"))
+  FlutterLibserialportPlugin.register(with: registry.registrar(forPlugin: "FlutterLibserialportPlugin"))
   FlutterNesignerSdkPlugin.register(with: registry.registrar(forPlugin: "FlutterNesignerSdkPlugin"))
   FlutterSecureStoragePlugin.register(with: registry.registrar(forPlugin: "FlutterSecureStoragePlugin"))
+  IsarFlutterLibsPlugin.register(with: registry.registrar(forPlugin: "IsarFlutterLibsPlugin"))
   NesignerAdapterPlugin.register(with: registry.registrar(forPlugin: "NesignerAdapterPlugin"))
   OpenFilePlugin.register(with: registry.registrar(forPlugin: "OpenFilePlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
