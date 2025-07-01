@@ -41,7 +41,7 @@ class _UserLoginDialog extends CustState<UserLoginDialog> {
 
   @override
   Future<void> onReady(BuildContext context) async {
-    if (PlatformUtil.isPC()) {
+    if (PlatformUtil.isPC() || PlatformUtil.isAndroid()) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         checkNesigner();
       });
