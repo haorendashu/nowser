@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/data/bookmark.dart';
@@ -22,12 +24,11 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
 
   String? url;
 
-  // late FocusNode focusNode;
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    // focusNode = FocusNode();
     // Future.delayed(const Duration(milliseconds: 350), () {
     //   focusNode.requestFocus();
     // });
@@ -61,52 +62,66 @@ class _WebUrlInputRouter extends State<WebUrlInputRouter> {
         item: bookmark,
       ));
     }
+    Widget inputField = SearchField(
+      suggestions: suggestions,
+      controller: textEditingController,
+      suggestionDirection: SuggestionDirection.up,
+      searchInputDecoration: SearchInputDecoration(
+        border: OutlineInputBorder(),
+      ),
+      onSubmit: (value) {
+        checkAndBack(value);
+      },
+      autofocus: true,
+      // focusNode: focusNode,
+      onSuggestionTap: (suggestion) {
+        var item = suggestion.item;
+        if (item != null) {
+          checkAndBack(item.url);
+        }
+      },
+      onSearchTextChanged: (input) {
+        print("onSearchTextChanged");
+        List<SearchFieldListItem> matchList = [];
+        if (StringUtil.isBlank(input)) {
+          return matchList;
+        }
+
+        for (var suggestion in suggestions) {
+          var item = suggestion.item;
+          if (item != null && StringUtil.isNotBlank(item.url)) {
+            if (item.url!.contains(input)) {
+              matchList.add(suggestion);
+              continue;
+            }
+
+            if (item.title != null && item.title!.contains(input)) {
+              matchList.add(suggestion);
+              continue;
+            }
+          }
+        }
+
+        return matchList;
+      },
+    );
+
+    if (PlatformUtil.isPC()) {
+      inputField = KeyboardListener(
+        focusNode: focusNode,
+        child: inputField,
+        onKeyEvent: (value) {
+          if (value.logicalKey == LogicalKeyboardKey.enter) {
+            checkAndBack(textEditingController.text);
+          }
+        },
+      );
+    }
+
     var inputWidget = Hero(
       tag: "urlInput",
       child: Material(
-        child: SearchField(
-          suggestions: suggestions,
-          controller: textEditingController,
-          suggestionDirection: SuggestionDirection.up,
-          searchInputDecoration: SearchInputDecoration(
-            border: OutlineInputBorder(),
-          ),
-          onSubmit: (value) {
-            checkAndBack(value);
-          },
-          autofocus: true,
-          // focusNode: focusNode,
-          onSuggestionTap: (suggestion) {
-            var item = suggestion.item;
-            if (item != null) {
-              checkAndBack(item.url);
-            }
-          },
-          onSearchTextChanged: (input) {
-            print("onSearchTextChanged");
-            List<SearchFieldListItem> matchList = [];
-            if (StringUtil.isBlank(input)) {
-              return matchList;
-            }
-
-            for (var suggestion in suggestions) {
-              var item = suggestion.item;
-              if (item != null && StringUtil.isNotBlank(item.url)) {
-                if (item.url!.contains(input)) {
-                  matchList.add(suggestion);
-                  continue;
-                }
-
-                if (item.title != null && item.title!.contains(input)) {
-                  matchList.add(suggestion);
-                  continue;
-                }
-              }
-            }
-
-            return matchList;
-          },
-        ),
+        child: inputField,
       ),
     );
 
