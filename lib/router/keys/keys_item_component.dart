@@ -31,6 +31,7 @@ class _KeysItemComponent extends State<KeysItemComponent> {
         right: Base.BASE_PADDING_HALF,
       ),
       child: UserPicComponent(
+        pubkey: widget.pubkey,
         width: 26,
       ),
     ));

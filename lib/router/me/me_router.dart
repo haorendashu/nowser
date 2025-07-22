@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/text_input/text_input_dialog.dart';
 import 'package:nowser/component/user/user_name_component.dart';
@@ -62,6 +63,7 @@ class _MeRouter extends CustState<MeRouter> {
     var mediaQueryData = MediaQuery.of(context);
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
+    var _keyProvider = Provider.of<KeyProvider>(context);
     s = S.of(context);
 
     var listWidgetMargin = const EdgeInsets.only(
@@ -69,33 +71,31 @@ class _MeRouter extends CustState<MeRouter> {
       bottom: Base.BASE_PADDING,
     );
 
+    var pubkeys = _keyProvider.pubkeys;
+    String defaultPubkey = "";
+    if (pubkeys.isNotEmpty) {
+      defaultPubkey = pubkeys.first;
+    }
+
     List<Widget> defaultUserWidgets = [];
     defaultUserWidgets.add(Container(
       margin: const EdgeInsets.only(
         left: Base.BASE_PADDING,
       ),
-      child: UserPicComponent(width: 50),
+      child: UserPicComponent(pubkey: defaultPubkey, width: 50),
     ));
+    Widget addOrNameWidget = GestureDetector(
+      onTap: () {
+        KeysRouter.addKey(context);
+      },
+      child: Text(s.Click_and_Login),
+    );
+    if (StringUtil.isNotBlank(defaultPubkey)) {
+      addOrNameWidget = UserNameComponent(defaultPubkey);
+    }
     defaultUserWidgets.add(Container(
       margin: const EdgeInsets.only(left: Base.BASE_PADDING),
-      child: Selector<KeyProvider, List<String>>(
-        builder: (context, npubList, child) {
-          if (npubList.isNotEmpty) {
-            var pubkey = npubList.first;
-            return UserNameComponent(pubkey);
-          }
-
-          return GestureDetector(
-            onTap: () {
-              KeysRouter.addKey(context);
-            },
-            child: Text(s.Click_and_Login),
-          );
-        },
-        selector: (context, _provider) {
-          return _provider.pubkeys;
-        },
-      ),
+      child: addOrNameWidget,
     ));
     defaultUserWidgets.add(Expanded(child: Container()));
     defaultUserWidgets.add(Container(
@@ -111,53 +111,52 @@ class _MeRouter extends CustState<MeRouter> {
       margin: const EdgeInsets.only(
         top: Base.BASE_PADDING,
       ),
-      child: Row(
-        children: defaultUserWidgets,
+      child: GestureDetector(
+        onTap: () {
+          RouterUtil.router(context, RouterPath.KEYS);
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Row(
+          children: defaultUserWidgets,
+        ),
       ),
     );
 
-    var memberListWidget = Selector<KeyProvider, List<String>>(
-      builder: (context, npubList, child) {
-        if (npubList.isEmpty) {
-          return Container();
-        }
-
-        List<Widget> memberList = [];
-        for (var pubkey in npubList) {
-          memberList.add(Container(
-            margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
-            child: UserPicComponent(width: 30),
-          ));
-        }
-        memberList.add(Expanded(child: Container()));
-        memberList.add(GestureDetector(
-          child: Icon(Icons.chevron_right),
-        ));
-
-        return Container(
-          decoration: BoxDecoration(
-            color: themeData.cardColor,
-            borderRadius: BorderRadius.circular(
-              Base.BASE_PADDING,
-            ),
-          ),
-          margin: listWidgetMargin,
-          padding: EdgeInsets.all(Base.BASE_PADDING),
-          child: GestureDetector(
-            onTap: () {
-              RouterUtil.router(context, RouterPath.KEYS);
-            },
-            behavior: HitTestBehavior.translucent,
-            child: Row(
-              children: memberList,
-            ),
-          ),
-        );
-      },
-      selector: (context, _provider) {
-        return _provider.pubkeys;
-      },
+    Widget memberListWidget = Container(
+      height: Base.BASE_PADDING,
     );
+    if (pubkeys.length > 1) {
+      List<Widget> memberList = [];
+      for (var pubkey in pubkeys) {
+        memberList.add(Container(
+          margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+          child: UserPicComponent(pubkey: pubkey, width: 30),
+        ));
+      }
+      memberList.add(Expanded(child: Container()));
+      memberList.add(GestureDetector(
+        child: const Icon(Icons.chevron_right),
+      ));
+      memberListWidget = Container(
+        decoration: BoxDecoration(
+          color: themeData.cardColor,
+          borderRadius: BorderRadius.circular(
+            Base.BASE_PADDING,
+          ),
+        ),
+        margin: listWidgetMargin,
+        padding: const EdgeInsets.all(Base.BASE_PADDING),
+        child: GestureDetector(
+          onTap: () {
+            RouterUtil.router(context, RouterPath.KEYS);
+          },
+          behavior: HitTestBehavior.translucent,
+          child: Row(
+            children: memberList,
+          ),
+        ),
+      );
+    }
 
     List<Widget> webItemList = [];
     webItemList.add(MeRouterWebItemComponent(

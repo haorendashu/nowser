@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import '../const/base.dart';
 
 class DB {
-  static const _VERSION = 2;
+  static const _VERSION = 3;
 
   static const _dbName = "nowser.db";
 
@@ -43,13 +43,27 @@ class DB {
         "create table bookmark(id             integer not null constraint bookmark_pk primary key autoincrement,title          text,url            text    not null,favicon        text,weight         integer,added_to_index integer, added_to_qa integer,created_at     integer);");
     db.execute(
         "create table browser_history(id         integer not null constraint browser_history_pk primary key autoincrement,title      text,url        text    not null,favicon    text,created_at integer);");
+
+    db.execute(
+        "create table event(id         text,pubkey     text,created_at integer,kind       integer,tags       text,content    text);");
+    db.execute("create unique index event_key_index_id_uindex on event (id);");
+    db.execute("create index event_date_index    on event (kind, created_at);");
   }
 
   static Future<void> _onUpgrade(
       Database db, int oldVersion, int newVersion) async {
-    if (oldVersion == 1) {
+    if (oldVersion < 2) {
       db.execute(
           "alter table bookmark add added_to_qa integer after added_to_index");
+    }
+
+    if (oldVersion < 3) {
+      db.execute(
+          "create table event(id         text,pubkey     text,created_at integer,kind       integer,tags       text,content    text);");
+      db.execute(
+          "create unique index event_key_index_id_uindex on event (id);");
+      db.execute(
+          "create index event_date_index    on event (kind, created_at);");
     }
   }
 

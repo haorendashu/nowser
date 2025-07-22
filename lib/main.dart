@@ -8,6 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nostr_sdk/client_utils/keys.dart';
+import 'package:nostr_sdk/nostr.dart';
+import 'package:nostr_sdk/signer/local_nostr_signer.dart';
 import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
@@ -18,6 +21,8 @@ import 'package:nowser/provider/build_in_relay_provider.dart';
 import 'package:nowser/provider/download_provider.dart';
 import 'package:nowser/provider/key_provider.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
+import 'package:nowser/provider/relay_provider.dart';
+import 'package:nowser/provider/userinfo_provider.dart';
 import 'package:nowser/provider/web_provider.dart';
 import 'package:nowser/router/about_me/about_me_router.dart';
 import 'package:nowser/router/app_detail/app_detail_router.dart';
@@ -75,6 +80,12 @@ BookmarkProvider bookmarkProvider = BookmarkProvider();
 
 late MediaDataCache mediaDataCache;
 
+late UserinfoProvider userinfoProvider;
+
+late RelayProvider relayProvider;
+
+Nostr? nostr;
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   rootIsolateToken = RootIsolateToken.instance!;
@@ -116,6 +127,11 @@ Future<void> main() async {
   // }
 
   await doInit();
+
+  relayProvider = RelayProvider.getInstance();
+  var tempPrivateKey = generatePrivateKey();
+  nostr = await relayProvider.genNostrWithKey(tempPrivateKey);
+  userinfoProvider = await UserinfoProvider.getInstance();
 
   mediaDataCache = MediaDataCache();
   await bookmarkProvider.init();
@@ -238,6 +254,12 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<DownloadProvider>.value(
           value: downloadProvider,
+        ),
+        ListenableProvider<UserinfoProvider>.value(
+          value: userinfoProvider,
+        ),
+        ListenableProvider<RelayProvider>.value(
+          value: relayProvider,
         ),
       ],
       child: MaterialApp(
