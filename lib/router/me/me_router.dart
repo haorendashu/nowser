@@ -62,6 +62,7 @@ class _MeRouter extends CustState<MeRouter> {
   Widget doBuild(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     var themeData = Theme.of(context);
+    var cardColor = themeData.cardColor;
     var _appProvider = Provider.of<AppProvider>(context);
     var _keyProvider = Provider.of<KeyProvider>(context);
     s = S.of(context);
@@ -189,11 +190,50 @@ class _MeRouter extends CustState<MeRouter> {
         RouterUtil.router(context, RouterPath.DOWNLOADS);
       },
     ));
-    // webItemList.add(MeRouterWebItemComponent(
-    //   num: 102,
-    //   name: "Bookmark",
-    //   iconData: Icons.bookmark,
-    // ));
+    webItemList.add(GestureDetector(
+      onTap: () {
+        RouterUtil.router(context, RouterPath.APPS, "addRemote");
+      },
+      child: Container(
+        alignment: Alignment.center,
+        // margin: widget.margin,
+        child: Container(
+          width: 80,
+          padding: const EdgeInsets.only(
+            left: Base.BASE_PADDING,
+            right: Base.BASE_PADDING,
+            top: Base.BASE_PADDING,
+            bottom: Base.BASE_PADDING,
+          ),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(Base.BASE_PADDING),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add),
+              Text(
+                "Add",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: themeData.textTheme.bodySmall!.fontSize! - 2,
+                ),
+              ),
+              Text(
+                "Remote",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: themeData.textTheme.bodySmall!.fontSize! - 2,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
     var webItemWidget = Container(
       margin: listWidgetMargin,
       child: Row(

@@ -33,12 +33,16 @@ class AppsRouter extends StatefulWidget {
 }
 
 class _AppsRouter extends CustState<AppsRouter> {
+  Object? action;
+
   @override
   Widget doBuild(BuildContext context) {
     var s = S.of(context);
     var themeData = Theme.of(context);
     var _appProvider = Provider.of<AppProvider>(context);
     var appList = _appProvider.appList;
+
+    action = RouterUtil.routerArgs(context);
 
     var _remoteSigningProvider = Provider.of<RemoteSigningProvider>(context);
 
@@ -189,13 +193,7 @@ class _AppsRouter extends CustState<AppsRouter> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              if (keyProvider.pubkeys.isEmpty) {
-                UserLoginDialog.show(context);
-                return;
-              }
-              RouterUtil.router(context, RouterPath.ADD_REMOTE_APP);
-            },
+            onTap: openAddRemote,
             child: Container(
               padding: const EdgeInsets.all(Base.BASE_PADDING),
               child: Icon(Icons.add),
@@ -213,5 +211,17 @@ class _AppsRouter extends CustState<AppsRouter> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {}
+  Future<void> onReady(BuildContext context) async {
+    if (action == "addRemote") {
+      openAddRemote();
+    }
+  }
+
+  void openAddRemote() {
+    if (keyProvider.pubkeys.isEmpty) {
+      UserLoginDialog.show(context);
+      return;
+    }
+    RouterUtil.router(context, RouterPath.ADD_REMOTE_APP);
+  }
 }

@@ -4,6 +4,8 @@ import 'package:nowser/const/base.dart';
 class MeRouterWebItemComponent extends StatefulWidget {
   int? num;
 
+  String? numText;
+
   String name;
 
   IconData iconData;
@@ -12,6 +14,7 @@ class MeRouterWebItemComponent extends StatefulWidget {
 
   MeRouterWebItemComponent({
     this.num,
+    this.numText,
     required this.name,
     required this.iconData,
     this.onTap,
@@ -63,7 +66,7 @@ class _MeRouterWebItemComponent extends State<MeRouterWebItemComponent> {
                 ),
               ),
               Text(
-                "${widget.num ?? 0}",
+                widget.numText ?? "${widget.num ?? 0}",
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
