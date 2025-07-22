@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
+import 'package:nowser/component/user/user_name_component.dart';
 import 'package:nowser/const/base.dart';
 import 'package:nowser/data/app.dart';
 import 'package:nowser/provider/key_provider.dart';
@@ -63,11 +64,7 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
       for (var pubkey in pubkeys) {
         items.add(DropdownMenuItem(
           value: pubkey,
-          child: Text(
-            Nip19.encodePubKey(pubkey),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: UserNameComponent(pubkey),
         ));
       }
 
