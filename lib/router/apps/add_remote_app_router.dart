@@ -8,6 +8,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/component/simple_qrcode_dialog.dart';
+import 'package:nowser/component/user/user_name_component.dart';
 import 'package:nowser/data/remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
 import 'package:nowser/main.dart';
@@ -73,11 +74,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
       for (var pubkey in pubkeys) {
         items.add(DropdownMenuItem(
           value: pubkey,
-          child: Text(
-            Nip19.encodePubKey(pubkey),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: UserNameComponent(pubkey),
         ));
       }
 
