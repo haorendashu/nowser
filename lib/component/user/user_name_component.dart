@@ -10,7 +10,10 @@ class UserNameComponent extends StatefulWidget {
 
   bool fullNpubName;
 
-  UserNameComponent(this.pubkey, {this.fullNpubName = false});
+  bool showBoth;
+
+  UserNameComponent(this.pubkey,
+      {this.fullNpubName = false, this.showBoth = false});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,10 +33,19 @@ class _UserNameComponent extends State<UserNameComponent> {
       var name = npub;
 
       if (metadata != null) {
+        String? niceName;
         if (StringUtil.isNotBlank(metadata.displayName)) {
-          name = metadata.displayName!;
+          niceName = metadata.displayName!;
         } else if (StringUtil.isNotBlank(metadata.name)) {
-          name = metadata.name!;
+          niceName = metadata.name!;
+        }
+
+        if (StringUtil.isNotBlank(niceName)) {
+          if (widget.showBoth) {
+            name = "$niceName / $npub";
+          } else {
+            name = niceName!;
+          }
         }
       }
 

@@ -64,7 +64,11 @@ class _AuthDialog extends State<AuthDialogBaseComponnet> {
       for (var pubkey in pubkeys) {
         items.add(DropdownMenuItem(
           value: pubkey,
-          child: UserNameComponent(pubkey),
+          child: UserNameComponent(
+            pubkey,
+            showBoth: true,
+            fullNpubName: true,
+          ),
         ));
       }
 

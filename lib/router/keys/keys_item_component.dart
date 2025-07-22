@@ -36,10 +36,15 @@ class _KeysItemComponent extends State<KeysItemComponent> {
       ),
     ));
     list.add(Expanded(
+      child: Container(
+        margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
         child: UserNameComponent(
-      widget.pubkey,
-      fullNpubName: true,
-    )));
+          widget.pubkey,
+          fullNpubName: true,
+          showBoth: true,
+        ),
+      ),
+    ));
     list.add(GestureDetector(
       onTap: () {
         keyProvider.removeKey(widget.pubkey);
