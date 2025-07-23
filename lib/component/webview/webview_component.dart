@@ -326,19 +326,19 @@ class _WebViewComponent extends State<WebViewComponent>
           nip07Reject(resultId, "Forbid");
         }, (app, signer) {
           // TODO handle getRelays
-          // var app = appProvider.getApp(AppType.WEB, code);
-          // if (app != null) {
-          //   var relayMaps = {};
-          //   var relayAddrs = relayProvider.relayAddrs;
-          //   for (var relayAddr in relayAddrs) {
-          //     relayMaps[relayAddr] = {"read": true, "write": true};
-          //   }
-          //   var resultStr = jsonEncode(relayMaps);
-          //   resultStr = resultStr.replaceAll("\"", "\\\"");
-          //   var script =
-          //       "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
-          //   webViewController!.evaluateJavascript(source: script);
-          // }
+          var app = appProvider.getApp(AppType.WEB, code);
+          if (app != null) {
+            var relayMaps = {};
+            // var relayAddrs = relayProvider.relayAddrs;
+            // for (var relayAddr in relayAddrs) {
+            //   relayMaps[relayAddr] = {"read": true, "write": true};
+            // }
+            var resultStr = jsonEncode(relayMaps);
+            resultStr = resultStr.replaceAll("\"", "\\\"");
+            var script =
+                "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
+            webViewController!.evaluateJavascript(source: script);
+          }
         });
       },
     );
