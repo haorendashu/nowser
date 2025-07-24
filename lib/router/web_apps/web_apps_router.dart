@@ -47,7 +47,8 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
       typeEnums.add(EnumObj(WebAppTypes.PHOTOS, s.Photos));
       typeEnums.add(EnumObj(WebAppTypes.STREAMING, s.Streaming));
       typeEnums.add(EnumObj(WebAppTypes.ZAPS, s.Zaps));
-      typeEnums.add(EnumObj(WebAppTypes.Marketplaces, s.Marketplaces));
+      typeEnums.add(EnumObj(WebAppTypes.MARKETPLACES, s.Marketplaces));
+      typeEnums.add(EnumObj(WebAppTypes.OTHERS, s.Others));
     }
 
     List<Widget> list = [];
@@ -126,7 +127,7 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
       }
     } else {
       for (var item in showItems) {
-        itemWidgetList.add(WebAppItemComponent(item));
+        itemWidgetList.add(WebAppItemComponent(item, onTap: onTap));
       }
     }
 
@@ -158,8 +159,8 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
   }
 
   void onTap(WebAppItem item) {
-    RouterUtil.back(context);
     webProvider.addTab(url: item.link);
+    RouterUtil.back(context);
   }
 
   @override
@@ -283,6 +284,250 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         [WebAppTypes.NOTES],
         image: "https://nowser.nostrmo.com/images/apps/iris.png",
       ));
+      items.add(WebAppItem(
+        "https://iris.to/",
+        "Nostter",
+        "Calm social client",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/nostter.png",
+      ));
+      items.add(WebAppItem(
+        "https://www.getwired.app/",
+        "Wired",
+        "An anonymous-first agora",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/wired.png",
+      ));
+      items.add(WebAppItem(
+        "https://emojito.meme/",
+        "Emojito",
+        "Create custom emoji sets",
+        [WebAppTypes.TOOLS],
+        image: "https://nowser.nostrmo.com/images/apps/emojito.png",
+      ));
+      items.add(WebAppItem(
+        "https://formstr.app/",
+        "Formstr",
+        "Create and share forms",
+        [WebAppTypes.TOOLS],
+        image: "https://nowser.nostrmo.com/images/apps/formstr.png",
+      ));
+      items.add(WebAppItem(
+        "https://coracle.social/",
+        "Coracle",
+        "Nostr, the easy way.",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/coracle.png",
+      ));
+      items.add(WebAppItem(
+        "https://badges.page/",
+        "Badges",
+        "A manager for your nostr badges",
+        [WebAppTypes.TOOLS],
+        image: "https://nowser.nostrmo.com/images/apps/badges.png",
+      ));
+      items.add(WebAppItem(
+        "https://olas.app/",
+        "Olas",
+        "Olas is a client for publishing and looking at photos",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/olas.png",
+      ));
+      items.add(WebAppItem(
+        "https://nsec.app/",
+        "Nsec",
+        "Use Nostr apps safely",
+        [WebAppTypes.TOOLS],
+        image: "https://nowser.nostrmo.com/images/apps/nsec.png",
+      ));
+      items.add(WebAppItem(
+        "https://chachi.chat/",
+        "Nsec",
+        "A group chat and generic NIP-29 group posts client",
+        [WebAppTypes.GROUP_CHAT],
+        image: "https://nowser.nostrmo.com/images/apps/chachi.png",
+      ));
+      items.add(WebAppItem(
+        "https://oddbean.com/",
+        "Oddbean",
+        "Hacker News style client",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/oddbean.png",
+      ));
+      items.add(WebAppItem(
+        "https://getalby.com/",
+        "Alby",
+        "Your bitcoin and nostr companion for the web",
+        [WebAppTypes.ZAPS],
+        image: "https://nowser.nostrmo.com/images/apps/alby.png",
+      ));
+      items.add(WebAppItem(
+        "https://jumble.social/",
+        "Jumble",
+        "Jumble is a client focused on browsing relay feeds",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/jumble.png",
+      ));
+      items.add(WebAppItem(
+        "https://yakihonne.com/",
+        "Yakihonne",
+        "Publish and curate long-form content",
+        [WebAppTypes.NOTES, WebAppTypes.LONG_FORM],
+        image: "https://nowser.nostrmo.com/images/apps/yakihonne.png",
+      ));
+      items.add(WebAppItem(
+        "https://flycat.club/",
+        "Flycat",
+        "Explore Nostr universe and long form content",
+        [WebAppTypes.LONG_FORM],
+        image: "https://nowser.nostrmo.com/images/apps/flycat.png",
+      ));
+      items.add(WebAppItem(
+        "https://zap.stream/",
+        "Zapstream",
+        "Live stream and zap",
+        [WebAppTypes.STREAMING],
+        image: "https://nowser.nostrmo.com/images/apps/zapstream.png",
+      ));
+      items.add(WebAppItem(
+        "https://bouquet.slidestr.net/",
+        "Bouquet",
+        "A personal manager for Blossom media servers",
+        [WebAppTypes.PHOTOS],
+        image: "https://nowser.nostrmo.com/images/apps/bouquet.png",
+      ));
+      items.add(WebAppItem(
+        "https://shopstr.store/",
+        "Shopstr",
+        "Buy and sell for sats over nostr",
+        [WebAppTypes.MARKETPLACES],
+        image: "https://nowser.nostrmo.com/images/apps/shopstr.png",
+      ));
+      items.add(WebAppItem(
+        "https://ostrich.work/",
+        "Ostrich Work",
+        "Job Board over Nostr",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/ostrich.png",
+      ));
+      items.add(WebAppItem(
+        "https://web.nostrmo.com/",
+        "Nostrmo",
+        "A nostr client for Web, iOS, Android, MacOS and Windows.",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/nostrmo.png",
+      ));
+      items.add(WebAppItem(
+        "https://alphaama.com/",
+        "alphaama",
+        "just a nostr fucking client, CLI + GUI",
+        [WebAppTypes.NOTES],
+      ));
+      items.add(WebAppItem(
+        "https://pinstr.app/",
+        "Pinstr",
+        "Like Pinterest but on nostr with zaps",
+        [WebAppTypes.PHOTOS],
+        image: "https://nowser.nostrmo.com/images/apps/pinstr.png",
+      ));
+      items.add(WebAppItem(
+        "https://wikifreedia.xyz/",
+        "Wikifreedia",
+        "a client for the wikipedia idea built on Nostr",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/wikifreedia.png",
+      ));
+      items.add(WebAppItem(
+        "https://go.yondar.me/",
+        "Yondar",
+        "The social map",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/yondar.png",
+      ));
+      items.add(WebAppItem(
+        "https://nostr.band/",
+        "Nostr Band",
+        "Nostr data and statistics advanced search.",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/nostrband.png",
+      ));
+      items.add(WebAppItem(
+        "https://nostrudel.ninja/",
+        "noStrudel",
+        "The jack of all trades",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/nostrudel.png",
+      ));
+      items.add(WebAppItem(
+        "https://nostrnests.com/",
+        "Nests",
+        "Audio rooms",
+        [WebAppTypes.STREAMING],
+        image: "https://nowser.nostrmo.com/images/apps/nostrnests.png",
+      ));
+      items.add(WebAppItem(
+        "https://wikistr.com/",
+        "Wikistr",
+        "A NIP-54 'wiki' client with multi-article view",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/wikistr.png",
+      ));
+      items.add(WebAppItem(
+        "https://slidestr.net/",
+        "Slidestr",
+        "Immersive media browsing",
+        [WebAppTypes.PHOTOS],
+        image: "https://nowser.nostrmo.com/images/apps/slidestr.png",
+      ));
+      items.add(WebAppItem(
+        "https://www.coolr.chat/",
+        "Coolr",
+        "A minimalist, IRC like chat app built on Nostr. Fast and temporary.",
+        [WebAppTypes.GROUP_CHAT],
+        image: "https://nowser.nostrmo.com/images/apps/coolr.png",
+      ));
+      items.add(WebAppItem(
+        "https://sendbox.nostrmo.com/",
+        "Sendbox",
+        "This is a tool to help you delayed publish your nostr event.",
+        [WebAppTypes.TOOLS],
+      ));
+      items.add(WebAppItem(
+        "https://www.coinos.io/",
+        "Coinos",
+        "The easiest way to get started with bitcoin. A free web wallet and payment page for everyone.",
+        [WebAppTypes.ZAPS],
+      ));
+      items.add(WebAppItem(
+        "https://shipyard.pub/",
+        "Shipyard",
+        "Schedule notes",
+        [WebAppTypes.TOOLS],
+      ));
+      items.add(WebAppItem(
+        "https://npub.pro/",
+        "NpubPro",
+        "Beautiful nostr-based websites for creators.Best way to share your work outside of nostr.",
+        [WebAppTypes.LONG_FORM],
+      ));
+      items.add(WebAppItem(
+        "https://write.nostr.com/",
+        "Write Nostr",
+        "A tool to send Markdown long-format or blog post notes using NIP-23.",
+        [WebAppTypes.LONG_FORM],
+      ));
+      items.add(WebAppItem(
+        "https://nosli.vercel.app/",
+        "Nosli",
+        "Nosli helps you create a curated list of posts on nostr.",
+        [WebAppTypes.LONG_FORM],
+      ));
+      items.add(WebAppItem(
+        "https://primal.net/",
+        "Primal",
+        "A Multi-platform client",
+        [WebAppTypes.NOTES],
+      ));
 
       // List<Map> jsonList = [];
       // for (var item in items) {
@@ -290,7 +535,7 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
       // }
       // log(jsonEncode(jsonList));
 
-      setState(() {});
+      // setState(() {});
     }
   }
 }

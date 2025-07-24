@@ -6,5 +6,6 @@ class WebAppTypes {
   static String PHOTOS = "photos";
   static String STREAMING = "streaming";
   static String ZAPS = "zaps";
-  static String Marketplaces = "marketplaces";
+  static String MARKETPLACES = "marketplaces";
+  static String OTHERS = "others";
 }

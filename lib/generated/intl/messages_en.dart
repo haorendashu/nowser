@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Open in a New Tab"),
         "Open_with_Incognito_Mode":
             MessageLookupByLibrary.simpleMessage("Open with Incognito Mode"),
+        "Others": MessageLookupByLibrary.simpleMessage("Others"),
         "Pendding_connect_remote_apps": MessageLookupByLibrary.simpleMessage(
             "Pendding connect remote apps"),
         "Photos": MessageLookupByLibrary.simpleMessage("Photos"),

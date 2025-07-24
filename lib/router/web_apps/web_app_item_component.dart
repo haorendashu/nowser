@@ -30,9 +30,11 @@ class _WebAppItemComponent extends State<WebAppItemComponent> {
     return GestureDetector(
       onTap: () {
         if (widget.onTap != null) {
+          print("onTap!!");
           widget.onTap!(widget.item);
         }
       },
+      behavior: HitTestBehavior.translucent,
       child: Container(
         padding: const EdgeInsets.only(
           left: Base.BASE_PADDING,

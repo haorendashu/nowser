@@ -101,6 +101,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Open_in_a_New_Tab": MessageLookupByLibrary.simpleMessage("打开新标签"),
         "Open_with_Incognito_Mode":
             MessageLookupByLibrary.simpleMessage("无痕模式打开"),
+        "Others": MessageLookupByLibrary.simpleMessage("其他"),
         "Pendding_connect_remote_apps":
             MessageLookupByLibrary.simpleMessage("待链接的远程应用"),
         "Photos": MessageLookupByLibrary.simpleMessage("照片"),
