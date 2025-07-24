@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Add_to_index": MessageLookupByLibrary.simpleMessage("Add to index"),
         "Add_to_quick_action":
             MessageLookupByLibrary.simpleMessage("Add to quick action"),
+        "All": MessageLookupByLibrary.simpleMessage("All"),
         "Allow": MessageLookupByLibrary.simpleMessage("Allow"),
         "Alway_reject": MessageLookupByLibrary.simpleMessage("Alway reject"),
         "Always": MessageLookupByLibrary.simpleMessage("Always"),
@@ -89,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "Get_Public_Key":
             MessageLookupByLibrary.simpleMessage("Get Public Key"),
         "Get_Relays": MessageLookupByLibrary.simpleMessage("Get Relays"),
+        "Group_Chat": MessageLookupByLibrary.simpleMessage("Group Chat"),
         "Historys": MessageLookupByLibrary.simpleMessage("Historys"),
         "Incognito": MessageLookupByLibrary.simpleMessage("Incognito"),
         "Input_can_not_be_null":
@@ -103,7 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "Login_fail": MessageLookupByLibrary.simpleMessage("Login_fail"),
         "Login_with_Nesigner":
             MessageLookupByLibrary.simpleMessage("Login with Nesigner"),
+        "Long_Form": MessageLookupByLibrary.simpleMessage("Long Form"),
+        "Marketplaces": MessageLookupByLibrary.simpleMessage("Marketplaces"),
         "Name": MessageLookupByLibrary.simpleMessage("Name"),
+        "Notes": MessageLookupByLibrary.simpleMessage("Notes"),
         "Open_backgroundly":
             MessageLookupByLibrary.simpleMessage("Open backgroundly"),
         "Open_image_in_a_New_Tab":
@@ -114,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Open with Incognito Mode"),
         "Pendding_connect_remote_apps": MessageLookupByLibrary.simpleMessage(
             "Pendding connect remote apps"),
+        "Photos": MessageLookupByLibrary.simpleMessage("Photos"),
         "Privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "Pubkey": MessageLookupByLibrary.simpleMessage("Pubkey"),
         "Reasonable": MessageLookupByLibrary.simpleMessage("Reasonable"),
@@ -134,9 +140,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show more logs"),
         "Sign_Event": MessageLookupByLibrary.simpleMessage("Sign Event"),
         "Stars": MessageLookupByLibrary.simpleMessage("Stars"),
+        "Streaming": MessageLookupByLibrary.simpleMessage("Streaming"),
         "ThemeStyle": MessageLookupByLibrary.simpleMessage("ThemeStyle"),
+        "Tools": MessageLookupByLibrary.simpleMessage("Tools"),
         "Url": MessageLookupByLibrary.simpleMessage("Url"),
         "WEB": MessageLookupByLibrary.simpleMessage("WEB"),
+        "Web_APPs": MessageLookupByLibrary.simpleMessage("Web APPs"),
+        "Zaps": MessageLookupByLibrary.simpleMessage("Zaps"),
         "a": MessageLookupByLibrary.simpleMessage("a"),
         "auto": MessageLookupByLibrary.simpleMessage("auto"),
         "detail": MessageLookupByLibrary.simpleMessage("detail"),

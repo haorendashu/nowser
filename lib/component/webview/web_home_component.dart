@@ -198,6 +198,15 @@ class _WebHomeComponent extends State<WebHomeComponent> {
       if (bookmarks.length == index) {
         main = GestureDetector(
           onTap: () {
+            RouterUtil.router(context, RouterPath.WEB_APPS);
+          },
+          child: Container(
+            child: Icon(Icons.apps),
+          ),
+        );
+      } else if (bookmarks.length + 1 == index) {
+        main = GestureDetector(
+          onTap: () {
             BookmarkEditDialog.show(
               context,
               Bookmark(

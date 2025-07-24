@@ -95,5 +95,15 @@
     "or": "or",
     "Login_with_Nesigner": "Login with Nesigner",
     "Login_fail": "Login_fail",
-    "Delete": "Delete"
+    "Delete": "Delete",
+    "Notes": "Notes",
+    "Long_Form": "Long Form",
+    "Group_Chat": "Group Chat",
+    "Tools": "Tools",
+    "Photos": "Photos",
+    "Streaming": "Streaming",
+    "Zaps": "Zaps",
+    "Marketplaces": "Marketplaces",
+    "All": "All",
+    "Web_APPs": "Web APPs"
 }

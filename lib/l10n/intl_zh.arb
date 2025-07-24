@@ -95,5 +95,15 @@
     "or": "或者",
     "Login_with_Nesigner": "使用 Nesigner 登录",
     "Login_fail": "登录失败",
-    "Delete": "删除"
+    "Delete": "删除",
+    "Notes": "笔记",
+    "Long_Form": "长文本",
+    "Group_Chat": "群组聊天",
+    "Tools": "工具",
+    "Photos": "照片",
+    "Streaming": "直播",
+    "Zaps": "Zaps",
+    "Marketplaces": "市场",
+    "All": "全部",
+    "Web_APPs": "网页应用"
 }

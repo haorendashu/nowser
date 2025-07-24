@@ -36,6 +36,7 @@ import 'package:nowser/router/index/index_router.dart';
 import 'package:nowser/router/keys/keys_router.dart';
 import 'package:nowser/router/me/me_router.dart';
 import 'package:nowser/router/setting/setting_router.dart';
+import 'package:nowser/router/web_apps/web_apps_router.dart';
 import 'package:nowser/router/web_tabs_select/web_tabs_select_router.dart';
 import 'package:nowser/router/web_url_input/web_url_input_router.dart';
 import 'package:provider/provider.dart';
@@ -220,6 +221,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
       RouterPath.ABOUT_ME: (context) => AboutMeRouter(),
       RouterPath.DOWNLOADS: (context) => DownloadsRouter(),
+      RouterPath.WEB_APPS: (context) => WebAppsRouter(),
     };
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

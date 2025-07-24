@@ -1019,6 +1019,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Notes`
+  String get Notes {
+    return Intl.message(
+      'Notes',
+      name: 'Notes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Long Form`
+  String get Long_Form {
+    return Intl.message(
+      'Long Form',
+      name: 'Long_Form',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Group Chat`
+  String get Group_Chat {
+    return Intl.message(
+      'Group Chat',
+      name: 'Group_Chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tools`
+  String get Tools {
+    return Intl.message(
+      'Tools',
+      name: 'Tools',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Photos`
+  String get Photos {
+    return Intl.message(
+      'Photos',
+      name: 'Photos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Streaming`
+  String get Streaming {
+    return Intl.message(
+      'Streaming',
+      name: 'Streaming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Zaps`
+  String get Zaps {
+    return Intl.message(
+      'Zaps',
+      name: 'Zaps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Marketplaces`
+  String get Marketplaces {
+    return Intl.message(
+      'Marketplaces',
+      name: 'Marketplaces',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get All {
+    return Intl.message(
+      'All',
+      name: 'All',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Web APPs`
+  String get Web_APPs {
+    return Intl.message(
+      'Web APPs',
+      name: 'Web_APPs',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -13,4 +13,6 @@ class Base {
 
   static String USER_AGENT =
       "${Base.APP_NAME} ${PlatformUtil.getPlatformName()} ${Base.VERSION_NAME}";
+
+  static String WEB_APPS = "https://nowser.nostrmo.com/jsons/webapps.json";
 }
