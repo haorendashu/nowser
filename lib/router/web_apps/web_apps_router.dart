@@ -528,6 +528,31 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         "A Multi-platform client",
         [WebAppTypes.NOTES],
       ));
+      items.add(WebAppItem(
+        "https://nostr.build/",
+        "Nostr Build",
+        "Nostr media uploader",
+        [WebAppTypes.PHOTOS],
+      ));
+      items.add(WebAppItem(
+        "https://nostrplebs.com/",
+        "Nostr Plebs",
+        "An easy way of getting a NIP-05 identifier/Nostr Address and other Nostr services.",
+        [WebAppTypes.TOOLS],
+      ));
+      items.add(WebAppItem(
+        "https://nostrnests.com/",
+        "Nostr Nests",
+        "Join this audio Space",
+        [WebAppTypes.TOOLS],
+      ));
+      items.add(WebAppItem(
+        "https://zappix.app/",
+        "Zappix",
+        "Social Media on Nostr",
+        [WebAppTypes.PHOTOS],
+        image: "https://nowser.nostrmo.com/images/apps/zappix.png",
+      ));
 
       // List<Map> jsonList = [];
       // for (var item in items) {
