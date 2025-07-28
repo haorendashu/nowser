@@ -119,7 +119,7 @@
 //         }
 
 //         checkPermission(context, AppType.WEB, code, AuthType.GET_PUBLIC_KEY,
-//             (app) {
+//             (app, signer) {
 //           nip07Reject(resultId, "Forbid");
 //         }, (app, signer) {
 //           print("confirm get pubkey");
@@ -147,7 +147,7 @@
 //           var eventKind = eventObj["kind"];
 //           if (eventKind is int) {
 //             checkPermission(context, AppType.WEB, code, AuthType.SIGN_EVENT,
-//                 eventKind: eventKind, authDetail: content, (app) {
+//                 eventKind: eventKind, authDetail: content, (app, signer) {
 //               nip07Reject(resultId, "Forbid");
 //             }, (app, signer) async {
 //               var tags = eventObj["tags"];
@@ -184,23 +184,23 @@
 //           return;
 //         }
 
-//         checkPermission(context, AppType.WEB, code, AuthType.GET_RELAYS, (app) {
+//         checkPermission(context, AppType.WEB, code, AuthType.GET_RELAYS, (app, signer) {
 //           nip07Reject(resultId, "Forbid");
 //         }, (app, signer) {
 //           // TODO handle getRelays
-//           // var app = appProvider.getApp(AppType.WEB, code);
-//           // if (app != null) {
-//           //   var relayMaps = {};
-//           //   var relayAddrs = relayProvider.relayAddrs;
-//           //   for (var relayAddr in relayAddrs) {
-//           //     relayMaps[relayAddr] = {"read": true, "write": true};
-//           //   }
-//           //   var resultStr = jsonEncode(relayMaps);
-//           //   resultStr = resultStr.replaceAll("\"", "\\\"");
-//           //   var script =
-//           //       "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
-//           //   webViewController!.evaluateJavascript(source: script);
-//           // }
+//           var app = appProvider.getApp(AppType.WEB, code);
+//           if (app != null) {
+//             var relayMaps = {};
+//             // var relayAddrs = relayProvider.relayAddrs;
+//             // for (var relayAddr in relayAddrs) {
+//             //   relayMaps[relayAddr] = {"read": true, "write": true};
+//             // }
+//             var resultStr = jsonEncode(relayMaps);
+//             resultStr = resultStr.replaceAll("\"", "\\\"");
+//             var script =
+//                 "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
+//             controller.evaluateJavascript(script);
+//           }
 //         });
 //       },)
 //     );
@@ -221,7 +221,7 @@
 //           }
 
 //           checkPermission(context, AppType.WEB, code, AuthType.NIP04_ENCRYPT,
-//               (app) {
+//               (app, signer) {
 //             nip07Reject(resultId, "Forbid");
 //           }, (app, signer) async {
 //             var resultStr = await signer.encrypt(pubkey, plaintext);
@@ -252,7 +252,7 @@
 //           }
 
 //           checkPermission(context, AppType.WEB, code, AuthType.NIP04_DECRYPT,
-//               (app) {
+//               (app, signer) {
 //             nip07Reject(resultId, "Forbid");
 //           }, (app, signer) async {
 //             var app = appProvider.getApp(AppType.WEB, code);
@@ -286,7 +286,7 @@
 //           }
 
 //           checkPermission(context, AppType.WEB, code, AuthType.NIP44_ENCRYPT,
-//               (app) {
+//               (app, signer) {
 //             nip07Reject(resultId, "Forbid");
 //           }, (app, signer) async {
 //             var resultStr = await signer.nip44Encrypt(pubkey, plaintext);
@@ -317,7 +317,7 @@
 //           }
 
 //           checkPermission(context, AppType.WEB, code, AuthType.NIP44_DECRYPT,
-//               (app) {
+//               (app, signer) {
 //             nip07Reject(resultId, "Forbid");
 //           }, (app, signer) async {
 //             var resultStr = await signer.nip44Decrypt(pubkey, ciphertext);
