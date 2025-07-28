@@ -17,6 +17,8 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - isar_flutter_libs (1.0.0):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - nesigner_adapter (0.0.1):
     - Flutter
@@ -46,6 +48,7 @@ DEPENDENCIES:
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
   - flutter_nesigner_sdk (from `.symlinks/plugins/flutter_nesigner_sdk/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - nesigner_adapter (from `.symlinks/plugins/nesigner_adapter/ios`)
   - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -74,6 +77,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_nesigner_sdk/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  isar_flutter_libs:
+    :path: ".symlinks/plugins/isar_flutter_libs/ios"
   nesigner_adapter:
     :path: ".symlinks/plugins/nesigner_adapter/ios"
   open_file_ios:
@@ -97,6 +102,7 @@ SPEC CHECKSUMS:
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
   flutter_nesigner_sdk: dc71aa8bc67e6955b77a470bdd40938c460383b3
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
+  isar_flutter_libs: bc909e72c3d756c2759f14c8776c13b5b0556e26
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nesigner_adapter: 58039ceb826b863ae3bb5bb97fa2375b4babead2
   open_file_ios: 5ff7526df64e4394b4fe207636b67a95e83078bb
