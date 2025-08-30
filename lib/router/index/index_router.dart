@@ -37,6 +37,7 @@ class _IndexRouter extends CustState<IndexRouter>
 
   @override
   Future<void> onReady(BuildContext context) async {
+    var themeData = Theme.of(context);
     await remoteSigningProvider.reload();
     await remoteSigningProvider.reloadPenddingRemoteApps();
 
@@ -119,11 +120,23 @@ class _IndexRouter extends CustState<IndexRouter>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        body: Column(
-          children: [
-            Expanded(child: main),
-            IndexWebBottomComponent(showControl),
-          ],
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle(
+            statusBarColor:
+                themeData.appBarTheme.systemOverlayStyle?.statusBarColor,
+            statusBarIconBrightness: themeData
+                .appBarTheme.systemOverlayStyle?.statusBarIconBrightness,
+            systemNavigationBarColor: themeData
+                .appBarTheme.systemOverlayStyle?.systemNavigationBarColor,
+            systemNavigationBarIconBrightness: themeData.appBarTheme
+                .systemOverlayStyle?.systemNavigationBarIconBrightness,
+          ),
+          child: Column(
+            children: [
+              Expanded(child: main),
+              IndexWebBottomComponent(showControl),
+            ],
+          ),
         ),
       ),
     );

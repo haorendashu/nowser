@@ -325,7 +325,7 @@ ThemeData getLightTheme() {
   }
 
   return ThemeData(
-    platform: TargetPlatform.iOS,
+    // platform: TargetPlatform.iOS,
     primarySwatch: themeColor,
     colorScheme: ColorScheme.fromSeed(
       seedColor: themeColor[500]!,
@@ -340,6 +340,11 @@ ThemeData getLightTheme() {
       titleTextStyle: titleTextStyle,
       elevation: 0,
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: scaffoldBackgroundColor,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+      ),
     ),
     dividerColor: ColorsUtil.hexToColor("#DFE1EB"),
     cardColor: cardColor,
@@ -348,15 +353,14 @@ ThemeData getLightTheme() {
     textTheme: textTheme,
     hintColor: hintColor,
     buttonTheme: ButtonThemeData(),
-    shadowColor: Colors.black.withOpacity(0.2),
-    tabBarTheme: TabBarTheme(
+    shadowColor: Colors.black.withValues(alpha: 0.2),
+    tabBarTheme: TabBarThemeData(
       indicatorColor: Colors.white,
       indicatorSize: TabBarIndicatorSize.tab,
       dividerHeight: 0,
       labelColor: Colors.white,
       unselectedLabelColor: Colors.grey[200],
     ),
-    bottomSheetTheme: BottomSheetThemeData(modalBarrierColor: Colors.red),
   );
 }
 
@@ -406,7 +410,7 @@ ThemeData getDarkTheme() {
   }
 
   return ThemeData(
-    platform: TargetPlatform.iOS,
+    // platform: TargetPlatform.iOS,
     primarySwatch: themeColor,
     colorScheme: ColorScheme.fromSeed(
       seedColor: themeColor[500]!,
@@ -419,13 +423,18 @@ ThemeData getDarkTheme() {
       titleTextStyle: titleTextStyle,
       elevation: 0,
       scrolledUnderElevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: scaffoldBackgroundColor,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ),
     ),
     dividerColor: Colors.grey[200],
     cardColor: cardColor,
     textTheme: textTheme,
     hintColor: hintColor,
-    shadowColor: Colors.white.withOpacity(0.3),
-    tabBarTheme: TabBarTheme(
+    shadowColor: Colors.white.withValues(alpha: 0.3),
+    tabBarTheme: TabBarThemeData(
       indicatorColor: Colors.white,
       indicatorSize: TabBarIndicatorSize.tab,
       dividerHeight: 0,
