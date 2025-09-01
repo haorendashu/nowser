@@ -13,6 +13,8 @@ import 'package:nowser/main.dart';
 import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/util/router_util.dart';
 import 'package:provider/provider.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 import '../../component/appbar_back_btn_component.dart';
 import '../../data/bookmark.dart';
@@ -141,6 +143,37 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
       return;
     }
 
+    final originalBytes = await file.readAsBytes();
+    final originalImage = img.decodeImage(originalBytes);
+    if (originalImage == null) {
+      print("Failed to decode image");
+      return;
+    }
+
+    final targetSize = 256;
+    final newImage = img.Image(width: targetSize, height: targetSize);
+    img.fill(newImage, color: img.ColorRgb8(240, 240, 240));
+
+    final scale = (targetSize * 0.6).toDouble() /
+        (originalImage.width > originalImage.height
+            ? originalImage.width
+            : originalImage.height);
+    final int newWidth = (originalImage.width * scale).round();
+    final int newHeight = (originalImage.height * scale).round();
+
+    final resizedImage =
+        img.copyResize(originalImage, width: newWidth, height: newHeight);
+
+    final int x = (targetSize - newWidth) ~/ 2;
+    final int y = (targetSize - newHeight) ~/ 2;
+
+    img.compositeImage(newImage, resizedImage, dstX: x, dstY: y);
+
+    final tempDir = await getTemporaryDirectory();
+    final resizedFile = File(
+        '${tempDir.path}/icon_${DateTime.now().millisecondsSinceEpoch}.png');
+    await resizedFile.writeAsBytes(img.encodePng(newImage));
+
     if (StringUtil.isBlank(bookmark.title) ||
         StringUtil.isBlank(bookmark.url)) {
       return;
@@ -151,7 +184,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
         label: bookmark.title!,
         action: bookmark.url!,
         iconAssetName: "assets/logo_android.png",
-        iconUri: Uri.file(file.path).toString());
+        iconUri: Uri.file(resizedFile.path).toString());
   }
 
   Future<void> doEdit(Bookmark bookmark) async {
