@@ -285,7 +285,7 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         image: "https://nowser.nostrmo.com/images/apps/iris.png",
       ));
       items.add(WebAppItem(
-        "https://iris.to/",
+        "https://nostter.app/",
         "Nostter",
         "Calm social client",
         [WebAppTypes.NOTES],
