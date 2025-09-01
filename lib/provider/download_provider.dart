@@ -13,6 +13,10 @@ class DownloadProvider extends ChangeNotifier {
 
   Future<void> reloadData() async {
     _allRecords = await fileDownloader.database.allRecords();
+    _allRecords.sort((task1, task2) {
+      return task2.task.creationTime.millisecondsSinceEpoch -
+          task1.task.creationTime.millisecondsSinceEpoch;
+    });
   }
 
   Future<void> init() async {
@@ -27,24 +31,21 @@ class DownloadProvider extends ChangeNotifier {
   }
 
   Future<void> pauseDownload(DownloadTask downloadTask) async {
-    fileDownloader.pause(downloadTask);
+    await fileDownloader.pause(downloadTask);
     await reloadData();
     notifyListeners();
   }
 
   Future<void> resumeDownload(DownloadTask downloadTask) async {
-    fileDownloader.resume(downloadTask);
+    await fileDownloader.resume(downloadTask);
     await reloadData();
     notifyListeners();
   }
 
   Future<void> startDownload(String url, String fileName) async {
-    var downloadDir = await getApplicationDocumentsDirectory();
-
-    var downloadDirPath = downloadDir.absolute.path;
-
+    // var downloadDir = await getApplicationDocumentsDirectory();
+    // var downloadDirPath = downloadDir.absolute.path;
     // print("url $url fileName $fileName downloadDirPath $downloadDirPath");
-
     final task = DownloadTask(
       url: url,
       filename: fileName,
@@ -56,7 +57,7 @@ class DownloadProvider extends ChangeNotifier {
       allowPause: true,
     );
 
-    fileDownloader.download(
+    await fileDownloader.download(
       task,
       onProgress: (progress) {
         print('Progress: ${progress * 100}%');
@@ -64,9 +65,7 @@ class DownloadProvider extends ChangeNotifier {
       },
       onStatus: (status) {
         print('Status: $status');
-        if (status == TaskStatus.running) {
-          reloadData();
-        }
+        reloadData();
         notifyListeners();
       },
     );
