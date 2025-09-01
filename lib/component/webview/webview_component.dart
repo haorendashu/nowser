@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -136,6 +137,10 @@ class _WebViewComponent extends State<WebViewComponent>
   @override
   Widget build(BuildContext context) {
     settings.incognito = widget.webInfo.incognitoMode;
+    var themeData = Theme.of(context);
+    if (themeData.brightness == Brightness.dark) {
+      settings.forceDark = ForceDark.ON;
+    }
 
     return Container(
       child: InAppWebView(

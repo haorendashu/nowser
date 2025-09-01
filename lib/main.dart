@@ -325,6 +325,7 @@ ThemeData getLightTheme() {
   }
 
   return ThemeData(
+    brightness: Brightness.light,
     // platform: TargetPlatform.iOS,
     primarySwatch: themeColor,
     colorScheme: ColorScheme.fromSeed(
@@ -410,6 +411,7 @@ ThemeData getDarkTheme() {
   }
 
   return ThemeData(
+    brightness: Brightness.dark,
     // platform: TargetPlatform.iOS,
     primarySwatch: themeColor,
     colorScheme: ColorScheme.fromSeed(
