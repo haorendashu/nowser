@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -132,6 +133,11 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
   final _flutterPinnedShortcutPlugin = FlutterPinnedShortcut();
 
   Future<void> doAddPinnedShortcut(Bookmark bookmark) async {
+    if (StringUtil.isBlank(bookmark.title) ||
+        StringUtil.isBlank(bookmark.url)) {
+      return;
+    }
+
     File? file;
     if (StringUtil.isNotBlank(bookmark.favicon)) {
       // use favicon as icon
@@ -143,40 +149,44 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
       return;
     }
 
-    final originalBytes = await file.readAsBytes();
-    final originalImage = img.decodeImage(originalBytes);
-    if (originalImage == null) {
-      print("Failed to decode image");
-      return;
-    }
+    var filepath = file.path;
 
-    final targetSize = 256;
-    final newImage = img.Image(width: targetSize, height: targetSize);
-    img.fill(newImage, color: img.ColorRgb8(240, 240, 240));
+    try {
+      final originalBytes = await file.readAsBytes();
+      final originalImage = img.decodeImage(originalBytes);
+      if (originalImage == null) {
+        print("Failed to decode image");
+        return;
+      }
 
-    final scale = (targetSize * 0.6).toDouble() /
-        (originalImage.width > originalImage.height
-            ? originalImage.width
-            : originalImage.height);
-    final int newWidth = (originalImage.width * scale).round();
-    final int newHeight = (originalImage.height * scale).round();
+      final targetSize = 512;
+      final newImage = img.Image(width: targetSize, height: targetSize);
+      img.fill(newImage, color: img.ColorRgb8(240, 240, 240));
 
-    final resizedImage =
-        img.copyResize(originalImage, width: newWidth, height: newHeight);
+      final scale = (targetSize * 0.6).toDouble() /
+          (originalImage.width > originalImage.height
+              ? originalImage.width
+              : originalImage.height);
+      final int newWidth = max((originalImage.width * scale).round(), 1);
+      final int newHeight = max((originalImage.height * scale).round(), 1);
 
-    final int x = (targetSize - newWidth) ~/ 2;
-    final int y = (targetSize - newHeight) ~/ 2;
+      final resizedImage =
+          img.copyResize(originalImage, width: newWidth, height: newHeight);
 
-    img.compositeImage(newImage, resizedImage, dstX: x, dstY: y);
+      final int x = (targetSize - newWidth) ~/ 2;
+      final int y = (targetSize - newHeight) ~/ 2;
 
-    final tempDir = await getTemporaryDirectory();
-    final resizedFile = File(
-        '${tempDir.path}/icon_${DateTime.now().millisecondsSinceEpoch}.png');
-    await resizedFile.writeAsBytes(img.encodePng(newImage));
+      img.compositeImage(newImage, resizedImage, dstX: x, dstY: y);
 
-    if (StringUtil.isBlank(bookmark.title) ||
-        StringUtil.isBlank(bookmark.url)) {
-      return;
+      final tempDir = await getTemporaryDirectory();
+      final resizedFile = File(
+          '${tempDir.path}/icon_${DateTime.now().millisecondsSinceEpoch}.png');
+      await resizedFile.writeAsBytes(img.encodePng(newImage));
+
+      filepath = resizedFile.path;
+    } catch (e) {
+      print("create pinned shortcut failed!");
+      print(e);
     }
 
     _flutterPinnedShortcutPlugin.createPinnedShortcut(
@@ -184,7 +194,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter>
         label: bookmark.title!,
         action: bookmark.url!,
         iconAssetName: "assets/logo_android.png",
-        iconUri: Uri.file(resizedFile.path).toString());
+        iconUri: Uri.file(filepath).toString());
   }
 
   Future<void> doEdit(Bookmark bookmark) async {
