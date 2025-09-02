@@ -212,7 +212,12 @@ class _MeRouter extends CustState<MeRouter> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.add),
+              Container(
+                margin: EdgeInsets.only(
+                  bottom: Base.BASE_PADDING_HALF,
+                ),
+                child: Icon(Icons.add),
+              ),
               Text(
                 "Add",
                 maxLines: 1,
