@@ -364,7 +364,8 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
 
   TextEditingController relayAddrController = TextEditingController();
 
-  static const String DEFAULT_RELAY = "wss://relay.nsec.app";
+  // static const String DEFAULT_RELAY = "wss://relay.nsec.app";
+  static const String DEFAULT_RELAY = "wss://relay.primal.net/";
 
   TextEditingController secretController = TextEditingController();
 
