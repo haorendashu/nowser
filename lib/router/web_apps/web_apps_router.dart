@@ -553,6 +553,13 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         [WebAppTypes.PHOTOS],
         image: "https://nowser.nostrmo.com/images/apps/zappix.png",
       ));
+      items.add(WebAppItem(
+        "https://following.space/",
+        "Following Space",
+        "Create, share, and discover Nostr Follow Packs",
+        [WebAppTypes.OTHERS],
+        image: "https://nowser.nostrmo.com/images/apps/following_space.png",
+      ));
 
       // List<Map> jsonList = [];
       // for (var item in items) {
