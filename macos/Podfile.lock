@@ -97,7 +97,7 @@ SPEC CHECKSUMS:
   flutter_libserialport: 2c523cb8d8203fc6d1b0da88190da31ac970eb93
   flutter_nesigner_sdk: 939e2a7f606071466d3e8158c745818abe62d266
   flutter_secure_storage_macos: b2d62a774c23b060f0b99d0173b0b36abb4a8632
-  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   isar_flutter_libs: a65381780401f81ad6bf3f2e7cd0de5698fb98c4
   libserialport: 1cb25e66ef3c92a8e59c2ea3820302c3fa2268cd
   nesigner_adapter: 970127cb0da104a1e377b007cefca24ec5fe838d
@@ -109,6 +109,6 @@ SPEC CHECKSUMS:
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   window_manager: 1d01fa7ac65a6e6f83b965471b1a7fdd3f06166c
 
-PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+PODFILE CHECKSUM: 9ebaf0ce3d369aaa26a9ea0e159195ed94724cf3
 
 COCOAPODS: 1.16.2
