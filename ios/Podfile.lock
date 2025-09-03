@@ -98,7 +98,7 @@ SPEC CHECKSUMS:
   background_downloader: 50e91d979067b82081aba359d7d916b3ba5fadad
   cryptography_flutter: 70166b3780db39960caf51fd90fe308bec22d3f1
   device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_inappwebview_ios: b89ba3482b96fb25e00c967aae065701b66e9b99
   flutter_nesigner_sdk: dc71aa8bc67e6955b77a470bdd40938c460383b3
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
