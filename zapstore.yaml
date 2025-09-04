@@ -1,15 +1,22 @@
-nowser:
-  android:
-    identifier: com.github.haorendashu.nowser
-    name: Nowser
-    description: A secure nostr key management and signing app for iOS, Android, MacOS, Windows and Linux that supports multiple authentication methods:\n\n- **NIP-07**, Acts as a browser extension replacement for mobile, allowing you to securely sign into nostr web apps\n- **NIP-46**, Functions as a remote signer (like a "bunker"), letting you keep your private keys on your phone while signing requests from your desktop\n- **NIP-55**, Supports Android's native key management system for secure key storage (similar to Apple Keychain)\n- **Nesigner**, A hardware signer allows you to store and process sign requests in hardware
-    repository: https://github.com/haorendashu/nowser
-    license: GPL-3.0
-    builder: npub19yeqjawls407xjnmgkk6yss7936pcd7qzd5srlj8wye6j8433vrsjazqwk
-    artifacts:
-      app-armeabi-v7a-release.apk:
-        platform: armeabi-v7a
-      app-arm64-v8a-release.apk:
-        platform: arm64-v8a
-      app-x86_64-release.apk:
-        platform: x86_64
+identifier: com.github.haorendashu.nowser
+version: 1.3.0
+name: Nowser
+summary: A nostr signer.
+description: A secure nostr key management and signing app for iOS, Android, MacOS, Windows and Linux that supports multiple authentication methods:\n\n- **NIP-07**, Acts as a browser extension replacement for mobile, allowing you to securely sign into nostr web apps\n- **NIP-46**, Functions as a remote signer (like a "bunker"), letting you keep your private keys on your phone while signing requests from your desktop\n- **NIP-55**, Supports Android's native key management system for secure key storage (similar to Apple Keychain)\n- **Nesigner**, A hardware signer allows you to store and process sign requests in hardware.
+repository: https://github.com/haorendashu/nowser
+release_repository: https://github.com/haorendashu/nowser
+images:
+  - screenshots/screenshot1.png
+  - screenshots/screenshot2.png
+  - screenshots/screenshot3.png
+  - screenshots/screenshot4.png
+icon: assets/imgs/logo/logo512.png
+tags: nostr, signer
+license: GNU
+remote_metadata:
+  - github
+blossom_server: https://cdn.zapstore.dev
+assets:
+  - ./app-armeabi-v7a-release.apk
+  - ./app-arm64-v8a-release.apk
+  - ./app-x86_64-release.apk
