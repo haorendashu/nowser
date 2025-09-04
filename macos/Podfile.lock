@@ -92,7 +92,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   cryptography_flutter: 33e8726fef117a6f306382f6fa34e173642cc64f
-  device_info_plus: a56e6e74dbbd2bb92f2da12c64ddd4f67a749041
+  device_info_plus: 4fb280989f669696856f8b129e4a5e3cd6c48f76
   flutter_inappwebview_macos: c2d68649f9f8f1831bfcd98d73fd6256366d9d1d
   flutter_libserialport: 2c523cb8d8203fc6d1b0da88190da31ac970eb93
   flutter_nesigner_sdk: 939e2a7f606071466d3e8158c745818abe62d266

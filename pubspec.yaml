@@ -82,6 +82,7 @@ dev_dependencies:
 
 dependency_overrides:
   google_fonts: ^6.2.1
+  device_info_plus: ^11.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
