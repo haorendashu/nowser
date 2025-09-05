@@ -560,6 +560,20 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         [WebAppTypes.OTHERS],
         image: "https://nowser.nostrmo.com/images/apps/following_space.png",
       ));
+      items.add(WebAppItem(
+        "https://nosotros.app/",
+        "Nosotros",
+        "A decentralized social network based on nostr protocol",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/nosotros.ico",
+      ));
+      items.add(WebAppItem(
+        "https://npub.cash/",
+        "npub.cash",
+        "A nostr native Lightning Address for everyone",
+        [WebAppTypes.ZAPS],
+        image: "https://nowser.nostrmo.com/images/apps/npubcash.ico",
+      ));
 
       // List<Map> jsonList = [];
       // for (var item in items) {
