@@ -54,18 +54,21 @@ class RelayProvider extends ChangeNotifier {
     var relays = parseRelayAddrs(content);
     if (relays.isEmpty) {
       relays = [
+        "wss://purplepag.es", // indexer relay
+        "wss://indexer.coracle.social", // indexer relay
+        "wss://user.kindpag.es", // indexer relay
         "wss://nos.lol",
-        "wss://nostr.wine",
-        "wss://atlas.nostr.land",
+        // "wss://nostr.wine",
+        // "wss://atlas.nostr.land",
         "wss://relay.damus.io",
-        "wss://nostr-relay.app",
-        "wss://nostr.oxtr.dev",
-        "wss://relayable.org",
+        // "wss://nostr-relay.app",
+        // "wss://nostr.oxtr.dev",
+        // "wss://relayable.org",
         "wss://relay.primal.net",
-        "wss://relay.nostr.bg",
+        // "wss://relay.nostr.bg",
         "wss://relay.nostr.band",
-        "wss://yabu.me",
-        "wss://nostr.mom"
+        // "wss://yabu.me",
+        // "wss://nostr.mom"
       ];
     }
 
