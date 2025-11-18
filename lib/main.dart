@@ -144,18 +144,20 @@ Future<void> doInit() async {
   keyProvider = KeyProvider();
   appProvider = AppProvider();
   buildInRelayProvider = BuildInRelayProvider();
+  remoteSigningProvider = RemoteSigningProvider();
 
   var dataUtilTask = DataUtil.getInstance();
   var keyTask = keyProvider.init();
   var dbTask = DB.getCurrentDatabase();
-  var dataFutureResultList = await Future.wait([dataUtilTask, keyTask, dbTask]);
+  var remoteSigningInitTask = remoteSigningProvider.init();
+  var dataFutureResultList =
+      await Future.wait([dataUtilTask, keyTask, dbTask, remoteSigningInitTask]);
 
   var settingTask = SettingProvider.getInstance();
   var appTask = appProvider.reload();
   var futureResultList = await Future.wait([settingTask, appTask]);
   settingProvider = futureResultList[0] as SettingProvider;
   webProvider = WebProvider();
-  remoteSigningProvider = RemoteSigningProvider();
   downloadProvider = DownloadProvider();
   await downloadProvider.init();
 }

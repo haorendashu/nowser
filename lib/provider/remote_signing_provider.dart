@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/event.dart';
 import 'package:nostr_sdk/event_kind.dart';
@@ -13,6 +14,7 @@ import 'package:nostr_sdk/relay/relay_isolate.dart';
 import 'package:nostr_sdk/relay/relay_status.dart';
 import 'package:nostr_sdk/signer/local_nostr_signer.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
+import 'package:nostr_sdk/utils/hash_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
@@ -42,6 +44,10 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
   // remoteSignerPubkey - App
   Map<String, App> appMap = {};
 
+  Future<void> init() async {
+    encryptKey = await getOrGenEncryptKey();
+  }
+
   Future<void> reload() async {
     relayMap = {};
     remoteSigningInfoMap = {};
@@ -50,15 +56,30 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     load();
   }
 
+  var encryptKey = "";
+
   Future<void> load() async {
     var remoteAppList = appProvider.remoteAppList();
     for (var remoteApp in remoteAppList) {
-      await addRemoteApp(remoteApp);
+      await addRemoteApp(remoteApp, encryptKey);
     }
   }
 
-  Future<void> addRemoteApp(App remoteApp) async {
-    var remoteSigningInfo = await RemoteSigningInfoDB.getByAppId(remoteApp.id!);
+  static const String KEY_NAME = "remoteKey";
+
+  Future<String> getOrGenEncryptKey() async {
+    const storage = FlutterSecureStorage();
+    var str = await storage.read(key: KEY_NAME);
+    if (StringUtil.isBlank(str)) {
+      str = HashUtil.md5(StringUtil.rndNameStr(10));
+      await storage.write(key: KEY_NAME, value: str);
+    }
+    return str!;
+  }
+
+  Future<void> addRemoteApp(App remoteApp, String encryptKey) async {
+    var remoteSigningInfo =
+        await RemoteSigningInfoDB.getByAppId(remoteApp.id!, encryptKey);
     if (remoteSigningInfo != null &&
         StringUtil.isNotBlank(remoteSigningInfo.remoteSignerKey) &&
         StringUtil.isNotBlank(remoteSigningInfo.remotePubkey) &&
@@ -154,7 +175,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
               remoteSigningInfo.updatedAt =
                   DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-              RemoteSigningInfoDB.update(remoteSigningInfo);
+              RemoteSigningInfoDB.update(remoteSigningInfo, encryptKey);
               remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
               appMap[remoteSignerPubkey] = app;
 
@@ -385,13 +406,13 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
   Future<void> saveRemoteSigningInfo(
       RemoteSigningInfo remoteSigningInfo) async {
-    await RemoteSigningInfoDB.insert(remoteSigningInfo);
+    await RemoteSigningInfoDB.insert(remoteSigningInfo, encryptKey);
     await reloadPenddingRemoteApps();
     notifyListeners();
   }
 
   Future<void> reloadPenddingRemoteApps() async {
-    var list = await RemoteSigningInfoDB.penddingRemoteSigningInfo();
+    var list = await RemoteSigningInfoDB.penddingRemoteSigningInfo(encryptKey);
     _penddingRemoteApps = list;
     notifyListeners();
 
