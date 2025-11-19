@@ -45,20 +45,4 @@ class RemoteSigningInfo {
     data['updated_at'] = this.updatedAt;
     return data;
   }
-
-  static RemoteSigningInfo? parseNostrConnectUrl(String nostrconnectUrlText) {
-    var uri = Uri.parse(nostrconnectUrlText);
-    var pars = uri.queryParametersAll;
-    var localPubkey = uri.host;
-
-    var relays = pars["relay"];
-    if (relays == null || relays.isEmpty) {
-      return null;
-    }
-
-    return RemoteSigningInfo(
-      localPubkey: localPubkey,
-      relays: relays.join(","),
-    );
-  }
 }

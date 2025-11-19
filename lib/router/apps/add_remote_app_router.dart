@@ -4,11 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
 import 'package:nostr_sdk/nip19/nip19.dart';
 import 'package:nostr_sdk/nip46/nostr_remote_signer_info.dart';
+import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/component/cust_state.dart';
 import 'package:nowser/component/qrscanner.dart';
 import 'package:nowser/component/simple_qrcode_dialog.dart';
 import 'package:nowser/component/user/user_name_component.dart';
+import 'package:nowser/data/nostrconnect_remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info.dart';
 import 'package:nowser/data/remote_signing_info_db.dart';
 import 'package:nowser/main.dart';
@@ -205,14 +207,9 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
               unselectedLabelColor: textColor,
               indicatorColor: mainColor,
               tabs: [
-                GestureDetector(
-                  child: Text(
-                    "${s.Connect_by}\nnostrconnect:// url",
-                    textAlign: TextAlign.center,
-                  ),
-                  onTap: () {
-                    BotToast.showText(text: s.Comming_soon);
-                  },
+                Text(
+                  "${s.Connect_by}\nnostrconnect:// url",
+                  textAlign: TextAlign.center,
                 ),
                 Text(
                   "${s.Connect_by}\nbunker:// url",
@@ -246,12 +243,14 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
                         child: Row(
                           children: [
                             Expanded(child: Container()),
-                            IconButton(
-                              onPressed: () {
-                                scanNostrConnectQRCode();
-                              },
-                              icon: const Icon(Icons.qr_code_scanner),
-                            ),
+                            PlatformUtil.isAndroid() || PlatformUtil.isIOS()
+                                ? IconButton(
+                                    onPressed: () {
+                                      scanNostrConnectQRCode();
+                                    },
+                                    icon: const Icon(Icons.qr_code_scanner),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
@@ -259,9 +258,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
                         margin: const EdgeInsets.only(top: Base.BASE_PADDING),
                         width: double.infinity,
                         child: FilledButton(
-                          onPressed: () {
-                            BotToast.showText(text: s.Comming_soon);
-                          },
+                          onPressed: confirmNostrConnect,
                           child: Text(s.Confirm),
                         ),
                       ),
@@ -347,19 +344,27 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
 
   String remoteSignerKey = generatePrivateKey();
 
-  void confirmNostrConnect() {
-    var remoteSigningInfo =
-        RemoteSigningInfo.parseNostrConnectUrl(nostrconnectConn.text);
+  Future<void> confirmNostrConnect() async {
+    var remoteSigningInfo = NostrconnectRemoteSigningInfo.parseNostrConnectUrl(
+        nostrconnectConn.text.trim());
     if (remoteSigningInfo == null) {
-      // TODO
+      BotToast.showText(text: 'Invalid nostrconnect url');
       return;
     }
 
+    remoteSigningInfo.remotePubkey = pubkey;
     remoteSigningInfo.remoteSignerKey = remoteSignerKey;
     remoteSigningInfo.createdAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
-    // TODO
+    var result = await remoteSigningProvider
+        .addNostrconnectRemoteSigningInfo(remoteSigningInfo);
+    if (result) {
+      BotToast.showText(text: 'Add remote app success');
+      RouterUtil.back(context);
+    } else {
+      BotToast.showText(text: 'Add remote app fail');
+    }
   }
 
   TextEditingController relayAddrController = TextEditingController();
@@ -412,7 +417,7 @@ class _AddRemoteAppRouter extends CustState<AddRemoteAppRouter> {
     );
     remoteSigningInfo.updatedAt = remoteSigningInfo.createdAt;
 
-    remoteSigningProvider.saveRemoteSigningInfo(remoteSigningInfo);
+    remoteSigningProvider.saveBunkerRemoteSigningInfo(remoteSigningInfo);
     RouterUtil.back(context);
   }
 

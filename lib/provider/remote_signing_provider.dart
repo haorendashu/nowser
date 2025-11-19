@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nostr_sdk/client_utils/keys.dart';
@@ -9,6 +10,7 @@ import 'package:nostr_sdk/event_kind.dart';
 import 'package:nostr_sdk/filter.dart';
 import 'package:nostr_sdk/nip46/nostr_remote_request.dart';
 import 'package:nostr_sdk/nip46/nostr_remote_response.dart';
+import 'package:nostr_sdk/relay/client_connected.dart';
 import 'package:nostr_sdk/relay/relay.dart';
 import 'package:nostr_sdk/relay/relay_isolate.dart';
 import 'package:nostr_sdk/relay/relay_status.dart';
@@ -19,6 +21,7 @@ import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/const/app_type.dart';
 import 'package:nowser/const/auth_type.dart';
 import 'package:nowser/data/app.dart';
+import 'package:nowser/data/nostrconnect_remote_signing_info.dart';
 import 'package:nowser/provider/permission_check_mixin.dart';
 import 'package:relay_sdk/network/memory/mem_relay_client.dart';
 
@@ -77,7 +80,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     return str!;
   }
 
-  Future<void> addRemoteApp(App remoteApp, String encryptKey) async {
+  Future<List<Relay>?> addRemoteApp(App remoteApp, String encryptKey) async {
     var remoteSigningInfo =
         await RemoteSigningInfoDB.getByAppId(remoteApp.id!, encryptKey);
     if (remoteSigningInfo != null &&
@@ -91,6 +94,8 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
       remoteSigningInfoMap[remoteSignerPubkey] = remoteSigningInfo;
       appMap[remoteSignerPubkey] = remoteApp;
       relayMap[remoteSignerPubkey] = relays;
+
+      return relays;
     }
   }
 
@@ -313,7 +318,12 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
       if (event != null) {
         for (var relay in relays) {
-          relay.send(["EVENT", event.toJson()]);
+          if (relay.relayStatus.connected == ClientConneccted.CONNECTED) {
+            relay.send(["EVENT", event.toJson()]);
+          } else {
+            relay.pendingAuthedMessages.add(["EVENT", event.toJson()]);
+            relay.pendingMessages.add(["EVENT", event.toJson()]);
+          }
         }
       }
     }
@@ -400,11 +410,49 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
     }
   }
 
+  Future<bool> addNostrconnectRemoteSigningInfo(
+      NostrconnectRemoteSigningInfo remoteSigningInfo) async {
+    NostrSigner signerSigner =
+        LocalNostrSigner(remoteSigningInfo.remoteSignerKey!);
+    var remoteSignerPubkey = getPublicKey(remoteSigningInfo.remoteSignerKey!);
+    var appType = AppType.REMOTE;
+    var code = remoteSignerPubkey;
+
+    App? app = await getApp(appType, code);
+    app.name = remoteSigningInfo.name;
+    if (StringUtil.isBlank(app.name)) {
+      app.name = remoteSigningInfo.url;
+    }
+    app.pubkey = remoteSigningInfo.remotePubkey;
+    app.image = remoteSigningInfo.image;
+    await AuthAppConnectDialog.show(context!, app);
+    app = appProvider.getApp(appType, code);
+    if (app == null) {
+      BotToast.showText(text: "Remote App connect fail.");
+      return false;
+    }
+
+    remoteSigningInfo.appId = app.id;
+    remoteSigningInfo.updatedAt = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+    await RemoteSigningInfoDB.insert(remoteSigningInfo, encryptKey);
+
+    var relays = await addRemoteApp(app, encryptKey);
+    if (relays != null) {
+      var response = NostrRemoteResponse(
+          StringUtil.rndNameStr(12), remoteSigningInfo.secret!);
+      await sendResponse(relays, response, signerSigner,
+          remoteSigningInfo.localPubkey!, remoteSignerPubkey);
+    }
+
+    return true;
+  }
+
   List<RemoteSigningInfo> _penddingRemoteApps = [];
 
   List<RemoteSigningInfo> get penddingRemoteApps => _penddingRemoteApps;
 
-  Future<void> saveRemoteSigningInfo(
+  Future<void> saveBunkerRemoteSigningInfo(
       RemoteSigningInfo remoteSigningInfo) async {
     await RemoteSigningInfoDB.insert(remoteSigningInfo, encryptKey);
     await reloadPenddingRemoteApps();
