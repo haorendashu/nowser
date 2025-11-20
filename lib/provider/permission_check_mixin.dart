@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:nostr_sdk/signer/nostr_signer.dart';
 import 'package:nowser/component/auth_dialog/auth_app_connect_dialog.dart';
@@ -34,13 +36,9 @@ mixin PermissionCheckMixin {
 
     var app = appProvider.getApp(appType, code);
     if (app == null) {
-      // app is null, app connect
-      var newApp = await getApp(appType, code);
       if (context != null) {
-        await AuthAppConnectDialog.show(context, newApp);
+        app = await connectToApp(appType, code, context);
       }
-      // reload from provider
-      app = appProvider.getApp(appType, code);
     }
 
     if (app == null) {
@@ -109,6 +107,30 @@ mixin PermissionCheckMixin {
     saveAuthLog(app, authType, eventKind, authDetail, AuthResult.REJECT);
     reject(app, RejectType.OTHERS);
     return;
+  }
+
+  Map<String, Future<App?>> connectingAppFutureMap = {};
+
+  Future<App?> connectToApp(int appType, String code, BuildContext context) {
+    var key = "$appType-$code";
+    var f = connectingAppFutureMap[key];
+    if (f != null) {
+      return f;
+    }
+
+    var complete = Completer<App?>();
+    f = complete.future;
+    connectingAppFutureMap[key] = f;
+
+    getApp(appType, code).then((newApp) => {
+          AuthAppConnectDialog.show(context, newApp).then((value) {
+            var app = appProvider.getApp(appType, code);
+            complete.complete(app);
+            connectingAppFutureMap.remove(key);
+          })
+        });
+
+    return f;
   }
 
   void saveAuthLog(App app, int authType, int? eventKind, String? authDetail,
