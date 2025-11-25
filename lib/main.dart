@@ -15,6 +15,7 @@ import 'package:nostr_sdk/utils/platform_util.dart';
 import 'package:nostr_sdk/utils/string_util.dart';
 import 'package:nowser/data/db.dart';
 import 'package:nowser/provider/android_signer_mixin.dart';
+import 'package:nowser/provider/app_links_service.dart';
 import 'package:nowser/provider/app_provider.dart';
 import 'package:nowser/provider/bookmark_provider.dart';
 import 'package:nowser/provider/build_in_relay_provider.dart';
@@ -84,6 +85,8 @@ late MediaDataCache mediaDataCache;
 late UserinfoProvider userinfoProvider;
 
 late RelayProvider relayProvider;
+
+late AppLinksService appLinksService;
 
 Nostr? nostr;
 
@@ -160,6 +163,7 @@ Future<void> doInit() async {
   webProvider = WebProvider();
   downloadProvider = DownloadProvider();
   await downloadProvider.init();
+  appLinksService = AppLinksService();
 }
 
 class MyApp extends StatefulWidget {

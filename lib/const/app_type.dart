@@ -4,4 +4,6 @@ class AppType {
   static const REMOTE = 2;
 
   static const ANDROID_APP = 3;
+
+  static const URI = 4;
 }

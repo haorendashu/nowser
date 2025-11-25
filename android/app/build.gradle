@@ -29,7 +29,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.github.haorendashu.nowser"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = "28.0.13004108"
 
     // compileOptions {
@@ -57,7 +57,7 @@ android {
         // minSdk = flutter.minSdkVersion
         // targetSdk = flutter.targetSdkVersion
         minSdkVersion flutter.minSdkVersion
-        targetSdk = 33
+        targetSdk = 36
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }

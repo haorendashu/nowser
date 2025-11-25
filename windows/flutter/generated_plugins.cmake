@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   flutter_inappwebview_windows
   flutter_libserialport
   flutter_nesigner_sdk
@@ -10,6 +11,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   isar_flutter_libs
   nesigner_adapter
   screen_retriever_windows
+  url_launcher_windows
   window_manager
 )
 

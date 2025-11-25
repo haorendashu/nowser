@@ -66,6 +66,8 @@ class _IndexRouter extends CustState<IndexRouter>
         webProvider.checkAndOpenUrl(shortcutType);
       });
     }
+
+    appLinksService.listen();
   }
 
   @override
@@ -96,6 +98,7 @@ class _IndexRouter extends CustState<IndexRouter>
     //   });
     // }
     remoteSigningProvider.updateContext(context);
+    appLinksService.updateContext(context);
     webProvider.checkBlank();
 
     var _webProvider = Provider.of<WebProvider>(context);
