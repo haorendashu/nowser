@@ -25,6 +25,8 @@ class _AppTypeComponent extends State<AppTypeComponent> {
       typeName = s.Android;
     } else if (widget.appType == AppType.REMOTE) {
       typeName = s.Remote;
+    } else if (widget.appType == AppType.URI) {
+      typeName = s.Uri;
     }
 
     return TagComponent(typeName);

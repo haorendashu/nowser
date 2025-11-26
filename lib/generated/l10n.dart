@@ -564,6 +564,11 @@ class S {
     return Intl.message('Remote', name: 'Remote', desc: '', args: []);
   }
 
+  /// `Uri`
+  String get Uri {
+    return Intl.message('Uri', name: 'Uri', desc: '', args: []);
+  }
+
   /// `auto`
   String get auto {
     return Intl.message('auto', name: 'auto', desc: '', args: []);

@@ -151,6 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Streaming": MessageLookupByLibrary.simpleMessage("Streaming"),
     "ThemeStyle": MessageLookupByLibrary.simpleMessage("ThemeStyle"),
     "Tools": MessageLookupByLibrary.simpleMessage("Tools"),
+    "Uri": MessageLookupByLibrary.simpleMessage("Uri"),
     "Url": MessageLookupByLibrary.simpleMessage("Url"),
     "WEB": MessageLookupByLibrary.simpleMessage("WEB"),
     "Web_APPs": MessageLookupByLibrary.simpleMessage("Web APPs"),
