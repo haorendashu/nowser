@@ -39,8 +39,14 @@ class AppLinksService with PermissionCheckMixin {
     log("AppLinksService $uri");
 
     var appType = AppType.URI;
-    callbackUrl ??= UNKNOWN_CODE;
-    var code = callbackUrl;
+    String? code;
+    if (StringUtil.isNotBlank(callbackUrl)) {
+      var uri = Uri.tryParse(callbackUrl!);
+      code = uri?.host;
+    } else {
+      callbackUrl = UNKNOWN_CODE;
+    }
+    code = StringUtil.isNotBlank(code) ? code : UNKNOWN_CODE;
 
     int? eventKind;
     String? authDetail;
@@ -76,7 +82,7 @@ class AppLinksService with PermissionCheckMixin {
       authDetail = uri.host;
     }
 
-    checkPermission(context!, appType, code, authType,
+    checkPermission(context!, appType, code!, authType,
         eventKind: eventKind, authDetail: authDetail, (app, rejectType) {
       // TODO How to return a reject message to app ?
       return;
