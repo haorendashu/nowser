@@ -131,8 +131,8 @@ class AppLinksService with PermissionCheckMixin {
 
     var url = callbackUrl + Uri.encodeComponent(response!);
     var uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    // if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
-    }
+    // }
   }
 }
