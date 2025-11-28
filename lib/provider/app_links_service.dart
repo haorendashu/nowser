@@ -36,13 +36,12 @@ class AppLinksService with PermissionCheckMixin {
     if (StringUtil.isBlank(type) || !uri.isScheme('nostrsigner')) {
       return;
     }
-    log("AppLinksService $uri");
 
     var appType = AppType.URI;
     String? code;
     if (StringUtil.isNotBlank(callbackUrl)) {
       var uri = Uri.tryParse(callbackUrl!);
-      code = uri?.host;
+      code = uri?.path;
     } else {
       callbackUrl = UNKNOWN_CODE;
     }
@@ -56,9 +55,9 @@ class AppLinksService with PermissionCheckMixin {
 
     if (type == "sign_event") {
       authType = AuthType.SIGN_EVENT;
-      authDetail = uri.host;
+      authDetail = uri.path;
 
-      eventObj = jsonDecode(authDetail);
+      eventObj = jsonDecode(Uri.decodeComponent(authDetail));
       eventKind = eventObj["kind"];
     } else if (type == "get_relays") {
       authType = AuthType.GET_RELAYS;
@@ -67,19 +66,19 @@ class AppLinksService with PermissionCheckMixin {
     } else if (type == "nip04_encrypt") {
       authType = AuthType.NIP04_ENCRYPT;
       thirdPartyPubkey = uri.queryParameters["pubkey"];
-      authDetail = uri.host;
+      authDetail = Uri.decodeComponent(uri.path);
     } else if (type == "nip04_decrypt") {
       authType = AuthType.NIP04_DECRYPT;
       thirdPartyPubkey = uri.queryParameters["pubkey"];
-      authDetail = uri.host;
+      authDetail = Uri.decodeComponent(uri.path);
     } else if (type == "nip44_encrypt") {
       authType = AuthType.NIP44_ENCRYPT;
       thirdPartyPubkey = uri.queryParameters["pubkey"];
-      authDetail = uri.host;
+      authDetail = Uri.decodeComponent(uri.path);
     } else if (type == "nip44_decrypt") {
       authType = AuthType.NIP44_DECRYPT;
       thirdPartyPubkey = uri.queryParameters["pubkey"];
-      authDetail = uri.host;
+      authDetail = Uri.decodeComponent(uri.path);
     }
 
     checkPermission(context!, appType, code!, authType,
@@ -130,7 +129,7 @@ class AppLinksService with PermissionCheckMixin {
       return;
     }
 
-    var url = callbackUrl + response!;
+    var url = callbackUrl + Uri.encodeComponent(response!);
     var uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
