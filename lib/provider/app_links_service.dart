@@ -88,51 +88,53 @@ class AppLinksService with PermissionCheckMixin {
     }, (app, signer) async {
       String? response;
 
-      if (type == "sign_event") {
-        var tags = eventObj["tags"];
-        Event? event = Event(
-            app.pubkey!, eventObj["kind"], tags ?? [], eventObj["content"],
-            createdAt: eventObj["created_at"]);
-        log(jsonEncode(event.toJson()));
-        event = await signer.signEvent(event);
-        if (event == null) {
-          log("sign event fail");
-          return;
+      try {
+        if (type == "sign_event") {
+          var tags = eventObj["tags"];
+          Event? event = Event(
+              app.pubkey!, eventObj["kind"], tags ?? [], eventObj["content"],
+              createdAt: eventObj["created_at"]);
+          log(jsonEncode(event.toJson()));
+          event = await signer.signEvent(event);
+          if (event == null) {
+            log("sign event fail");
+          } else {
+            response = event.sig;
+          }
+        } else if (type == "get_relays") {
+          response = '{}';
+        } else if (type == "get_public_key") {
+          response = await signer.getPublicKey();
+        } else if (type == "nip04_encrypt") {
+          response = await signer.encrypt(thirdPartyPubkey, authDetail);
+        } else if (type == "nip04_decrypt") {
+          response = await signer.decrypt(thirdPartyPubkey, authDetail);
+        } else if (type == "nip44_encrypt") {
+          response = await signer.nip44Encrypt(thirdPartyPubkey, authDetail);
+        } else if (type == "nip44_decrypt") {
+          response = await signer.nip44Decrypt(thirdPartyPubkey, authDetail);
         }
-
-        response = event.sig;
-      } else if (type == "get_relays") {
-        response = '{}';
-      } else if (type == "get_public_key") {
-        response = await signer.getPublicKey();
-      } else if (type == "nip04_encrypt") {
-        response = await signer.encrypt(thirdPartyPubkey, authDetail);
-      } else if (type == "nip04_decrypt") {
-        response = await signer.decrypt(thirdPartyPubkey, authDetail);
-      } else if (type == "nip44_encrypt") {
-        response = await signer.nip44Encrypt(thirdPartyPubkey, authDetail);
-      } else if (type == "nip44_decrypt") {
-        response = await signer.nip44Decrypt(thirdPartyPubkey, authDetail);
+      } catch (e) {
+        log("AppLinksService handleUri error: $e");
+      } finally {
+        sendResponse(callbackUrl!, response);
       }
-
-      sendResponse(callbackUrl!, response);
     });
   }
 
   Future<void> sendResponse(String callbackUrl, String? response) async {
-    if (StringUtil.isBlank(response)) {
-      return;
-    }
-
-    if (callbackUrl == UNKNOWN_CODE) {
+    if (callbackUrl == UNKNOWN_CODE && StringUtil.isNotBlank(response)) {
       Clipboard.setData(ClipboardData(text: response!));
       return;
     }
 
-    var url = callbackUrl + Uri.encodeComponent(response!);
+    var url = callbackUrl;
+    if (StringUtil.isNotBlank(response)) {
+      url += Uri.encodeComponent(response!);
+    }
     var uri = Uri.parse(url);
     // if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    await launchUrl(uri);
     // }
   }
 }
