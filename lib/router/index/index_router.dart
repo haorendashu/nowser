@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +55,10 @@ class _IndexRouter extends CustState<IndexRouter>
           print("find url! $url");
           webProvider.checkAndOpenUrl(url);
         } else {
-          dohandleInitialIntent(context, intent);
+          if (intent.data != null && !intent.data!.contains('callbackUrl=')) {
+            // android intent call doesn't contain callbackUrl arg.
+            dohandleInitialIntent(context, intent);
+          }
         }
       }
     }
