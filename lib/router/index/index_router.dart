@@ -55,7 +55,9 @@ class _IndexRouter extends CustState<IndexRouter>
           print("find url! $url");
           webProvider.checkAndOpenUrl(url);
         } else {
-          if (intent.data != null && !intent.data!.contains('callbackUrl=')) {
+          if (intent.data != null &&
+              !intent.data!.contains('callbackUrl=') &&
+              !intent.data!.contains('type=')) {
             // android intent call doesn't contain callbackUrl arg.
             dohandleInitialIntent(context, intent);
           }
