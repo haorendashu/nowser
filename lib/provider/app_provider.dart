@@ -122,6 +122,14 @@ class AppProvider extends ChangeNotifier {
   Future<void> deleteApp(App app) async {
     await AppDB.delete(app.id!);
 
+    if (app.appType == AppType.REMOTE) {
+      try {
+        RemoteSigningInfoDB.deleteByAppId(app.id!);
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+
     try {
       await AuthLogDB.deleteByAppId(app.id!);
     } catch (e) {

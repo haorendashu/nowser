@@ -73,4 +73,9 @@ class RemoteSigningInfoDB {
         "remote_signing_info", await _toJsonWithEncrypt(o, encryptKey),
         where: "id = ?", whereArgs: [o.id]);
   }
+
+  static Future<void> deleteByAppId(int appId, {DatabaseExecutor? db}) async {
+    db = await DB.getDB(db);
+    db.execute("delete from remote_signing_info where app_id = ?", [appId]);
+  }
 }
