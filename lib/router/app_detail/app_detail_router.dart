@@ -117,8 +117,10 @@ class _AppDetailRouter extends State<AppDetailRouter> {
 
     var keyWidget =
         Selector<KeyProvider, List<String>>(builder: (context, pubkeys, child) {
+      var uniquePubkeys = pubkeys.toSet().toList();
+
       List<DropdownMenuItem<String>> items = [];
-      for (var pubkey in pubkeys) {
+      for (var pubkey in uniquePubkeys) {
         items.add(DropdownMenuItem(
           value: pubkey,
           child: UserNameComponent(
@@ -128,11 +130,17 @@ class _AppDetailRouter extends State<AppDetailRouter> {
           ),
         ));
       }
+
+      String? currentValue = app!.pubkey;
+      if (currentValue != null && !uniquePubkeys.contains(currentValue)) {
+        currentValue = uniquePubkeys.isNotEmpty ? uniquePubkeys.first : null;
+      }
+
       return DropdownButton<String>(
         items: items,
         isExpanded: true,
         onChanged: null,
-        value: app!.pubkey,
+        value: currentValue,
       );
     }, selector: (context, provider) {
       return provider.pubkeys;
