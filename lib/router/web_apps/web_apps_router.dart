@@ -574,12 +574,19 @@ class WebAppsRouterState extends CustState<WebAppsRouter> {
         [WebAppTypes.ZAPS],
         image: "https://nowser.nostrmo.com/images/apps/npubcash.ico",
       ));
+      items.add(WebAppItem(
+        "https://asknostr.site/",
+        "asknostr",
+        "This website is a Q&A community on top of Nostr.",
+        [WebAppTypes.NOTES],
+        image: "https://nowser.nostrmo.com/images/apps/asknostr_site.png",
+      ));
 
-      // List<Map> jsonList = [];
-      // for (var item in items) {
-      //   jsonList.add(item.toJson());
-      // }
-      // log(jsonEncode(jsonList));
+      List<Map> jsonList = [];
+      for (var item in items) {
+        jsonList.add(item.toJson());
+      }
+      log(jsonEncode(jsonList));
 
       // setState(() {});
     }
