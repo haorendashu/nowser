@@ -129,6 +129,7 @@ class RemoteSigningProvider extends ChangeNotifier with PermissionCheckMixin {
 
       if (isLocalRelay) {
         buildInRelayProvider.addMemClient(relay as MemRelayClient);
+        relay.connect();
       } else {
         relay.connect();
       }
