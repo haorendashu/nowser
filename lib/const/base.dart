@@ -3,7 +3,7 @@ import 'package:nostr_sdk/utils/platform_util.dart';
 class Base {
   static const APP_NAME = "Nowser";
 
-  static String VERSION_NAME = "1.4.0";
+  static String VERSION_NAME = "1.4.1";
 
   static const double BASE_PADDING = 12;
 
